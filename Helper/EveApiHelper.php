@@ -79,6 +79,7 @@ class EveApiHelper {
 		 */
 		$this->apiEndpoints = array(
 			'eve.characterName' => 'eve/CharacterName.xml.aspx',
+			'eve.owner' => 'eve/OwnerID.xml.aspx',
 			'eve.typeName' => 'eve/TypeName.xml.aspx', // Returns the names associated with a sequence of typeIDs. ( http://eveonline-third-party-documentation.readthedocs.io/en/latest/xmlapi/eve/eve_typename.html )
 		);
 
@@ -208,7 +209,7 @@ class EveApiHelper {
 		$data = $this->checkApiCache($transientName);
 
 		if($data === false) {
-//			$endpoint = 'eve.owner';
+			$endpoint = 'eve.owner';
 //			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
 			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
 
