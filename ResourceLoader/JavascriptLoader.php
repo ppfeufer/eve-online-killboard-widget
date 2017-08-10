@@ -23,8 +23,8 @@ class JavascriptLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Int
 		if(!\is_admin()) {
 			\wp_enqueue_script('bootstrap-js', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/js/bootstrap.min.js'), array('jquery'), '', true);
 			\wp_enqueue_script('bootstrap-toolkit-js', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/bootstrap-toolkit/bootstrap-toolkit.min.js'), array('jquery', 'bootstrap-js'), '', true);
-//			\wp_enqueue_script('eve-online-killboard-widget-js', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('js/eve-online-killboard-widget.min.js'), array('jquery'), '', true);
-//			\wp_localize_script('eve-online-killboard-widget-js', 'killboardWidgetL10n', $this->getJavaScriptTranslations());
+			\wp_enqueue_script('eve-online-killboard-widget-js', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('js/eve-online-killboard-widget.min.js'), array('jquery'), '', true);
+			\wp_localize_script('eve-online-killboard-widget-js', 'killboardWidgetL10n', $this->getJavaScriptTranslations());
 		} // END if(!\is_admin())
 	} // END public function enqueue()
 
@@ -38,8 +38,8 @@ class JavascriptLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Int
 			'ajax' => array(
 				'url' => \admin_url('admin-ajax.php'),
 				'loaderImage' => \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('images/loader-sprite.gif'),
-				'eveFittingMarketData' => array(
-					'nonce' => \wp_create_nonce('ajax-nonce-eve-market-data-for-fitting')
+				'eveKillboardWidget' => array(
+					'nonce' => \wp_create_nonce('ajax-nonce-eve-online-killboard-widget')
 				)
 			)
 		);

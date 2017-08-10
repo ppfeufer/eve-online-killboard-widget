@@ -51,10 +51,12 @@ class KillboardWidget extends \WP_Widget {
 			'eve-online-killboard-widget-number-of-kills' => 5,
 			'eve-online-killboard-widget-entity-type' => '',
 			'eve-online-killboard-widget-entity-name' => '',
-			'eve-online-killboard-widget-show-losses' => false
+			'eve-online-killboard-widget-show-losses' => false,
+			'eve-online-killboard-widget-static-cache' => false
 		));
 
 		$showLosses = $instance['eve-online-killboard-widget-show-losses'] ? 'checked="checked"' : '';
+		$staticCache = $instance['eve-online-killboard-widget-static-cache'] ? 'checked="checked"' : '';
 
 		$typeArray = [
 			'corporation' => \__('Corporation', 'eve-online-killboard-widget'),
@@ -96,6 +98,11 @@ class KillboardWidget extends \WP_Widget {
 		echo '<p style="border-bottom: 1px solid #DFDFDF;"><strong>' . \__('Losses', 'eve-online-killboard-widget') . '</strong></p>';
 		echo '<p><label><input class="checkbox" type="checkbox" ' . $showLosses . ' id="' . $this->get_field_id('eve-online-killboard-widget-show-losses') . '" name="' . $this->get_field_name('eve-online-killboard-widget-show-losses') . '"> <span>' . \__('Show losses as well?', 'eve-online-killboard-widget') . '</span></label></p>';
 		echo '<p style="clear:both;"></p>';
+
+		// Cache patch
+		echo '<p style="border-bottom: 1px solid #DFDFDF;"><strong>' . \__('Static cache workaround', 'eve-online-killboard-widget') . '</strong></p>';
+		echo '<p><label><input class="checkbox" type="checkbox" ' . $staticCache . ' id="' . $this->get_field_id('eve-online-killboard-widget-static-cache') . '" name="' . $this->get_field_name('eve-online-killboard-widget-static-cache') . '"> <span>' . \__('FC, I am using a static cache, halp!!', 'eve-online-killboard-widget') . '</span></label></p>';
+		echo '<p style="clear:both;"></p>';
 	} // END public function form($instance)
 
 	/**
@@ -117,7 +124,8 @@ class KillboardWidget extends \WP_Widget {
 			'eve-online-killboard-widget-number-of-kills' => 5,
 			'eve-online-killboard-widget-entity-type' => '',
 			'eve-online-killboard-widget-entity-name' => '',
-			'eve-online-killboard-widget-show-losses' => false
+			'eve-online-killboard-widget-show-losses' => false,
+			'eve-online-killboard-widget-static-cache' => false
 		));
 
 		/**
@@ -130,6 +138,7 @@ class KillboardWidget extends \WP_Widget {
 		$instance['eve-online-killboard-widget-entity-name'] = (string) \esc_html($new_instance['eve-online-killboard-widget-entity-name']);
 		$instance['eve-online-killboard-widget-number-of-kills'] = (int) $new_instance['eve-online-killboard-widget-number-of-kills'];
 		$instance['eve-online-killboard-widget-show-losses'] = $new_instance['eve-online-killboard-widget-show-losses'] ? 1 : 0;
+		$instance['eve-online-killboard-widget-static-cache'] = $new_instance['eve-online-killboard-widget-static-cache'] ? 1 : 0;
 
 		/**
 		 * return new settings for saving them
@@ -152,8 +161,32 @@ class KillboardWidget extends \WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		} // END if(!empty($title))
 
-		echo $this->getWidgetData($instance);
-		echo $args['after_widget'];
+
+		$widgetHtml = null;
+
+		switch($instance['eve-online-killboard-widget-static-cache']) {
+			case 0:
+				$widgetHtml = $this->getWidgetData($instance);
+				break;
+
+			case 1:
+				$widgetHtml = '<div class="killboard-widget-kill-list">';
+				$widgetHtml .= '<p>' . \__('Loading killboard data, please wait ...') . '</p>';
+				$widgetHtml .= '<p><span class="loaderImage"></span></p>';
+				$widgetHtml .= '</div>';
+				$widgetHtml .= $args['after_widget'];
+				$widgetHtml .= '<script type="text/javascript">'
+					. 'var entityType = "' . $instance['eve-online-killboard-widget-entity-type'] . '";' . "\n"
+					. 'var entityName = "' . $instance['eve-online-killboard-widget-entity-name'] . '";' . "\n"
+					. 'var killCount = ' . $instance['eve-online-killboard-widget-number-of-kills'] . ';' . "\n"
+					. 'var showLosses = ' . $instance['eve-online-killboard-widget-show-losses'] . ';' . "\n"
+					. '</script>';
+				break;
+		}
+
+
+
+		echo $widgetHtml;
 	} // END public function widget($args, $instance)
 
 	private function getWidgetData($instance) {

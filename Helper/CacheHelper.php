@@ -84,7 +84,7 @@ class CacheHelper {
 
 	/**
 	 * creating our needed cache directories under:
-	 *		/wp-content/cache/themes/«theme-name»/
+	 *		/wp-content/cache/plugin/«plugin-name»/
 	 *
 	 * @param string $directory The Directory to create
 	 */

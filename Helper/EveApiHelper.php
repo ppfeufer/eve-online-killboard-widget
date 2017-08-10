@@ -11,13 +11,6 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
 class EveApiHelper {
 	/**
-	 * User Agent
-	 *
-	 * @var string
-	 */
-	private $sUserAgent = 'Mozilla/5.0 (X11; Linux x86_64; rv:5.0) Gecko/20100101 Firefox/5.0 EVE Online Killboard Widget for WordPress https://github.com/ppfeufer/eve-online-killboard-widget';
-
-	/**
 	 * API URL
 	 *
 	 * @var string
@@ -58,6 +51,7 @@ class EveApiHelper {
 		if(null === self::$instance) {
 			self::$instance = new self;
 		}
+
 		return self::$instance;
 	}
 
@@ -148,7 +142,6 @@ class EveApiHelper {
 
 		if($data === false) {
 			$endpoint = 'eve.typeName';
-//			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $typeID));
 			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $typeID));
 
 			/**
@@ -177,7 +170,6 @@ class EveApiHelper {
 
 		if($data === false) {
 			$endpoint = 'eve.characterName';
-//			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $systemID));
 			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $systemID));
 
 			/**
@@ -201,6 +193,7 @@ class EveApiHelper {
 
 	/**
 	 * get the EVE ID by it's name
+	 *
 	 * @param type $name
 	 * @return type
 	 */
@@ -210,7 +203,6 @@ class EveApiHelper {
 
 		if($data === false) {
 			$endpoint = 'eve.owner';
-//			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
 			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
 
 			/**

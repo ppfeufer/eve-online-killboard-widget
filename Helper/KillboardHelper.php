@@ -22,6 +22,7 @@ class KillboardHelper {
 		if(null === self::$instance) {
 			self::$instance = new self;
 		}
+
 		return self::$instance;
 	}
 
@@ -48,9 +49,9 @@ class KillboardHelper {
 		$this->entityID = EveApiHelper::getInstance()->getEveIdFromName($entityName);
 		$this->entityType = $entityType;
 
-		$transientName = \sanitize_title('eve_online_killboard.lastkills_kills-only');
-		if($showLosses === 1) {
-			$transientName = \sanitize_title('eve_online_killboard.lastkills');
+		$transientName = \sanitize_title('eve_online_killboard-' . $entityType . '-' . $entityName . '.lastkills_kills-only');
+		if((int) $showLosses === 1) {
+			$transientName = \sanitize_title('eve_online_killboard-' . $entityType . '-' . $entityName . '.lastkills');
 		} // END if($showLosses === true)
 
 		$data = \get_transient($transientName);
