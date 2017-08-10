@@ -25,20 +25,20 @@ class KillboardWidget extends \WP_Widget {
 	public $name;
 
 	public function __construct() {
-		$widget_options = array(
+		$widgetOptions = array(
 			'classname' => 'eve-online-killboard-widget',
 			'description' => \__('Displaying the latest kills (and maybe losses if you are tough enough) in your sidebar.', 'eve-online-killboard-widget')
 		);
 
-		$control_options = array();
+		$controlOptions = array();
 
-		parent::__construct('eve_online_killboard_widget', __('EVE Online Killboard Widget', 'eve-online-killboard-widget'), $widget_options, $control_options);
+		parent::__construct('eve_online_killboard_widget', __('EVE Online Killboard Widget', 'eve-online-killboard-widget'), $widgetOptions, $controlOptions);
 	} // END public function __construct($id_base, $name, $widget_options = array(), $control_options = array())
 
 	/**
 	 * The widgets settings form
 	 *
-	 * @param type $instance
+	 * @param array $instance
 	 */
 	public function form($instance) {
 		/**
@@ -108,18 +108,18 @@ class KillboardWidget extends \WP_Widget {
 	/**
 	 * Update Widget Setting
 	 *
-	 * @param type $new_instance
-	 * @param type $old_instance
+	 * @param array $newInstance
+	 * @param array $oldInstance
 	 */
-	public function update($new_instance, $old_instance) {
-		$instance = $old_instance;
+	public function update($newInstance, $oldInstance) {
+		$instance = $oldInstance;
 
 		/**
 		 * Set defaults
 		 *
 		 * @var array
 		 */
-		$new_instance = \wp_parse_args((array) $new_instance, array(
+		$newInstance = \wp_parse_args((array) $newInstance, array(
 			'eve-online-killboard-widget-title' => '',
 			'eve-online-killboard-widget-number-of-kills' => 5,
 			'eve-online-killboard-widget-entity-type' => '',
@@ -133,12 +133,12 @@ class KillboardWidget extends \WP_Widget {
 		 *
 		 * @var array
 		 */
-		$instance['eve-online-killboard-widget-title'] = (string) \esc_html($new_instance['eve-online-killboard-widget-title']);
-		$instance['eve-online-killboard-widget-entity-type'] = (string) \esc_html($new_instance['eve-online-killboard-widget-entity-type']);
-		$instance['eve-online-killboard-widget-entity-name'] = (string) \esc_html($new_instance['eve-online-killboard-widget-entity-name']);
-		$instance['eve-online-killboard-widget-number-of-kills'] = (int) $new_instance['eve-online-killboard-widget-number-of-kills'];
-		$instance['eve-online-killboard-widget-show-losses'] = $new_instance['eve-online-killboard-widget-show-losses'] ? 1 : 0;
-		$instance['eve-online-killboard-widget-static-cache'] = $new_instance['eve-online-killboard-widget-static-cache'] ? 1 : 0;
+		$instance['eve-online-killboard-widget-title'] = (string) \esc_html($newInstance['eve-online-killboard-widget-title']);
+		$instance['eve-online-killboard-widget-entity-type'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']);
+		$instance['eve-online-killboard-widget-entity-name'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']);
+		$instance['eve-online-killboard-widget-number-of-kills'] = (int) $newInstance['eve-online-killboard-widget-number-of-kills'];
+		$instance['eve-online-killboard-widget-show-losses'] = $newInstance['eve-online-killboard-widget-show-losses'] ? 1 : 0;
+		$instance['eve-online-killboard-widget-static-cache'] = $newInstance['eve-online-killboard-widget-static-cache'] ? 1 : 0;
 
 		/**
 		 * return new settings for saving them
@@ -149,8 +149,8 @@ class KillboardWidget extends \WP_Widget {
 	/**
 	 * Widget Output
 	 *
-	 * @param type $args
-	 * @param type $instance
+	 * @param array $args
+	 * @param array $instance
 	 */
 	public function widget($args, $instance) {
 		echo $args['before_widget'];
@@ -161,35 +161,43 @@ class KillboardWidget extends \WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		} // END if(!empty($title))
 
-
 		$widgetHtml = null;
 
-		switch($instance['eve-online-killboard-widget-static-cache']) {
+		switch((int) $instance['eve-online-killboard-widget-static-cache']) {
 			case 0:
 				$widgetHtml = $this->getWidgetData($instance);
 				break;
 
 			case 1:
 				$widgetHtml = '<div class="killboard-widget-kill-list">';
-				$widgetHtml .= '<p>' . \__('Loading killboard data, please wait ...') . '</p>';
+				$widgetHtml .= '<p style="text-align: center;">' . \__('Loading killboard data, please wait ...', 'eve-online-killboard-widget') . '</p>';
 				$widgetHtml .= '<p><span class="loaderImage"></span></p>';
 				$widgetHtml .= '</div>';
 				$widgetHtml .= $args['after_widget'];
+
+				$jsOptions = json_encode([
+					'entityType' => $instance['eve-online-killboard-widget-entity-type'],
+					'entityName' => $instance['eve-online-killboard-widget-entity-name'],
+					'killCount' => $instance['eve-online-killboard-widget-number-of-kills'],
+					'showLosses' => $instance['eve-online-killboard-widget-show-losses']
+				]);
+
 				$widgetHtml .= '<script type="text/javascript">'
-					. 'var entityType = "' . $instance['eve-online-killboard-widget-entity-type'] . '";' . "\n"
-					. 'var entityName = "' . $instance['eve-online-killboard-widget-entity-name'] . '";' . "\n"
-					. 'var killCount = ' . $instance['eve-online-killboard-widget-number-of-kills'] . ';' . "\n"
-					. 'var showLosses = ' . $instance['eve-online-killboard-widget-show-losses'] . ';' . "\n"
+					. 'var killboardOptions = ' . $jsOptions . ';' . "\n"
 					. '</script>';
 				break;
-		}
-
-
+		} // END switch((int) $instance['eve-online-killboard-widget-static-cache'])
 
 		echo $widgetHtml;
 	} // END public function widget($args, $instance)
 
-	private function getWidgetData($instance) {
+	/**
+	 * Getting Widget Data
+	 *
+	 * @param array $instance
+	 * @return string
+	 */
+	private function getWidgetData(array $instance) {
 		$widgetHtml = null;
 		$killList = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getKillList($instance['eve-online-killboard-widget-entity-type'], $instance['eve-online-killboard-widget-entity-name'], $instance['eve-online-killboard-widget-number-of-kills'], $instance['eve-online-killboard-widget-show-losses']);
 
