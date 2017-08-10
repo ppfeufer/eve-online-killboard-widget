@@ -1,2 +1,1 @@
-# eve-online-killboard-widget
-EVE Online Killboard Widget
+# EVE Online Killboard Widget for WordPress
