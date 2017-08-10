@@ -56,14 +56,30 @@ class KillboardWidget extends \WP_Widget {
 
 		$showLosses = $instance['eve-online-killboard-widget-show-losses'] ? 'checked="checked"' : '';
 
+		$typeArray = [
+			'corporation' => \__('Corporation', 'eve-online-killboard-widget'),
+			'alliance' => \__('Alliance', 'eve-online-killboard-widget')
+		];
+
 		// Titel
 		echo '<p style="border-bottom: 1px solid #DFDFDF;"><strong>' . \__('Title', 'eve-online-killboard-widget') . '</strong></p>';
 		echo '<p><input id="' . $this->get_field_id('eve-online-killboard-widget-title') . '" name="' . $this->get_field_name('eve-online-killboard-widget-title') . '" type="text" value="' . $instance['eve-online-killboard-widget-title'] . '"></p>';
 		echo '<p style="clear:both;"></p>';
 
-		// Entity tyoe (Corporation / Alliance)
+		// Entity type (Corporation / Alliance)
 		echo '<p style="border-bottom: 1px solid #DFDFDF;"><strong>' . \__('Corp or Alliance?', 'eve-online-killboard-widget') . '</strong></p>';
-		echo '<p><input id="' . $this->get_field_id('eve-online-killboard-widget-entity-type') . '" name="' . $this->get_field_name('eve-online-killboard-widget-entity-type') . '" type="text" value="' . $instance['eve-online-killboard-widget-entity-type'] . '"></p>';
+		echo '<p><select id="' . $this->get_field_id('eve-online-killboard-widget-entity-type') . '" name="' . $this->get_field_name('eve-online-killboard-widget-entity-type') . '">';
+
+		foreach($typeArray as $value => $output) {
+			$selected = '';
+			if($instance['eve-online-killboard-widget-entity-type'] === $value) {
+				$selected = ' selected';
+			} // END if($instance['eve-online-killboard-widget-entity-type'] === $value)
+
+			echo '<option value="' . $value . '"' . $selected . '>' . $output . '</option>';
+		} // END foreach($typeArray as $value => $output)
+
+		echo '</select></p>';
 		echo '<p style="clear:both;"></p>';
 
 		// Entity name
@@ -141,39 +157,11 @@ class KillboardWidget extends \WP_Widget {
 	} // END public function widget($args, $instance)
 
 	private function getWidgetData($instance) {
-		$killList = YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getKillList($instance['eve-online-killboard-widget-entity-type'], $instance['eve-online-killboard-widget-entity-name'], $instance['eve-online-killboard-widget-number-of-kills']);
+		$widgetHtml = null;
+		$killList = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getKillList($instance['eve-online-killboard-widget-entity-type'], $instance['eve-online-killboard-widget-entity-name'], $instance['eve-online-killboard-widget-number-of-kills'], $instance['eve-online-killboard-widget-show-losses']);
 
 		if(!empty($killList) && is_array($killList)) {
-			$widgetHtml = null;
-
-			foreach($killList as $killmail) {
-				$countAttackers = \count($killmail->attackers);
-				$stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
-
-				$killType = ' kill-list-kill-mail';
-				if($killmail->victim->corporationID === (int) $this->entityID || $killmail->victim->allianceID === (int) $this->entityID) {
-					$killType = ' kill-list-loss-mail';
-				} // END if($killmail->victim->corporationID === $this->entityID || $killmail->victim->allianceID === $this->entityID)
-
-				$widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
-							. '	<div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
-							. '		<figure>'
-							. '			<a href="' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getKillboardLink($killmail->killID) . '" rel="external">'
-							.				YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getVictimImage($killmail->victim)
-							. '			</a>'
-							. '		</figure>'
-							. '	</div>'
-							. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
-							. '		<ul>'
-							. '			<li>' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getVictimType($killmail->victim) . ': ' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getVictimName($killmail->victim) . '</li>'
-							. '			<li>' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getVictimShipType($killmail->victim) . ': ' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getVictimShip($killmail->victim) . '</li>'
-							. '			<li>ISK lost: ' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getIskLoss($killmail->zkb) . '</li>'
-							. '			<li>System: ' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getSystem($killmail->solarSystemID) . '</li>'
-							. '			<li>Killed by: ' . YulaiFederation\Plugins\Helper\ZkbKillboardHelper::getInstance()->getFinalBlow($killmail->attackers) . $stringInvolved . '</li>'
-							. '		</ul>'
-							. '	</div>'
-							. '</div>';
-			} // END foreach($array as $killmail)
+			$widgetHtml = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
 		} // END if(!empty($killList) && is_array($killList))
 
 		return $widgetHtml;

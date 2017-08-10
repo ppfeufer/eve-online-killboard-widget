@@ -6,10 +6,7 @@
 namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
 class KillboardHelper {
-	private $plugin = null;
-	private $eveApi = null;
-	private $entityID = null;
-	private $entityType = null;
+	private $zkbLink = null;
 	private $zkbApiLink = null;
 
 	/**
@@ -43,21 +40,28 @@ class KillboardHelper {
 	 * no external instanciation allowed
 	 */
 	protected function __construct() {
-		$this->eveApi = new \WordPress\Themes\YulaiFederation\Helper\EveApiHelper;
-
-		$this->entityID = $this->eveApi->getEveIdFromName($this->themeSettings['name']);
-		$this->entityType = $this->themeSettings['type'];
-
-		$this->zkbApiLink = 'https://zkillboard.com/api/' . $this->entityType . 'ID/' . $this->entityID . '/limit/';
+		$this->zkbApiLink = 'https://zkillboard.com/api/';
+		$this->zkbLink = 'https://zkillboard.com/';
 	} // END protected function __construct()
 
-	public function getKillList($entityType, $entityName, $killCount) {
-		$transientName = \sanitize_title('yf_theme_killboard.lastkills');
+	public function getKillList($entityType, $entityName, $killCount = 5, $showLosses = 0) {
+		$this->entityID = EveApiHelper::getInstance()->getEveIdFromName($entityName);
+		$this->entityType = $entityType;
+
+		$transientName = \sanitize_title('eve_online_killboard.lastkills_kills-only');
+		if($showLosses === 1) {
+			$transientName = \sanitize_title('eve_online_killboard.lastkills');
+		} // END if($showLosses === true)
+
 		$data = \get_transient($transientName);
 
 		if($data === false) {
-			$get = \wp_remote_get($this->zkbApiLink . $killCount . '/');
-			$data = \json_decode(\wp_remote_retrieve_body($get));
+			$zkbUrl = $this->zkbApiLink . 'kills/' . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/';
+			if($showLosses === 1) {
+				$zkbUrl = $this->zkbApiLink . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/';
+			} // END if($showLosses === true)
+
+			$data = \json_decode(PluginHelper::getInstance()->getRemoteData($zkbUrl));
 
 			/**
 			 * setting the transient caches
@@ -68,6 +72,41 @@ class KillboardHelper {
 		return $data;
 	} // END public function getKillList($killCount)
 
+	public function getWidgetHtml(array $killList) {
+		$widgetHtml = null;
+
+		foreach($killList as $killmail) {
+			$countAttackers = \count($killmail->attackers);
+			$stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
+
+			$killType = ' kill-list-kill-mail';
+			if($killmail->victim->corporationID === (int) $this->entityID || $killmail->victim->allianceID === (int) $this->entityID) {
+				$killType = ' kill-list-loss-mail';
+			} // END if($killmail->victim->corporationID === $this->entityID || $killmail->victim->allianceID === $this->entityID)
+
+			$widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
+						. '	<div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
+						. '		<figure>'
+						. '			<a href="' . $this->getKillboardLink($killmail->killID) . '" rel="external">'
+						.				$this->getVictimImage($killmail->victim)
+						. '			</a>'
+						. '		</figure>'
+						. '	</div>'
+						. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
+						. '		<ul>'
+						. '			<li>' . $this->getVictimType($killmail->victim) . ': ' . $this->getVictimName($killmail->victim) . '</li>'
+						. '			<li>' . $this->getVictimShipType($killmail->victim) . ': ' . $this->getVictimShip($killmail->victim) . '</li>'
+						. '			<li>ISK lost: ' . $this->getIskLoss($killmail->zkb) . '</li>'
+						. '			<li>System: ' . $this->getSystem($killmail->solarSystemID) . '</li>'
+						. '			<li>Killed by: ' . $this->getFinalBlow($killmail->attackers) . $stringInvolved . '</li>'
+						. '		</ul>'
+						. '	</div>'
+						. '</div>';
+		} // END foreach($array as $killmail)
+
+		return $widgetHtml;
+	} // END public function getWidgetHtml(array $killList)
+
 	/**
 	 * Getting the link to teh killmail on ZKB
 	 *
@@ -75,7 +114,7 @@ class KillboardHelper {
 	 * @return string
 	 */
 	public function getKillboardLink($killID) {
-		return 'https://zkillboard.com/kill/' . $killID . '/';
+		return $this->zkbLink . 'kill/' . $killID . '/';
 	} // END public function getKillboardLink($killID)
 
 	/**
@@ -90,11 +129,11 @@ class KillboardHelper {
 
 		switch($victimData->characterID) {
 			case 0:
-				$victimImage = '<img src="' . \WordPress\Themes\YulaiFederation\Helper\ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('render', 'http://image.eveonline.com/Render/' . $victimData->shipTypeID . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->shipTypeID . '">';
+				$victimImage = '<img src="' . ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('render', EveApiHelper::getInstance()->getImageServerUrl() . 'Render/' . $victimData->shipTypeID . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->shipTypeID . '">';
 				break;
 
 			default:
-				$victimImage = $this->eveApi->getCharacterImageById($victimData->characterID, false, $size);
+				$victimImage = EveApiHelper::getInstance()->getCharacterImageById($victimData->characterID, false, $size);
 				break;
 		} // END switch($victimData->characterID)
 
@@ -162,7 +201,7 @@ class KillboardHelper {
 	 * @return string
 	 */
 	public function getVictimShip(\stdClass $victimData) {
-		$typeNames = $this->eveApi->getTypeName($victimData->shipTypeID);
+		$typeNames = EveApiHelper::getInstance()->getTypeName($victimData->shipTypeID);
 
 		return $typeNames['0'];
 	} // END public function getVictimShip(\stdClass $victimData)
@@ -190,7 +229,7 @@ class KillboardHelper {
 	 * @return string
 	 */
 	public function getSystem($systemID) {
-		$systemNames = $this->eveApi->getSystemNameFromId($systemID);
+		$systemNames = EveApiHelper::getInstance()->getSystemNameFromId($systemID);
 
 		return $systemNames['0'];
 	} // END public function getSystem($systemID)

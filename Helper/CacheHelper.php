@@ -163,8 +163,7 @@ class CacheHelper {
 		// make sure its an image
 		if($extension === 'gif' || $extension === 'jpg' || $extension === 'jpeg' || $extension === 'png') {
 			// get the remote image
-			$get = \wp_remote_get($remoteImageUrl);
-			$imageToFetch = \wp_remote_retrieve_body($get);
+			$imageToFetch = PluginHelper::getInstance()->getRemoteData($remoteImageUrl);
 
 			$wpFileSystem = new \WP_Filesystem_Direct(null);
 

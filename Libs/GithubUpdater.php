@@ -109,7 +109,7 @@ class GithubUpdater {
 	public function hasMinimumConfig() {
 		$this->missingConfig = array();
 
-		$required_config_params = array(
+		$requiredParams = array(
 			'api_url',
 			'raw_url',
 			'github_url',
@@ -119,9 +119,9 @@ class GithubUpdater {
 			'readme',
 		);
 
-		foreach($required_config_params as $required_param) {
-			if(empty($this->config[$required_param])) {
-				$this->missingConfig[] = $required_param;
+		foreach($requiredParams as $requiredParameter) {
+			if(empty($this->config[$requiredParameter])) {
+				$this->missingConfig[] = $requiredParameter;
 			}
 		}
 
@@ -166,21 +166,21 @@ class GithubUpdater {
 			$this->config['description'] = $this->getDescription();
 		}
 
-		$plugin_data = $this->getPluginData();
+		$pluginData = $this->getPluginData();
 		if(!isset($this->config['plugin_name'])) {
-			$this->config['plugin_name'] = $plugin_data['Name'];
+			$this->config['plugin_name'] = $pluginData['Name'];
 		}
 
 		if(!isset($this->config['version'])) {
-			$this->config['version'] = $plugin_data['Version'];
+			$this->config['version'] = $pluginData['Version'];
 		}
 
 		if(!isset($this->config['author'])) {
-			$this->config['author'] = $plugin_data['Author'];
+			$this->config['author'] = $pluginData['Author'];
 		}
 
 		if(!isset($this->config['homepage'])) {
-			$this->config['homepage'] = $plugin_data['PluginURI'];
+			$this->config['homepage'] = $pluginData['PluginURI'];
 		}
 
 		if(!isset($this->config['readme'])) {
@@ -224,15 +224,15 @@ class GithubUpdater {
 		$version = \get_site_transient(\md5($this->config['slug']) . '_new_version');
 
 		if($this->overruleTransients() || (!isset($version) || !$version || $version === '')) {
-			$raw_response = $this->remoteGet(\trailingslashit($this->config['raw_url']) . \basename($this->config['slug']));
+			$rawResponse = $this->remoteGet(\trailingslashit($this->config['raw_url']) . \basename($this->config['slug']));
 
-			if(\is_wp_error($raw_response)) {
+			if(\is_wp_error($rawResponse)) {
 				$version = false;
 			}
 
-			if(\is_array($raw_response)) {
-				if(!empty($raw_response['body'])) {
-					\preg_match('/.*Version\:\s*(.*)$/mi', $raw_response['body'], $matches);
+			if(\is_array($rawResponse)) {
+				if(!empty($rawResponse['body'])) {
+					\preg_match('/.*Version\:\s*(.*)$/mi', $rawResponse['body'], $matches);
 				}
 			}
 
@@ -244,13 +244,13 @@ class GithubUpdater {
 			// back compat for older readme version handling
 			// only done when there is no version found in file name
 			if($version === false) {
-				$raw_response = $this->remoteGet(\trailingslashit($this->config['raw_url']) . $this->config['readme']);
+				$rawResponse = $this->remoteGet(\trailingslashit($this->config['raw_url']) . $this->config['readme']);
 
-				if(\is_wp_error($raw_response)) {
+				if(\is_wp_error($rawResponse)) {
 					return $version;
 				}
 
-				\preg_match('#^\s*`*~Current Version\:\s*([^~]*)~#im', $raw_response['body'], $__version);
+				\preg_match('#^\s*`*~Current Version\:\s*([^~]*)~#im', $rawResponse['body'], $__version);
 
 				if(isset($__version[1])) {
 					$version_readme = $__version[1];
@@ -283,11 +283,11 @@ class GithubUpdater {
 			$query = \add_query_arg(array('access_token' => $this->config['access_token']), $query);
 		}
 
-		$raw_response = \wp_remote_get($query, array(
+		$rawResponse = \wp_remote_get($query, array(
 			'sslverify' => $this->config['sslverify']
 		));
 
-		return $raw_response;
+		return $rawResponse;
 	}
 
 	/**
@@ -429,11 +429,11 @@ class GithubUpdater {
 	 *
 	 * @since 1.0
 	 * @param boolean $true       always true
-	 * @param mixed   $hook_extra not used
+	 * @param mixed   $hookExtra not used
 	 * @param array   $result     the result of the move
 	 * @return array $result the result of the move
 	 */
-	public function upgraderPostInstall($true, $hook_extra, $result) {
+	public function upgraderPostInstall($true, $hookExtra, $result) {
 		global $wp_filesystem;
 
 		// Move & Activate

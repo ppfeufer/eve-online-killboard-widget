@@ -21,8 +21,8 @@ class CssLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Interfaces
 		 * Only in Frontend
 		 */
 		if(!\is_admin()) {
-			\wp_enqueue_style('bootstrap', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getPluginUri('bootstrap/css/bootstrap.min.css'));
-			\wp_enqueue_style('eve-online-killboard-widget', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getPluginUri('css/eve-online-killboard-widget.min.css'));
+			\wp_enqueue_style('bootstrap', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/css/bootstrap.min.css'));
+			\wp_enqueue_style('eve-online-killboard-widget', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('css/eve-online-killboard-widget.min.css'));
 		} // END if(!\is_admin())
 	} // END public function enqueue()
 } // END class CssLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Interfaces\AssetsInterface

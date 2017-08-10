@@ -78,7 +78,6 @@ class EveApiHelper {
 		 * Assigning API Endpoints
 		 */
 		$this->apiEndpoints = array(
-			// EVE API Endpoints
 			'eve.characterName' => 'eve/CharacterName.xml.aspx',
 			'eve.typeName' => 'eve/TypeName.xml.aspx', // Returns the names associated with a sequence of typeIDs. ( http://eveonline-third-party-documentation.readthedocs.io/en/latest/xmlapi/eve/eve_typename.html )
 		);
@@ -129,14 +128,14 @@ class EveApiHelper {
 		return $html;
 	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
 
-	public function getCharacterImageById($id, $imageOnly = true, $size = 128) {
-		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->imageserverUrl . $this->imageserverEndpoints['character'] . $id . '_' . $size. '.jpg');
+	public function getCharacterImageById($characterID, $imageOnly = true, $size = 128) {
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->imageserverUrl . $this->imageserverEndpoints['character'] . $characterID . '_' . $size. '.jpg');
 
 		if($imageOnly === true) {
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $id . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '">';
 
 		return $html;
 	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
@@ -148,7 +147,8 @@ class EveApiHelper {
 
 		if($data === false) {
 			$endpoint = 'eve.typeName';
-			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $typeID));
+//			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $typeID));
+			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $typeID));
 
 			/**
 			 * setting the transient caches
@@ -176,7 +176,8 @@ class EveApiHelper {
 
 		if($data === false) {
 			$endpoint = 'eve.characterName';
-			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $systemID));
+//			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $systemID));
+			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $systemID));
 
 			/**
 			 * setting the transient caches
@@ -196,6 +197,41 @@ class EveApiHelper {
 
 		return $systemName;
 	} // END public function getSystemNameFromId($systemID)
+
+	/**
+	 * get the EVE ID by it's name
+	 * @param type $name
+	 * @return type
+	 */
+	public function getEveIdFromName($name) {
+		$transientName = \sanitize_title('get_eve.owner_data_' . $name);
+		$data = $this->checkApiCache($transientName);
+
+		if($data === false) {
+//			$endpoint = 'eve.owner';
+//			$data = $this->curl($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
+			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
+
+			/**
+			 * setting the transient caches
+			 */
+			$this->setApiCache($transientName, $data);
+		} // END if($data === false)
+
+		if($this->isXml($data)) {
+			$xml = new \SimpleXMLElement($data);
+
+			if(!empty($xml->result->rowset)) {
+				foreach($xml->result->rowset->row as $row) {
+					if(\strtolower((string) $row->attributes()->ownerName) == strtolower($name)) {
+						$ownerID = (string) $row->attributes()->ownerID;
+					} // END if((string) $row->attributes()->name == $corpName)s
+				} // END foreach($xml->result->rowset->row as $row)
+
+				return $ownerID;
+			} // END if(!empty($xml->result->rowset))
+		} // END if($this->isXml($data))
+	} // END public function getCorpIdFromName($name)
 
 	/**
 	 * Getting transient cache information / data
@@ -220,49 +256,18 @@ class EveApiHelper {
 	} // END private function setApiCache($transientName, $data)
 
 	/**
-	 * Getting stuff from remote systems
-	 *
-	 * @param type $url
-	 * @param type $post
-	 * @return type
-	 */
-	private function curl($url, $post = '') {
-		$cUrlChannel = \curl_init();
-		$data = false;
-
-		if(!empty($post)) {
-			\curl_setopt($cUrlChannel, \CURLOPT_POST, 1);
-			\curl_setopt($cUrlChannel, \CURLOPT_POSTFIELDS, \http_build_query($post, \PHP_QUERY_RFC3986));
-		} // END if(!empty($post))
-
-		\curl_setopt($cUrlChannel, \CURLOPT_URL, $url);
-
-		if(\ini_get('open_basedir') === '' && \ini_get('safe_mode' === 'Off')) {
-			\curl_setopt ($cUrlChannel, \CURLOPT_FOLLOWLOCATION, 1);
-		} // END if(ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off'))
-
-		\curl_setopt($cUrlChannel, \CURLOPT_SSL_VERIFYPEER, false);
-		\curl_setopt($cUrlChannel, \CURLOPT_RETURNTRANSFER, 1);
-		\curl_setopt($cUrlChannel, \CURLOPT_USERAGENT, $this->sUserAgent);
-
-		$data = \curl_exec($cUrlChannel);
-
-		\curl_close($cUrlChannel);
-
-		return $data;
-	} // END private function curl($url, $post = '')
-
-	/**
 	 * Check if a string is a valid XML
 	 *
 	 * @param string $string
 	 * @return boolean
 	 */
 	private function isXml($string) {
+		$returnValue = false;
+
 		if(\substr($string, 0, 5) == "<?xml") {
-			return true;
-		} else {
-			return false;
+			$returnValue = true;
 		} // END if(substr($sovereigntyXml, 0, 5) == "<?xml")
+
+		return $returnValue;
 	} // END private function isXml($string)
 } // END class EveApi
