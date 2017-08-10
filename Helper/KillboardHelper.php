@@ -58,7 +58,7 @@ class KillboardHelper {
 
 		if($data === false) {
 			$zkbUrl = $this->zkbApiLink . 'kills/' . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/';
-			if($showLosses === 1) {
+			if((int) $showLosses === 1) {
 				$zkbUrl = $this->zkbApiLink . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/';
 			} // END if($showLosses === true)
 
