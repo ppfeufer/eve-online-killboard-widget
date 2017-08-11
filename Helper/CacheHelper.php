@@ -105,6 +105,14 @@ class CacheHelper {
 
 						if(!$wpFileSystem->is_dir(\trailingslashit(\WP_CONTENT_DIR) . $createDir) && !empty($dir)) {
 							$wpFileSystem->mkdir(\trailingslashit(\WP_CONTENT_DIR) . $createDir, 0755);
+
+							if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php')) {
+								$wpFileSystem->put_contents(
+									\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php',
+									'',
+									FS_CHMOD_FILE // predefined mode settings for WP files
+								);
+							}
 						} // END if(!$wpFileSystem->is_dir(\trailingslashit(\WP_CONTENT_DIR) . $createDir) && !empty($dir))
 					} // END foreach($subdirs as $dir)
 				} // END if(!$wpFileSystem->is_dir(\trailingslashit($this->getPluginCacheDir())))
@@ -112,6 +120,14 @@ class CacheHelper {
 
 			if(!$wpFileSystem->is_dir(\trailingslashit($this->getPluginCacheDir()) . $directory)) {
 				$wpFileSystem->mkdir(\trailingslashit($this->getPluginCacheDir()) . $directory, 0755);
+
+				if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php')) {
+					$wpFileSystem->put_contents(
+						\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php',
+						'',
+						FS_CHMOD_FILE // predefined mode settings for WP files
+					);
+				}
 			} // END if(!$wpFileSystem->is_dir(\trailingslashit($this->getThemeCacheDir()) . $directory))
 		} // END if($wpFileSystem->is_writable($wpFileSystem->wp_content_dir()))
 	} // END public function createCacheDirectories()

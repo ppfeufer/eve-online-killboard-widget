@@ -3,7 +3,9 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.2...HEAD)
-- in development
+### Changed
+- Prevent direct access to our classes
+- Writing empty index.php files into our cache directories, so the directory listing doesn't work there
 
 ## [0.2](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.2) - 2017-08-11
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.1...v0.2)
