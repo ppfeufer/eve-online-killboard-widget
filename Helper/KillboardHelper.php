@@ -88,7 +88,7 @@ class KillboardHelper {
 			$widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
 						. '	<div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
 						. '		<figure>'
-						. '			<a href="' . $this->getKillboardLink($killmail->killID) . '" rel="external">'
+						. '			<a href="' . $this->getKillboardLink($killmail->killID) . '" rel="external" target="_blank">'
 						.				$this->getVictimImage($killmail->victim)
 						. '			</a>'
 						. '		</figure>'
