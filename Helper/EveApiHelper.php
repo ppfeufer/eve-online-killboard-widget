@@ -47,6 +47,11 @@ class EveApiHelper {
 	 */
 	protected static $instance = null;
 
+	/**
+	 * Getting the instance
+	 *
+	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\EveApiHelper
+	 */
 	public static function getInstance() {
 		if(null === self::$instance) {
 			self::$instance = new self;
@@ -105,6 +110,14 @@ class EveApiHelper {
 		return $this->getEveApiUrl() . $this->apiEndpoints[$section];
 	} // END public function getEveApiEndpoint($section)
 
+	/**
+	 * Get a pilots image by his name
+	 *
+	 * @param string $name
+	 * @param boolean $imageOnly
+	 * @param int $size
+	 * @return boolean|string
+	 */
 	public function getCharacterImageByName($name, $imageOnly = true, $size = 128) {
 		$entitieID = $this->getEveIdFromName($name);
 
@@ -123,17 +136,89 @@ class EveApiHelper {
 		return $html;
 	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
 
-	public function getCharacterImageById($characterID, $imageOnly = true, $size = 128) {
+	/**
+	 * Get a pilots image by his ID
+	 *
+	 * @param int $characterID
+	 * @param string $characterName
+	 * @param boolean $imageOnly
+	 * @param int $size
+	 * @return string
+	 */
+	public function getCharacterImageById($characterID, $characterName = '', $imageOnly = true, $size = 128) {
 		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->imageserverUrl . $this->imageserverEndpoints['character'] . $characterID . '_' . $size. '.jpg');
 
 		if($imageOnly === true) {
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '" alt="' . \esc_html($characterName) . '" title="' . \esc_html($characterName) . '">';
 
 		return $html;
 	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
+
+	/**
+	 * Get a corporation logo by corp ID
+	 *
+	 * @param int $corporationID
+	 * @param string $corporationName Corp name will be passed into the image tag
+	 * @param boolean $imageOnly
+	 * @param size $size
+	 * @return string
+	 */
+	public function getCorporationImageById($corporationID, $corporationName = '', $imageOnly = true, $size = 128) {
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', $this->imageserverUrl . $this->imageserverEndpoints['corporation'] . $corporationID . '_' . $size. '.png');
+
+		if($imageOnly === true) {
+			return $imagePath;
+		} // END if($imageOnly === true)
+
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-corporation-id-' . $characterID . '" alt="' . \esc_html($corporationName) . '" title="' . \esc_html($corporationName) . '">';
+
+		return $html;
+	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
+
+	/**
+	 * Get the ship image by ship ID
+	 *
+	 * @param int $shipTypeID
+	 * @param string $shiptype
+	 * @param boolean $imageOnly
+	 * @param int $size
+	 * @return string
+	 */
+	public function getShipImageById($shipTypeID, $shiptype = '', $imageOnly = true, $size = 128) {
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->imageserverUrl . $this->imageserverEndpoints['inventory'] . $shipTypeID . '_' . $size. '.png');
+
+		if($imageOnly === true) {
+			return $imagePath;
+		} // END if($imageOnly === true)
+
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-ship-id-' . $shipTypeID . '" alt="' . \esc_html($shiptype) . '" title="' . \esc_html($shiptype) . '">';
+
+		return $html;
+	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
+
+	/**
+	 * Get the alliance logo by alliance ID
+	 *
+	 * @param int $allianceID
+	 * @param string $allianceName
+	 * @param boolean $imageOnly
+	 * @param int $size
+	 * @return string
+	 */
+	public function getAllianceImageById($allianceID, $allianceName = '', $imageOnly = true, $size = 128) {
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', $this->imageserverUrl . $this->imageserverEndpoints['alliance'] . $allianceID . '_' . $size. '.png');
+
+		if($imageOnly === true) {
+			return $imagePath;
+		} // END if($imageOnly === true)
+
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-alliance-id-' . $allianceID . '" alt="' . \esc_html($allianceName) . '" title="' . \esc_html($allianceName) . '">';
+
+		return $html;
+	} // END public function getAllianceImageById($allianceID, $imageOnly = true, $size = 128)
 
 	public function getTypeName($typeID) {
 		$transientName = \sanitize_title('get_eve.typeName_' . $typeID);

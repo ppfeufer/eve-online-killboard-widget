@@ -5,6 +5,8 @@
 
 namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
+\defined('ABSPATH') or die();
+
 class KillboardHelper {
 	private $zkbLink = null;
 	private $zkbApiLink = null;
@@ -18,6 +20,11 @@ class KillboardHelper {
 	 */
 	protected static $instance = null;
 
+	/**
+	 * Getting the instance
+	 *
+	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper
+	 */
 	public static function getInstance() {
 		if(null === self::$instance) {
 			self::$instance = new self;
@@ -92,6 +99,17 @@ class KillboardHelper {
 						.				$this->getVictimImage($killmail->victim)
 						. '			</a>'
 						. '		</figure>'
+						. '		<div class="eve-online-killboard-widget-pilot-information clearfix">'
+						. '			<span class="victimShipImage">'
+						.				$this->getVictimShipImage($killmail->victim, 32)
+						. '			</span>'
+						. '			<span class="victimCorpImage">'
+						.				$this->getVictimCorpImage($killmail->victim, 32)
+						. '			</span>'
+						. '			<span class="victimAllianceImage">'
+						.				$this->getVictimAllianceImage($killmail->victim, 32)
+						. '			</span>'
+						. '		</div>'
 						. '	</div>'
 						. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
 						. '		<ul>'
@@ -176,9 +194,58 @@ class KillboardHelper {
 				break;
 
 			default:
-				$victimImage = EveApiHelper::getInstance()->getCharacterImageById($victimData->characterID, false, $size);
+				$victimImage = EveApiHelper::getInstance()->getCharacterImageById($victimData->characterID, $victimData->characterName, false, $size);
 				break;
 		} // END switch($victimData->characterID)
+
+		return $victimImage;
+	} // END public function getVictimImage(\stdClass $victimData, $size = 256)
+
+	public function getVictimCorpImage(\stdClass $victimData, $size = 256) {
+		$victimImage = null;
+
+		switch($victimData->corporationID) {
+			case 0:
+				$victimImage = null;
+				break;
+
+			default:
+				$victimImage = EveApiHelper::getInstance()->getCorporationImageById($victimData->corporationID, $victimData->corporationName, false, $size);
+				break;
+		} // END switch($victimData->corporationID)
+
+		return $victimImage;
+	} // END public function getVictimImage(\stdClass $victimData, $size = 256)
+
+	public function getVictimShipImage(\stdClass $victimData, $size = 256) {
+		$victimImage = null;
+
+		switch($victimData->shipTypeID) {
+			case 0:
+				$victimImage = null;
+				break;
+
+			default:
+				$typeNames = EveApiHelper::getInstance()->getTypeName($victimData->shipTypeID);
+				$victimImage = EveApiHelper::getInstance()->getShipImageById($victimData->shipTypeID, $typeNames['0'], false, $size);
+				break;
+		} // END switch($victimData->shipTypeID)
+
+		return $victimImage;
+	} // END public function getVictimImage(\stdClass $victimData, $size = 256)
+
+	public function getVictimAllianceImage(\stdClass $victimData, $size = 128) {
+		$victimImage = null;
+
+		switch($victimData->allianceID) {
+			case 0:
+				$victimImage = null;
+				break;
+
+			default:
+				$victimImage = EveApiHelper::getInstance()->getAllianceImageById($victimData->allianceID, $victimData->allianceName, false, $size);
+				break;
+		} // END switch($victimData->allianceID)
 
 		return $victimImage;
 	} // END public function getVictimImage(\stdClass $victimData, $size = 256)

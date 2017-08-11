@@ -2,13 +2,15 @@
 
 namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs;
 
+\defined('ABSPATH') or die();
+
 class AjaxApi {
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		$this->initActions();
-	}
+	} // END public function __construct()
 
 	/**
 	 * Initialize the actions
@@ -16,7 +18,7 @@ class AjaxApi {
 	private function initActions() {
 		\add_action('wp_ajax_nopriv_get-eve-killboard-widget-data', array($this, 'ajaxGetKillboardData'));
 		\add_action('wp_ajax_get-eve-killboard-widget-data', array($this, 'ajaxGetKillboardData'));
-	}
+	} // END private function initActions()
 
 	/**
 	 * Getting the market data for a fitting
@@ -25,7 +27,7 @@ class AjaxApi {
 		$nonce = \filter_input(\INPUT_POST, 'nonce');
 		if(!\wp_verify_nonce($nonce, 'ajax-nonce-eve-online-killboard-widget')) {
 			die('Busted!');
-		}
+		} // END if(!\wp_verify_nonce($nonce, 'ajax-nonce-eve-online-killboard-widget'))
 
 		$entityType = \filter_input(\INPUT_POST, 'type');
 		$entityName  = \filter_input(\INPUT_POST, 'name');
@@ -43,5 +45,5 @@ class AjaxApi {
 
 		// always exit this API function
 		exit;
-	}
-}
+	} // END public function ajaxGetKillboardData()
+} // END class AjaxApi
