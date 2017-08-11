@@ -44,6 +44,8 @@ class CacheHelper {
 		$this->createCacheDirectory('images');
 		$this->createCacheDirectory('images/ship');
 		$this->createCacheDirectory('images/character');
+		$this->createCacheDirectory('images/corporation');
+		$this->createCacheDirectory('images/alliance');
 	} // END public function checkOrCreateCacheDirectories()
 
 	/**

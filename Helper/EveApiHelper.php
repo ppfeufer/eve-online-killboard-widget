@@ -140,6 +140,42 @@ class EveApiHelper {
 		return $html;
 	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
 
+	public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128) {
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', $this->imageserverUrl . $this->imageserverEndpoints['corporation'] . $corporationID . '_' . $size. '.png');
+
+		if($imageOnly === true) {
+			return $imagePath;
+		} // END if($imageOnly === true)
+
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '">';
+
+		return $html;
+	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
+
+	public function getShipImageById($shipTypeID, $imageOnly = true, $size = 128) {
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->imageserverUrl . $this->imageserverEndpoints['inventory'] . $shipTypeID . '_' . $size. '.png');
+
+		if($imageOnly === true) {
+			return $imagePath;
+		} // END if($imageOnly === true)
+
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '">';
+
+		return $html;
+	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
+
+	public function getAllianceImageById($allianceID, $imageOnly = true, $size = 128) {
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', $this->imageserverUrl . $this->imageserverEndpoints['alliance'] . $allianceID . '_' . $size. '.png');
+
+		if($imageOnly === true) {
+			return $imagePath;
+		} // END if($imageOnly === true)
+
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '">';
+
+		return $html;
+	} // END public function getAllianceImageById($allianceID, $imageOnly = true, $size = 128)
+
 	public function getTypeName($typeID) {
 		$transientName = \sanitize_title('get_eve.typeName_' . $typeID);
 		$data = $this->checkApiCache($transientName);
