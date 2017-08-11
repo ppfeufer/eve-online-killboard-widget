@@ -109,6 +109,48 @@ class KillboardHelper {
 	} // END public function getWidgetHtml(array $killList)
 
 	/**
+	 * Getting dummy HTML for the killboard widget, which will be
+	 * replaced with the real killboard information after the ajax call
+	 *
+	 * @return string
+	 */
+	public function getDummyHtml() {
+		return '<div class="row killboard-entry">'
+				. '	<div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
+				. '		<figure>'
+				.			$this->getDummyImage()
+				. '		</figure>'
+				. '	</div>'
+				. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
+				. '		<ul>'
+				. '			<li>Pilot:</li>'
+				. '			<li>Ship:</li>'
+				. '			<li>ISK lost:</li>'
+				. '			<li>System:</li>'
+				. '			<li>Killed by:</li>'
+				. '		</ul>'
+				. '	</div>'
+				. '</div>';
+	} // END public function getDummyHtml()
+
+	/**
+	 * Getting the dummy image
+	 *
+	 * @param boolean $linkOnly
+	 * @return string
+	 */
+	public function getDummyImage($linkOnly = false) {
+		$dummyImage = PluginHelper::getInstance()->getPluginUri('images/dummy.jpg');
+		$returnValue = $dummyImage;
+
+		if($linkOnly === false) {
+			$returnValue = '<img src="' . $dummyImage . '" class="eve-character-image">';
+		} // END if($linkOnly === false)
+
+		return $returnValue;
+	} // END public function getDummyImage($linkOnly = false)
+
+	/**
 	 * Getting the link to teh killmail on ZKB
 	 *
 	 * @param int $killID
