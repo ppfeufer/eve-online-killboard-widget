@@ -2,6 +2,8 @@
 
 namespace WordPress\Plugin\EveOnlineKillboardWidget\ResourceLoader;
 
+\defined('ABSPATH') or die();
+
 /**
  * CSS Loader
  */

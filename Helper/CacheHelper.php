@@ -26,7 +26,7 @@ class CacheHelper {
 	/**
 	 * Getting the instance
 	 *
-	 * @return WordPress\Plugin\EveOnlineFittingManager\Helper\CacheHelper
+	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\CacheHelper
 	 */
 	public static function getInstance() {
 		if(\is_null(self::$instance)) {

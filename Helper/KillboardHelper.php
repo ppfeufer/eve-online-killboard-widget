@@ -5,6 +5,8 @@
 
 namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
+\defined('ABSPATH') or die();
+
 class KillboardHelper {
 	private $zkbLink = null;
 	private $zkbApiLink = null;
@@ -18,6 +20,11 @@ class KillboardHelper {
 	 */
 	protected static $instance = null;
 
+	/**
+	 * Getting the instance
+	 *
+	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper
+	 */
 	public static function getInstance() {
 		if(null === self::$instance) {
 			self::$instance = new self;

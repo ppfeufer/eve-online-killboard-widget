@@ -5,6 +5,8 @@
 
 namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs;
 
+\defined('ABSPATH') or die();
+
 class KillboardWidget extends \WP_Widget {
 	/**
 	 * Root ID for all widgets of this type.

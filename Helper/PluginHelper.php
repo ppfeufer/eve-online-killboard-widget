@@ -14,6 +14,11 @@ class PluginHelper {
 	 */
 	protected static $instance = null;
 
+	/**
+	 * Getting the instance
+	 *
+	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper
+	 */
 	public static function getInstance() {
 		if(null === self::$instance) {
 			self::$instance = new self;
