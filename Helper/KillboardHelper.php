@@ -64,9 +64,9 @@ class KillboardHelper {
 		$data = \get_transient($transientName);
 
 		if($data === false) {
-			$zkbUrl = $this->zkbApiLink . 'kills/' . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/';
+			$zkbUrl = $this->zkbApiLink . 'kills/' . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/npc/0/';
 			if((int) $showLosses === 1) {
-				$zkbUrl = $this->zkbApiLink . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/';
+				$zkbUrl = $this->zkbApiLink . $this->entityType . 'ID/' . $this->entityID . '/limit/' . $killCount . '/npc/0/';
 			} // END if($showLosses === true)
 
 			$data = \json_decode(PluginHelper::getInstance()->getRemoteData($zkbUrl));

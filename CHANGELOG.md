@@ -2,9 +2,14 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.3...HEAD)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.3.1...HEAD)
+- in development
+
+## [0.3.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.3.1) - 2017-08-11
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.3...v0.3.1)
 ### Fixed
 - Usage of a wrong variable
+- Ignoring NPC only killmails
 
 ## [0.3](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.3) - 2017-08-11
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.2...v0.3)
