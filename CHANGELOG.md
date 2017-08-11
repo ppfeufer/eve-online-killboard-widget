@@ -2,7 +2,11 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.2...HEAD)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.3...HEAD)
+- in development
+
+## [0.3](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.3) - 2017-08-11
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.2...v0.3)
 ### Added
 - Ship, corp and alliance images
 

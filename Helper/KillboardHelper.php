@@ -99,7 +99,7 @@ class KillboardHelper {
 						.				$this->getVictimImage($killmail->victim)
 						. '			</a>'
 						. '		</figure>'
-						. '		<div class="eve-online-killboard-widget-pilot-information hidden-xs hidden-lg visible-xl">'
+						. '		<div class="eve-online-killboard-widget-pilot-information clearfix">'
 						. '			<span class="victimShipImage">'
 						.				$this->getVictimShipImage($killmail->victim, 32)
 						. '			</span>'
@@ -194,7 +194,7 @@ class KillboardHelper {
 				break;
 
 			default:
-				$victimImage = EveApiHelper::getInstance()->getCharacterImageById($victimData->characterID, false, $size);
+				$victimImage = EveApiHelper::getInstance()->getCharacterImageById($victimData->characterID, $victimData->characterName, false, $size);
 				break;
 		} // END switch($victimData->characterID)
 
@@ -210,7 +210,7 @@ class KillboardHelper {
 				break;
 
 			default:
-				$victimImage = EveApiHelper::getInstance()->getCorporationImageById($victimData->corporationID, false, $size);
+				$victimImage = EveApiHelper::getInstance()->getCorporationImageById($victimData->corporationID, $victimData->corporationName, false, $size);
 				break;
 		} // END switch($victimData->corporationID)
 
@@ -226,7 +226,8 @@ class KillboardHelper {
 				break;
 
 			default:
-				$victimImage = EveApiHelper::getInstance()->getShipImageById($victimData->shipTypeID, false, $size);
+				$typeNames = EveApiHelper::getInstance()->getTypeName($victimData->shipTypeID);
+				$victimImage = EveApiHelper::getInstance()->getShipImageById($victimData->shipTypeID, $typeNames['0'], false, $size);
 				break;
 		} // END switch($victimData->shipTypeID)
 
@@ -242,7 +243,7 @@ class KillboardHelper {
 				break;
 
 			default:
-				$victimImage = EveApiHelper::getInstance()->getAllianceImageById($victimData->allianceID, false, $size);
+				$victimImage = EveApiHelper::getInstance()->getAllianceImageById($victimData->allianceID, $victimData->allianceName, false, $size);
 				break;
 		} // END switch($victimData->allianceID)
 

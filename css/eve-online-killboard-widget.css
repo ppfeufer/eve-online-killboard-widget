@@ -25,18 +25,17 @@
 
 	.eve-online-killboard-widget-pilot-information {
 		position: absolute;
-		width: 32px;
-		width: 2rem;
-		top: 1px;
-		top: 0.0625rem;
+		display: flex;
 		bottom: 0;
-		right: 16px;
-		right: 1rem;
+		right: 15px;
+		left: 15px;
+		background: rgba(0,0,0,0.65);
 	}
 
 	.eve-online-killboard-widget-pilot-information > span {
-		display: block;
-		margin-bottom: 10px;
+		margin-bottom: 0;
+		flex-basis: 33.333333%;
+		text-align: center;
 	}
 }
 
