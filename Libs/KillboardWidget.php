@@ -170,6 +170,11 @@ class KillboardWidget extends \WP_Widget {
 
 			case 1:
 				$widgetHtml = '<div class="killboard-widget-kill-list">';
+
+				for($countI = 1; $countI <= $instance['eve-online-killboard-widget-number-of-kills']; $countI++) {
+					$widgetHtml .= \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getDummyHtml();
+				}
+
 				$widgetHtml .= '<p style="text-align: center;">' . \__('Loading killboard data, please wait ...', 'eve-online-killboard-widget') . '</p>';
 				$widgetHtml .= '<p><span class="loaderImage"></span></p>';
 				$widgetHtml .= '</div>';
