@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.3...HEAD)
-- in development
+### Fixed
+- Usage of a wrong variable
 
 ## [0.3](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.3) - 2017-08-11
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.2...v0.3)

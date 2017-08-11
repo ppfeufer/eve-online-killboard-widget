@@ -173,7 +173,7 @@ class EveApiHelper {
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-corporation-id-' . $characterID . '" alt="' . \esc_html($corporationName) . '" title="' . \esc_html($corporationName) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-corporation-id-' . $corporationID . '" alt="' . \esc_html($corporationName) . '" title="' . \esc_html($corporationName) . '">';
 
 		return $html;
 	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
