@@ -9,13 +9,13 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
 \defined('ABSPATH') or die();
 
-class EveApiHelper {
+class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
 	/**
 	 * API URL
 	 *
 	 * @var string
 	 */
-	private $apiUrl = 'https://api.eveonline.com/';
+	private $apiUrl = null;
 
 	/**
 	 * API Endpoints
@@ -29,7 +29,7 @@ class EveApiHelper {
 	 *
 	 * @var string
 	 */
-	private $imageserverUrl = 'https://image.eveonline.com/';
+	private $imageserverUrl = null;
 
 	/**
 	 * Image Server Endpoints
@@ -39,40 +39,14 @@ class EveApiHelper {
 	private $imageserverEndpoints = null;
 
 	/**
-	 * instance
-	 *
-	 * static variable to keep the current (and only!) instance of this class
-	 *
-	 * @var Singleton
-	 */
-	protected static $instance = null;
-
-	/**
-	 * Getting the instance
-	 *
-	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\EveApiHelper
-	 */
-	public static function getInstance() {
-		if(null === self::$instance) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
-	}
-
-	/**
-	 * clone
-	 *
-	 * no cloning allowed
-	 */
-	protected function __clone() {
-		;
-	}
-
-	/**
 	 * The Constructor
 	 */
 	protected function __construct() {
+		parent::__construct();
+
+		$this->apiUrl = 'https://api.eveonline.com/';
+		$this->imageserverUrl = 'https://image.eveonline.com/';
+
 		/**
 		 * Assigning API Endpoints
 		 */

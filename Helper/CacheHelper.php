@@ -10,31 +10,24 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
 require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');
 
-class CacheHelper {
-	private static $instance = null;
+class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
+	/**
+	 * The base directoy of our cache
+	 *
+	 * @var string
+	 */
 	private $cacheDirectoryBase;
 
 	/**
 	 * Constructor
 	 */
-	private function __construct() {
+	protected function __construct() {
+		parent::__construct();
+
 		$this->cacheDirectoryBase = $this->getPluginCacheDir();
 
 		$this->checkOrCreateCacheDirectories();
-	} // END private function __construct()
-
-	/**
-	 * Getting the instance
-	 *
-	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\CacheHelper
-	 */
-	public static function getInstance() {
-		if(\is_null(self::$instance)) {
-			self::$instance = new self();
-		} // END if(\is_null(self::$instance))
-
-		return self::$instance;
-	} // END public static function getInstance()
+	} // END protected function __construct()
 
 	/**
 	 * Check if cache directories exist, otherwise try to create them
@@ -112,9 +105,9 @@ class CacheHelper {
 								$wpFileSystem->put_contents(
 									\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php',
 									'',
-									FS_CHMOD_FILE // predefined mode settings for WP files
+									0644 // predefined mode settings for WP files
 								);
-							}
+							} // END if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php'))
 						} // END if(!$wpFileSystem->is_dir(\trailingslashit(\WP_CONTENT_DIR) . $createDir) && !empty($dir))
 					} // END foreach($subdirs as $dir)
 				} // END if(!$wpFileSystem->is_dir(\trailingslashit($this->getPluginCacheDir())))
@@ -127,9 +120,9 @@ class CacheHelper {
 					$wpFileSystem->put_contents(
 						\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php',
 						'',
-						FS_CHMOD_FILE // predefined mode settings for WP files
+						0644
 					);
-				}
+				} // END if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php'))
 			} // END if(!$wpFileSystem->is_dir(\trailingslashit($this->getThemeCacheDir()) . $directory))
 		} // END if($wpFileSystem->is_writable($wpFileSystem->wp_content_dir()))
 	} // END public function createCacheDirectories()
