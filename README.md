@@ -14,7 +14,7 @@ Works best with the [EVE Online WordPress Theme](https://github.com/ppfeufer/eve
 ### Installation
 - Simply [download the archive](https://github.com/ppfeufer/eve-online-killboard-widget/archive/master.zip) or one of the [releases](https://github.com/ppfeufer/eve-online-killboard-widget/releases)
 - Unzip it
-- Rename the folder to `eve-online-killboard-widget` (This is important, otherwise updates might not work as expected)
+- Rename the folder to `eve-online-killboard-widget` (This is important, otherwise automatic updates might not work as expected)
 - Copy the folder into your plugin directory in your WordPress installation.
 
 ### Set Up
