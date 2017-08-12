@@ -24,11 +24,6 @@ class AjaxApi {
 	 * Getting the market data for a fitting
 	 */
 	public function ajaxGetKillboardData() {
-		$nonce = \filter_input(\INPUT_POST, 'nonce');
-		if(!\wp_verify_nonce($nonce, 'ajax-nonce-eve-online-killboard-widget')) {
-			die('Busted!');
-		} // END if(!\wp_verify_nonce($nonce, 'ajax-nonce-eve-online-killboard-widget'))
-
 		$killList = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getKillList([
 			'eve-online-killboard-widget-entity-type' => \esc_html(\filter_input(\INPUT_POST, 'type')),
 			'eve-online-killboard-widget-entity-name' => \esc_html(\filter_input(\INPUT_POST, 'name')),

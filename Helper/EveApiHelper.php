@@ -11,18 +11,18 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
 class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
 	/**
-	 * API URL
+	 * ESI URL
 	 *
 	 * @var string
 	 */
-	private $apiUrl = null;
+	private $esiUrl = null;
 
 	/**
-	 * API Endpoints
+	 * ESI Endpoints
 	 *
 	 * @var array
 	 */
-	private $apiEndpoints = null;
+	private $esiEndpoints = null;
 
 	/**
 	 * Image Server URL
@@ -44,16 +44,20 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	protected function __construct() {
 		parent::__construct();
 
-		$this->apiUrl = 'https://api.eveonline.com/';
+		$this->esiUrl = 'https://esi.tech.ccp.is/latest/';
 		$this->imageserverUrl = 'https://image.eveonline.com/';
 
 		/**
-		 * Assigning API Endpoints
+		 * Assigning ESI Endpoints
+		 *
+		 * @see https://esi.tech.ccp.is/latest/
 		 */
-		$this->apiEndpoints = array(
-			'eve.characterName' => 'eve/CharacterName.xml.aspx',
-			'eve.owner' => 'eve/OwnerID.xml.aspx',
-			'eve.typeName' => 'eve/TypeName.xml.aspx', // Returns the names associated with a sequence of typeIDs. ( http://eveonline-third-party-documentation.readthedocs.io/en/latest/xmlapi/eve/eve_typename.html )
+		$this->esiEndpoints = array(
+			'corporation-information' => 'corporations/', // getting corporation information by ID - https://esi.tech.ccp.is/latest/corporations/98000030/
+			'alliance-information' => 'alliances/', // getting alliance information by ID - https://esi.tech.ccp.is/latest/alliances/99000102/
+			'character-information' => 'characters/', // getting character information by ID - https://esi.tech.ccp.is/latest/characters/90607580/
+			'type-information' => 'universe/types/', // getting types information by ID - https://esi.tech.ccp.is/latest/universe/types/670/
+			'system-information' => 'universe/systems/', // getting system information by ID - https://esi.tech.ccp.is/latest/universe/systems/30000003/
 		);
 
 		/**
@@ -68,47 +72,14 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 		);
 	} // END public function __construct()
 
+	/**
+	 * Returning the url to CCP's image server
+	 *
+	 * @return string
+	 */
 	public function getImageServerUrl() {
 		return $this->imageserverUrl;
 	} // END public function getImageServerUrl()
-
-	public function getImageServerEndpoint($group) {
-		return $this->getImageServerUrl() . $this->imageserverEndpoints[$group];
-	} // END public function getImageServerEndpoint($group)
-
-	public function getEveApiUrl() {
-		return $this->apiUrl;
-	} // END public function getEveApiUrl()
-
-	public function getEveApiEndpoint($section) {
-		return $this->getEveApiUrl() . $this->apiEndpoints[$section];
-	} // END public function getEveApiEndpoint($section)
-
-	/**
-	 * Get a pilots image by his name
-	 *
-	 * @param string $name
-	 * @param boolean $imageOnly
-	 * @param int $size
-	 * @return boolean|string
-	 */
-	public function getCharacterImageByName($name, $imageOnly = true, $size = 128) {
-		$entitieID = $this->getEveIdFromName($name);
-
-		if($entitieID == 0 || $entitieID === false) {
-			return false;
-		} // END if($entitieID == 0)
-
-		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->imageserverUrl . $this->imageserverEndpoints['character'] . $entitieID . '_' . $size. '.jpg');
-
-		if($imageOnly === true) {
-			return $imagePath;
-		} // END if($imageOnly === true)
-
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $entitieID . '" alt="' . $name . '">';
-
-		return $html;
-	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
 
 	/**
 	 * Get a pilots image by his ID
@@ -119,17 +90,94 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	 * @param int $size
 	 * @return string
 	 */
-	public function getCharacterImageById($characterID, $characterName = '', $imageOnly = true, $size = 128) {
+	public function getCharacterImageById($characterID, $imageOnly = true, $size = 128) {
+		$character = $this->getCharacterData($characterID);
 		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->imageserverUrl . $this->imageserverEndpoints['character'] . $characterID . '_' . $size. '.jpg');
 
 		if($imageOnly === true) {
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '" alt="' . \esc_html($characterName) . '" title="' . \esc_html($characterName) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '" alt="' . \esc_html($character['data']->name) . '">';
 
 		return $html;
-	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
+	} // END public function getCharacterImageById($name, $imageOnly = true, $size = 128)
+
+	/**
+	 * Getting all the needed character information from the ESI
+	 *
+	 * @param int $characterID
+	 * @return array
+	 */
+	public function getCharacterData($characterID) {
+		$characterData = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID);
+		$characterPortraits = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID . '/portrait/');
+
+		return [
+			'data' => $characterData,
+			'portrait' => $characterPortraits
+		];
+	} // END public function getCharacterData($characterID)
+
+	/**
+	 * getting all the needed corporation information from the ESI
+	 *
+	 * @param string $corporationID
+	 * @return array
+	 */
+	public function getCorpratinData($corporationID) {
+		$corporationData = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID);
+		$corporationLogos = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID . '/icons/');
+
+		return [
+			'data' => $corporationData,
+			'logo' => $corporationLogos
+		];
+	} // ENDpublic function getCorpratinData($corporationID)
+
+	/**
+	 * Getting all the needed alliance information from the ESI
+	 *
+	 * @param int $allianceID
+	 * @return array
+	 */
+	public function getAllianceData($allianceID) {
+		$allianceData = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID);
+		$allianceLogos = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/icons/');
+
+		return [
+			'data' => $allianceData,
+			'logo' => $allianceLogos
+		];
+	} // END public function getAllianceData($allianceID)
+
+	/**
+	 * Getting all the needed ship information from the ESI
+	 *
+	 * @param int $shipID
+	 * @return array
+	 */
+	public function getShipData($shipID) {
+		$shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID);
+
+		return [
+			'data' => $shipData
+		];
+	} // END public function getShipData($shipID)
+
+	/**
+	 * Getting all the needed system information from the ESI
+	 *
+	 * @param int $systemID
+	 * @return array
+	 */
+	public function getSystemData($systemID) {
+		$systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID);
+
+		return [
+			'data' => $systemData
+		];
+	} // END public function getSystemData($systemID)
 
 	/**
 	 * Get a corporation logo by corp ID
@@ -140,14 +188,15 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	 * @param size $size
 	 * @return string
 	 */
-	public function getCorporationImageById($corporationID, $corporationName = '', $imageOnly = true, $size = 128) {
+	public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128) {
+		$corporation = $this->getCorpratinData($corporationID);
 		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', $this->imageserverUrl . $this->imageserverEndpoints['corporation'] . $corporationID . '_' . $size. '.png');
 
 		if($imageOnly === true) {
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-corporation-id-' . $corporationID . '" alt="' . \esc_html($corporationName) . '" title="' . \esc_html($corporationName) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-corporation-id-' . $corporationID . '" alt="' . \esc_html($corporation['data']->corporation_name) . '" data-title="' . \esc_html($corporation['data']->corporation_name) . '" data-toggle="eve-killboard-tooltip">';
 
 		return $html;
 	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
@@ -161,14 +210,16 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	 * @param int $size
 	 * @return string
 	 */
-	public function getShipImageById($shipTypeID, $shiptype = '', $imageOnly = true, $size = 128) {
+	public function getShipImageById($shipTypeID, $imageOnly = true, $size = 128) {
+		$ship = $this->getShipData($shipTypeID);
+
 		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->imageserverUrl . $this->imageserverEndpoints['inventory'] . $shipTypeID . '_' . $size. '.png');
 
 		if($imageOnly === true) {
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-ship-id-' . $shipTypeID . '" alt="' . \esc_html($shiptype) . '" title="' . \esc_html($shiptype) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-ship-id-' . $shipTypeID . '" alt="' . \esc_html($ship['data']->name) . '" data-title="' . \esc_html($ship['data']->name) . '" data-toggle="eve-killboard-tooltip">';
 
 		return $html;
 	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
@@ -183,75 +234,29 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	 * @return string
 	 */
 	public function getAllianceImageById($allianceID, $allianceName = '', $imageOnly = true, $size = 128) {
+		$alliance = $this->getAllianceData($allianceID);
 		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', $this->imageserverUrl . $this->imageserverEndpoints['alliance'] . $allianceID . '_' . $size. '.png');
 
 		if($imageOnly === true) {
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-alliance-id-' . $allianceID . '" alt="' . \esc_html($allianceName) . '" title="' . \esc_html($allianceName) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-alliance-id-' . $allianceID . '" alt="' . \esc_html($alliance['data']->alliance_name) . '" data-title="' . \esc_html($alliance['data']->alliance_name) . '" data-toggle="eve-killboard-tooltip">';
 
 		return $html;
 	} // END public function getAllianceImageById($allianceID, $imageOnly = true, $size = 128)
 
-	public function getTypeName($typeID) {
-		$transientName = \sanitize_title('get_eve.typeName_' . $typeID);
-		$data = $this->checkApiCache($transientName);
-		$typeName = null;
-
-		if($data === false) {
-			$endpoint = 'eve.typeName';
-			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $typeID));
-
-			/**
-			 * setting the transient caches
-			 */
-			$this->setApiCache($transientName, $data);
-		} // END if($data === false)
-
-		if($this->isXml($data)) {
-			$xml = new \SimpleXMLElement($data);
-
-			if(!empty($xml->result->rowset)) {
-				foreach($xml->result->rowset->row as $row) {
-					$typeName[] = (string) $row->attributes()->typeName;
-				} // END foreach($xml->result->rowset->row as $row)
-			} // END if(!empty($xml->result->rowset))
-		} // END if($this->isXml($data))
-
-		return $typeName;
-	} // END public function getTypeName($typeID)
-
-	public function getSystemNameFromId($systemID) {
-		$transientName = \sanitize_title('get_eve.systemName_' . $systemID);
-		$data = $this->checkApiCache($transientName);
-		$systemName = null;
-
-		if($data === false) {
-			$endpoint = 'eve.characterName';
-			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('ids' => $systemID));
-
-			/**
-			 * setting the transient caches
-			 */
-			$this->setApiCache($transientName, $data);
-		} // END if($data === false)
-
-		if($this->isXml($data)) {
-			$xml = new \SimpleXMLElement($data);
-
-			if(!empty($xml->result->rowset)) {
-				foreach($xml->result->rowset->row as $row) {
-					$systemName[] = (string) $row->attributes()->name;
-				} // END foreach($xml->result->rowset->row as $row)
-			} // END if(!empty($xml->result->rowset))
-		} // END if($this->isXml($data))
-
-		return $systemName;
-	} // END public function getSystemNameFromId($systemID)
-
 	/**
-	 * get the EVE ID by it's name
+	 * Get the EVE ID by it's name
+	 *
+	 * This is the last API call made against the XML API,
+	 * since ESI doesn't supprt this type yet.
+	 *
+	 * Unfortunately we need this one, since we only get the
+	 * corp or alliance name from the widgets settings, but we need the ID ...
+	 *
+	 * So ...
+	 *		GET YOUR SHIT TOGETHER CCP!!!
 	 *
 	 * @param type $name
 	 * @return type
@@ -261,8 +266,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 		$data = $this->checkApiCache($transientName);
 
 		if($data === false) {
-			$endpoint = 'eve.owner';
-			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
+			$data = PluginHelper::getInstance()->getRemoteData('https://api.eveonline.com/eve/OwnerID.xml.aspx', array('names' => $name));
 
 			/**
 			 * setting the transient caches
@@ -284,6 +288,33 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 			} // END if(!empty($xml->result->rowset))
 		} // END if($this->isXml($data))
 	} // END public function getCorpIdFromName($name)
+
+	/**
+	 * Getting data from the ESI
+	 *
+	 * @param string $route
+	 * @return object
+	 */
+	private function getEsiData($route) {
+		$returnValue = null;
+		$transientName = \sanitize_title('eve-killboard-data_' . $route);
+		$data = $this->checkApiCache($transientName);
+
+		if($data === false) {
+			$data = PluginHelper::getInstance()->getRemoteData($this->esiUrl . $route);
+
+			/**
+			 * setting the transient caches
+			 */
+			$this->setApiCache($transientName, $data);
+		} // END if($data === false)
+
+		if(!empty($data)) {
+			$returnValue = \json_decode($data);
+		} // END if(!empty($data))
+
+		return $returnValue;
+	} // END private function getEsiData($route)
 
 	/**
 	 * Getting transient cache information / data
