@@ -4,45 +4,7 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
 \defined('ABSPATH') or die();
 
-class PluginHelper {
-	/**
-	 * instance
-	 *
-	 * static variable to keep the current (and only!) instance of this class
-	 *
-	 * @var Singleton
-	 */
-	protected static $instance = null;
-
-	/**
-	 * Getting the instance
-	 *
-	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper
-	 */
-	public static function getInstance() {
-		if(null === self::$instance) {
-			self::$instance = new self;
-		} // END if(null === self::$instance)
-
-		return self::$instance;
-	} // END public static function getInstance()
-
-	/**
-	 * clone
-	 *
-	 * no cloning allowed
-	 */
-	protected function __clone() {
-		;
-	} // END protected function __clone()
-
-	/**
-	 * The Constructor
-	 */
-	protected function __construct() {
-		;
-	} // END protected function __construct()
-
+class PluginHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
 	/**
 	 * Getting the Plugin Path
 	 *

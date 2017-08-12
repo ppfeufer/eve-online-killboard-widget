@@ -4,47 +4,7 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
 \defined('ABSPATH') or die();
 
-class ImageHelper {
-	/**
-	 * instance
-	 *
-	 * static variable to keep the current (and only!) instance of this class
-	 *
-	 * @var Singleton
-	 */
-	protected static $instance = null;
-
-	/**
-	 * Getting the instance
-	 *
-	 * @return \WordPress\Plugin\EveOnlineKillboardWidget\Helper\ImageHelper
-	 */
-	public static function getInstance() {
-		if(null === self::$instance) {
-			self::$instance = new self;
-		}
-
-		return self::$instance;
-	}
-
-	/**
-	 * clone
-	 *
-	 * no cloning allowed
-	 */
-	protected function __clone() {
-		;
-	}
-
-	/**
-	 * constructor
-	 *
-	 * no external instanciation allowed
-	 */
-	protected function __construct() {
-		;
-	}
-
+class ImageHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
 	/**
 	 * Getting the cached URL for a remote image
 	 *

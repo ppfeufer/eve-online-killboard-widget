@@ -206,7 +206,7 @@ class KillboardWidget extends \WP_Widget {
 	 */
 	private function getWidgetData(array $instance) {
 		$widgetHtml = null;
-		$killList = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getKillList($instance['eve-online-killboard-widget-entity-type'], $instance['eve-online-killboard-widget-entity-name'], $instance['eve-online-killboard-widget-number-of-kills'], $instance['eve-online-killboard-widget-show-losses']);
+		$killList = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getKillList($instance);
 
 		if(!empty($killList) && is_array($killList)) {
 			$widgetHtml = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);

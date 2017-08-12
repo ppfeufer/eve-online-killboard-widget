@@ -113,7 +113,7 @@ jQuery(document).ready(function($) {
 			genImage.onload = function() {
 				cImageTimeout = setTimeout(fun, 0);
 			};
-			genImage.onerror = new Function('alert(\'Could not load the image\')');
+			genImage.onerror = new Function('console.log(\'Could not load the image\')');
 			genImage.src = s;
 		};
 
