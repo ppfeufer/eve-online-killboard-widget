@@ -177,7 +177,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singlet
 				break;
 
 			default:
-				$victimImage = EveApiHelper::getInstance()->getCharacterImageById($victimData->characterID, $victimData->characterName, false, $size);
+				$victimImage = EveApiHelper::getInstance()->getCharacterImageById($victimData->characterID, false, $size);
 				break;
 		} // END switch($victimData->characterID)
 
@@ -193,7 +193,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singlet
 				break;
 
 			default:
-				$victimImage = EveApiHelper::getInstance()->getCorporationImageById($victimData->corporationID, $victimData->corporationName, false, $size);
+				$victimImage = EveApiHelper::getInstance()->getCorporationImageById($victimData->corporationID, false, $size);
 				break;
 		} // END switch($victimData->corporationID)
 
@@ -209,8 +209,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singlet
 				break;
 
 			default:
-				$typeNames = EveApiHelper::getInstance()->getTypeName($victimData->shipTypeID);
-				$victimImage = EveApiHelper::getInstance()->getShipImageById($victimData->shipTypeID, $typeNames['0'], false, $size);
+				$victimImage = EveApiHelper::getInstance()->getShipImageById($victimData->shipTypeID, false, $size);
 				break;
 		} // END switch($victimData->shipTypeID)
 
@@ -294,9 +293,9 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singlet
 	 * @return string
 	 */
 	public function getVictimShip(\stdClass $victimData) {
-		$typeNames = EveApiHelper::getInstance()->getTypeName($victimData->shipTypeID);
+		$ship = EveApiHelper::getInstance()->getShipData($victimData->shipTypeID);
 
-		return $typeNames['0'];
+		return $ship['data']->name;
 	} // END public function getVictimShip(\stdClass $victimData)
 
 	/**
@@ -322,9 +321,9 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singlet
 	 * @return string
 	 */
 	public function getSystem($systemID) {
-		$systemNames = EveApiHelper::getInstance()->getSystemNameFromId($systemID);
+		$system = EveApiHelper::getInstance()->getSystemData($systemID);
 
-		return $systemNames['0'];
+		return $system['data']->name;
 	} // END public function getSystem($systemID)
 
 	private function sanitizeIskLoss($isk) {
