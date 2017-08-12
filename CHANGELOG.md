@@ -10,6 +10,7 @@
 ### Changes
 - Dropped an additional check that doesn't make sense for this plugin
 - Tooltips
+- Switched API calls to ESI API except one that the ESI doesn't support yet (CCPLEASE!)
 
 ## [0.4](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.4) - 2017-08-12
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.3.1...v0.4)
