@@ -17,7 +17,9 @@ jQuery(document).ready(function($) {
 					dataType: 'json',
 					success: function(result) {
 						if(result !== null) {
-							$('.killboard-widget-kill-list').html(result.html);
+							$('.killboard-widget-kill-list').html(result.html).promise().done(function() {
+								$('[data-toggle="eve-killboard-tooltip"]').tooltip();
+							});
 						} // END if(result !== null)
 					},
 					error: function(jqXHR, textStatus, errorThrow) {
@@ -126,5 +128,10 @@ jQuery(document).ready(function($) {
 		 * Call the ajax to get the market data
 		 */
 		getKillboardWidgetDataData.ajaxCall();
+
+//		$('body').on('DOMSubtreeModified', '.killboard-widget-kill-list', function() {
+//			console.log($(this));
+//			$('[data-toggle="eve-killboard-tooltip"]').tooltip();
+//		});
 	} // END if($('.eve-online-killboard-widget .loaderImage').length)
 });

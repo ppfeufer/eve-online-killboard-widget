@@ -126,7 +126,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '" alt="' . \esc_html($characterName) . '" title="' . \esc_html($characterName) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-character-id-' . $characterID . '" alt="' . \esc_html($characterName) . '">';
 
 		return $html;
 	} // END public function getCharacterImageByName($name, $imageOnly = true, $size = 128)
@@ -147,7 +147,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-corporation-id-' . $corporationID . '" alt="' . \esc_html($corporationName) . '" title="' . \esc_html($corporationName) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-corporation-id-' . $corporationID . '" alt="' . \esc_html($corporationName) . '" data-title="' . \esc_html($corporationName) . '" data-toggle="eve-killboard-tooltip">';
 
 		return $html;
 	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
@@ -168,7 +168,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-ship-id-' . $shipTypeID . '" alt="' . \esc_html($shiptype) . '" title="' . \esc_html($shiptype) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-ship-id-' . $shipTypeID . '" alt="' . \esc_html($shiptype) . '" data-title="' . \esc_html($shiptype) . '" data-toggle="eve-killboard-tooltip">';
 
 		return $html;
 	} // END public function getCorporationImageById($corporationID, $imageOnly = true, $size = 128)
@@ -189,7 +189,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 			return $imagePath;
 		} // END if($imageOnly === true)
 
-		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-alliance-id-' . $allianceID . '" alt="' . \esc_html($allianceName) . '" title="' . \esc_html($allianceName) . '">';
+		$html = '<img src="' . $imagePath . '" class="eve-character-image eve-alliance-id-' . $allianceID . '" alt="' . \esc_html($allianceName) . '" data-title="' . \esc_html($allianceName) . '" data-toggle="eve-killboard-tooltip">';
 
 		return $html;
 	} // END public function getAllianceImageById($allianceID, $imageOnly = true, $size = 128)
