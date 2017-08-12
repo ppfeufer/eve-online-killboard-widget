@@ -12,10 +12,14 @@ This plugin works best with WordPress themes utilizing the Bootstrap Framework. 
 Works best with the [EVE Online WordPress Theme](https://github.com/ppfeufer/eve-online-wordpress-theme)
 
 ### Installation
-To install the plugin simply [download the archive](https://github.com/ppfeufer/eve-online-killboard-widget/archive/master.zip) or one of the [releases](https://github.com/ppfeufer/eve-online-killboard-widget/releases), unzip it and copy the folder into your plugin directory in your WordPress installation.
+- Simply [download the archive](https://github.com/ppfeufer/eve-online-killboard-widget/archive/master.zip) or one of the [releases](https://github.com/ppfeufer/eve-online-killboard-widget/releases)
+- Unzip it
+- Rename the folder to `eve-online-killboard-widget` (This is important, otherwise updates might not work as expected)
+- Copy the folder into your plugin directory in your WordPress installation.
 
 ### Set Up
-Find your widget in Appearance -> Widgets and select the EVE Online Killboard Widget. Drag and drop this widget into a sidebar and set it up there. The settings are self explaining, I hope.
+- Find your widget in Appearance -> Widgets and select the EVE Online Killboard Widget.
+- Drag and drop this widget into a sidebar and set it up there. The settings are self explaining, I hope.
 
 ### Additional Information
 - [License](LICENSE)
