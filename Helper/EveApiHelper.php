@@ -11,25 +11,11 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 
 class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
 	/**
-	 * API URL
-	 *
-	 * @var string
-	 */
-	private $apiUrl = null;
-
-	/**
 	 * ESI URL
 	 *
 	 * @var string
 	 */
 	private $esiUrl = null;
-
-	/**
-	 * API Endpoints
-	 *
-	 * @var array
-	 */
-	private $apiEndpoints = null;
 
 	/**
 	 * ESI Endpoints
@@ -59,20 +45,12 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 		parent::__construct();
 
 		$this->esiUrl = 'https://esi.tech.ccp.is/latest/';
-		$this->apiUrl = 'https://api.eveonline.com/';
 		$this->imageserverUrl = 'https://image.eveonline.com/';
 
 		/**
-		 * Assigning API Endpoints
-		 */
-		$this->apiEndpoints = array(
-			'eve.characterName' => 'eve/CharacterName.xml.aspx',
-			'eve.owner' => 'eve/OwnerID.xml.aspx',
-			'eve.typeName' => 'eve/TypeName.xml.aspx', // Returns the names associated with a sequence of typeIDs. ( http://eveonline-third-party-documentation.readthedocs.io/en/latest/xmlapi/eve/eve_typename.html )
-		);
-
-		/**
-		 * Assigning API Endpoints
+		 * Assigning ESI Endpoints
+		 *
+		 * @see https://esi.tech.ccp.is/latest/
 		 */
 		$this->esiEndpoints = array(
 			'corporation-information' => 'corporations/', // getting corporation information by ID - https://esi.tech.ccp.is/latest/corporations/98000030/
@@ -94,6 +72,11 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 		);
 	} // END public function __construct()
 
+	/**
+	 * Returning the url to CCP's image server
+	 *
+	 * @return string
+	 */
 	public function getImageServerUrl() {
 		return $this->imageserverUrl;
 	} // END public function getImageServerUrl()
@@ -120,6 +103,12 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 		return $html;
 	} // END public function getCharacterImageById($name, $imageOnly = true, $size = 128)
 
+	/**
+	 * Getting all the needed character information from the ESI
+	 *
+	 * @param int $characterID
+	 * @return array
+	 */
 	public function getCharacterData($characterID) {
 		$characterData = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID);
 		$characterPortraits = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID . '/portrait/');
@@ -128,8 +117,14 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 			'data' => $characterData,
 			'portrait' => $characterPortraits
 		];
-	}
+	} // END public function getCharacterData($characterID)
 
+	/**
+	 * getting all the needed corporation information from the ESI
+	 *
+	 * @param string $corporationID
+	 * @return array
+	 */
 	public function getCorpratinData($corporationID) {
 		$corporationData = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID);
 		$corporationLogos = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID . '/icons/');
@@ -138,35 +133,51 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 			'data' => $corporationData,
 			'logo' => $corporationLogos
 		];
-	}
+	} // ENDpublic function getCorpratinData($corporationID)
 
+	/**
+	 * Getting all the needed alliance information from the ESI
+	 *
+	 * @param int $allianceID
+	 * @return array
+	 */
 	public function getAllianceData($allianceID) {
 		$allianceData = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID);
-//		$allianceCorporations = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/corporations/');
 		$allianceLogos = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/icons/');
 
 		return [
 			'data' => $allianceData,
-//			'corporations' => $allianceCorporations,
 			'logo' => $allianceLogos
 		];
-	}
+	} // END public function getAllianceData($allianceID)
 
+	/**
+	 * Getting all the needed ship information from the ESI
+	 *
+	 * @param int $shipID
+	 * @return array
+	 */
 	public function getShipData($shipID) {
 		$shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID);
 
 		return [
 			'data' => $shipData
 		];
-	}
+	} // END public function getShipData($shipID)
 
+	/**
+	 * Getting all the needed system information from the ESI
+	 *
+	 * @param int $systemID
+	 * @return array
+	 */
 	public function getSystemData($systemID) {
 		$systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID);
 
 		return [
 			'data' => $systemData
 		];
-	}
+	} // END public function getSystemData($systemID)
 
 	/**
 	 * Get a corporation logo by corp ID
@@ -236,7 +247,16 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	} // END public function getAllianceImageById($allianceID, $imageOnly = true, $size = 128)
 
 	/**
-	 * get the EVE ID by it's name
+	 * Get the EVE ID by it's name
+	 *
+	 * This is the last API call made against the XML API,
+	 * since ESI doesn't supprt this type yet.
+	 *
+	 * Unfortunately we need this one, since we only get the
+	 * corp or alliance name from the widgets settings, but we need the ID ...
+	 *
+	 * So ...
+	 *		GET YOUR SHIT TOGETHER CCP!!!
 	 *
 	 * @param type $name
 	 * @return type
@@ -246,8 +266,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 		$data = $this->checkApiCache($transientName);
 
 		if($data === false) {
-			$endpoint = 'eve.owner';
-			$data = PluginHelper::getInstance()->getRemoteData($this->apiUrl . $this->apiEndpoints[$endpoint], array('names' => $name));
+			$data = PluginHelper::getInstance()->getRemoteData('https://api.eveonline.com/eve/OwnerID.xml.aspx', array('names' => $name));
 
 			/**
 			 * setting the transient caches
@@ -270,6 +289,12 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 		} // END if($this->isXml($data))
 	} // END public function getCorpIdFromName($name)
 
+	/**
+	 * Getting data from the ESI
+	 *
+	 * @param string $route
+	 * @return object
+	 */
 	private function getEsiData($route) {
 		$returnValue = null;
 		$transientName = \sanitize_title('eve-killboard-data_' . $route);
