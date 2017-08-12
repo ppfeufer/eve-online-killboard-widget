@@ -128,10 +128,7 @@ jQuery(document).ready(function($) {
 		 * Call the ajax to get the market data
 		 */
 		getKillboardWidgetDataData.ajaxCall();
-
-//		$('body').on('DOMSubtreeModified', '.killboard-widget-kill-list', function() {
-//			console.log($(this));
-//			$('[data-toggle="eve-killboard-tooltip"]').tooltip();
-//		});
 	} // END if($('.eve-online-killboard-widget .loaderImage').length)
+
+	$('[data-toggle="eve-killboard-tooltip"]').tooltip();
 });
