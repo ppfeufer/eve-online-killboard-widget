@@ -165,6 +165,7 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
 	 * @param string $remoteImageUrl The URL for the remote image
 	 */
 	public function cacheRemoteImageFile($cacheType = '', $remoteImageUrl = null) {
+		$returnValue = false;
 		$cacheDir = \trailingslashit($this->getImageCacheDir() . $cacheType);
 		$explodedImageUrl = \explode('/', $remoteImageUrl);
 		$imageFilename = \end($explodedImageUrl);
@@ -178,8 +179,12 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
 
 			$wpFileSystem = new \WP_Filesystem_Direct(null);
 
-			return $wpFileSystem->put_contents($cacheDir . $imageFilename, $imageToFetch, 0755);
+			if($wpFileSystem->put_contents($cacheDir . $imageFilename, $imageToFetch, 0755)) {
+				$returnValue = ImageHelper::getInstance()->compressImage($cacheDir . $imageFilename);
+			} // END if($wpFileSystem->put_contents($cacheDir . $imageFilename, $imageToFetch, 0755))
 		} // END if($extension === 'gif' || $extension === 'jpg' || $extension === 'jpeg' || $extension === 'png')
+
+		return $returnValue;
 	} // END public function cacheRemoteImageFile($cacheType = null, $remoteImageUrl = null)
 
 	/**
