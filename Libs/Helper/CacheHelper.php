@@ -1,6 +1,6 @@
 <?php
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
+namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
@@ -10,7 +10,7 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
 require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
 require_once(ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');
 
-class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
+class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
 	/**
 	 * The base directoy of our cache
 	 *
@@ -174,7 +174,7 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\A
 		// make sure its an image
 		if($extension === 'gif' || $extension === 'jpg' || $extension === 'jpeg' || $extension === 'png') {
 			// get the remote image
-			$imageToFetch = PluginHelper::getInstance()->getRemoteData($remoteImageUrl);
+			$imageToFetch = RemoteHelper::getInstance()->getRemoteData($remoteImageUrl);
 
 			$wpFileSystem = new \WP_Filesystem_Direct(null);
 
@@ -188,7 +188,7 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\A
 	 * @param string $transientName
 	 * @return mixed
 	 */
-	public function checkTransientCache($transientName) {
+	public function getTransientCache($transientName) {
 		$data = \get_transient($transientName);
 
 		return $data;

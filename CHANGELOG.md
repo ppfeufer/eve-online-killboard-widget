@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.5...HEAD)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.6...HEAD)
 - in development
+
+## [0.6](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.6) - 2017-08-13
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.5...v0.6)
+### Changes
+- Codebase reorganized
 
 ## [0.5](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.5) - 2017-08-12
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.4...v0.5)

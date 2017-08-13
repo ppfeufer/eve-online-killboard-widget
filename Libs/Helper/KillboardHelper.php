@@ -3,11 +3,11 @@
  * Killboard Widget
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
+namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
-class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
+class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
 	private $zkbLink = null;
 	private $zkbApiLink = null;
 	private $entityID = null;
@@ -46,7 +46,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singlet
 				$zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/limit/' . $widgetSettings['eve-online-killboard-widget-number-of-kills'] . '/npc/0/';
 			} // END if($showLosses === true)
 
-			$data = \json_decode(PluginHelper::getInstance()->getRemoteData($zkbUrl));
+			$data = \json_decode(RemoteHelper::getInstance()->getRemoteData($zkbUrl));
 
 			/**
 			 * setting the transient caches

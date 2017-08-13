@@ -1,6 +1,6 @@
 <?php
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Singleton;
+namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons;
 
 \defined('ABSPATH') or die();
 

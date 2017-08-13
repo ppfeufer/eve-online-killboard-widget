@@ -24,7 +24,7 @@ class AjaxApi {
 	 * Getting the market data for a fitting
 	 */
 	public function ajaxGetKillboardData() {
-		$killList = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getKillList([
+		$killList = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList([
 			'eve-online-killboard-widget-entity-type' => \esc_html(\filter_input(\INPUT_POST, 'type')),
 			'eve-online-killboard-widget-entity-name' => \esc_html(\filter_input(\INPUT_POST, 'name')),
 			'eve-online-killboard-widget-number-of-kills' => \filter_input(\INPUT_POST, 'count'),
@@ -33,7 +33,7 @@ class AjaxApi {
 
 		$widgetHtml = null;
 		if(!empty($killList) && is_array($killList)) {
-			$widgetHtml = \WordPress\Plugin\EveOnlineKillboardWidget\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
+			$widgetHtml = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
 		} // END if(!empty($killList) && is_array($killList))
 
 		echo \json_encode(['html' => $widgetHtml]);

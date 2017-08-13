@@ -1,13 +1,13 @@
 <?php
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\ResourceLoader;
+namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\ResourceLoader;
 
 \defined('ABSPATH') or die();
 
 /**
  * JavaScript Loader
  */
-class JavascriptLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Interfaces\AssetsInterface {
+class JavascriptLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Interfaces\AssetsInterface {
 	/**
 	 * Initialize the loader
 	 */
@@ -23,9 +23,9 @@ class JavascriptLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Int
 		 * Only in Frontend
 		 */
 		if(!\is_admin()) {
-			\wp_enqueue_script('bootstrap-js', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/js/bootstrap.min.js'), array('jquery'), '', true);
-			\wp_enqueue_script('bootstrap-toolkit-js', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/bootstrap-toolkit/bootstrap-toolkit.min.js'), array('jquery', 'bootstrap-js'), '', true);
-			\wp_enqueue_script('eve-online-killboard-widget-js', \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('js/eve-online-killboard-widget.min.js'), array('jquery'), '', true);
+			\wp_enqueue_script('bootstrap-js', \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/js/bootstrap.min.js'), array('jquery'), '', true);
+			\wp_enqueue_script('bootstrap-toolkit-js', \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/bootstrap-toolkit/bootstrap-toolkit.min.js'), array('jquery', 'bootstrap-js'), '', true);
+			\wp_enqueue_script('eve-online-killboard-widget-js', \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('js/eve-online-killboard-widget.min.js'), array('jquery'), '', true);
 			\wp_localize_script('eve-online-killboard-widget-js', 'killboardWidgetL10n', $this->getJavaScriptTranslations());
 		} // END if(!\is_admin())
 	} // END public function enqueue()
@@ -39,7 +39,7 @@ class JavascriptLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Int
 		return array(
 			'ajax' => array(
 				'url' => \admin_url('admin-ajax.php'),
-				'loaderImage' => \WordPress\Plugin\EveOnlineKillboardWidget\Helper\PluginHelper::getInstance()->getPluginUri('images/loader-sprite.gif'),
+				'loaderImage' => \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('images/loader-sprite.gif'),
 				'eveKillboardWidget' => array(
 					'nonce' => \wp_create_nonce('ajax-nonce-eve-online-killboard-widget')
 				)
