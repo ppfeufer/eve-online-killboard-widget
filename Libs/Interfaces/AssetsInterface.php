@@ -1,5 +1,5 @@
 <?php
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Interfaces;
+namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Interfaces;
 
 \defined('ABSPATH') or die();
 

@@ -5,11 +5,11 @@
  * Getting some stuff from CCP's EVE API
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Helper;
+namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
-class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\AbstractSingleton {
+class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
 	/**
 	 * ESI URL
 	 *
@@ -263,15 +263,15 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	 */
 	public function getEveIdFromName($name) {
 		$transientName = \sanitize_title('get_eve.owner_data_' . $name);
-		$data = $this->checkApiCache($transientName);
+		$data = CacheHelper::getInstance()->getTransientCache($transientName);
 
 		if($data === false) {
-			$data = PluginHelper::getInstance()->getRemoteData('https://api.eveonline.com/eve/OwnerID.xml.aspx', array('names' => $name));
+			$data = RemoteHelper::getInstance()->getRemoteData('https://api.eveonline.com/eve/OwnerID.xml.aspx', array('names' => $name));
 
 			/**
 			 * setting the transient caches
 			 */
-			$this->setApiCache($transientName, $data);
+			CacheHelper::getInstance()->setTransientCache($transientName, $data, 1 * \HOUR_IN_SECONDS);
 		} // END if($data === false)
 
 		if($this->isXml($data)) {
@@ -298,15 +298,15 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 	private function getEsiData($route) {
 		$returnValue = null;
 		$transientName = \sanitize_title('eve-killboard-data_' . $route);
-		$data = $this->checkApiCache($transientName);
+		$data = CacheHelper::getInstance()->getTransientCache($transientName);
 
 		if($data === false) {
-			$data = PluginHelper::getInstance()->getRemoteData($this->esiUrl . $route);
+			$data = RemoteHelper::getInstance()->getRemoteData($this->esiUrl . $route);
 
 			/**
 			 * setting the transient caches
 			 */
-			$this->setApiCache($transientName, $data);
+			CacheHelper::getInstance()->setTransientCache($transientName, $data, 1 * \HOUR_IN_SECONDS);
 		} // END if($data === false)
 
 		if(!empty($data)) {
@@ -315,28 +315,6 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Singleton\
 
 		return $returnValue;
 	} // END private function getEsiData($route)
-
-	/**
-	 * Getting transient cache information / data
-	 *
-	 * @param string $transientName
-	 * @return mixed
-	 */
-	private function checkApiCache($transientName) {
-		$data = \get_transient($transientName);
-
-		return $data;
-	} // END private function checkApiCache($transientName)
-
-	/**
-	 * Setting the transient cahe
-	 *
-	 * @param string $transientName
-	 * @param mixed $data
-	 */
-	private function setApiCache($transientName, $data) {
-		\set_transient($transientName, $data, 1 * \HOUR_IN_SECONDS);
-	} // END private function setApiCache($transientName, $data)
 
 	/**
 	 * Check if a string is a valid XML
