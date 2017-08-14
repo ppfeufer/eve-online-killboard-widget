@@ -37,6 +37,10 @@
 		flex-basis: 33.333333%;
 		text-align: center;
 	}
+
+	img {
+		max-width: 100%;
+	}
 }
 
 @media all and (min-width: 1200px) {
