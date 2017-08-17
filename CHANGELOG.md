@@ -7,6 +7,9 @@
 - Image optimization for cached images
 - max-width for images
 
+### Changed
+- Switched codebase to short array syntax
+
 ## [0.6](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.6) - 2017-08-13
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.5...v0.6)
 ### Changes

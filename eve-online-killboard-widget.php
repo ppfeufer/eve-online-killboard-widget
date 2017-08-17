@@ -64,7 +64,7 @@ class EveOnlineKillboardWidget {
 			/**
 			 * Check Github for updates
 			 */
-			$githubConfig = array(
+			$githubConfig = [
 				'slug' => \plugin_basename(__FILE__),
 				'proper_folder_name' => 'eve-online-killboard-widget',
 				'api_url' => 'https://api.github.com/repos/ppfeufer/eve-online-killboard-widget',
@@ -76,7 +76,7 @@ class EveOnlineKillboardWidget {
 				'tested' => '4.8',
 				'readme' => 'README.md',
 				'access_token' => '',
-			);
+			];
 
 			new Libs\GithubUpdater($githubConfig);
 		} // END if(\is_admin())

@@ -16,8 +16,8 @@ class AjaxApi {
 	 * Initialize the actions
 	 */
 	private function initActions() {
-		\add_action('wp_ajax_nopriv_get-eve-killboard-widget-data', array($this, 'ajaxGetKillboardData'));
-		\add_action('wp_ajax_get-eve-killboard-widget-data', array($this, 'ajaxGetKillboardData'));
+		\add_action('wp_ajax_nopriv_get-eve-killboard-widget-data', [$this, 'ajaxGetKillboardData']);
+		\add_action('wp_ajax_get-eve-killboard-widget-data', [$this, 'ajaxGetKillboardData']);
 	} // END private function initActions()
 
 	/**
