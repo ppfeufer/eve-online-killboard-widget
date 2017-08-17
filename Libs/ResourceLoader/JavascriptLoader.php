@@ -39,10 +39,7 @@ class JavascriptLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Lib
 		return [
 			'ajax' => [
 				'url' => \admin_url('admin-ajax.php'),
-				'loaderImage' => \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('images/loader-sprite.gif'),
-				'eveKillboardWidget' => [
-					'nonce' => \wp_create_nonce('ajax-nonce-eve-online-killboard-widget')
-				]
+				'loaderImage' => \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('images/loader-sprite.gif')
 			]
 		];
 	} // END private function getJavaScriptTranslations()

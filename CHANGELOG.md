@@ -10,6 +10,9 @@
 ### Changed
 - Switched codebase to short array syntax
 
+### Removed
+- Last fragments of am earlier change
+
 ## [0.6](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.6) - 2017-08-13
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.5...v0.6)
 ### Changes
