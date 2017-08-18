@@ -2,7 +2,7 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7...HEAD)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7.1...HEAD)
 - in development
 
 ## [0.7.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.7.1) - 2017-08-18
