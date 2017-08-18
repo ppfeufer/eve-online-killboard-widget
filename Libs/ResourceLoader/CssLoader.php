@@ -12,7 +12,7 @@ class CssLoader implements \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Inter
 	 * Initialize the loader
 	 */
 	public function init() {
-		\add_action('wp_enqueue_scripts', array($this, 'enqueue'), 99);
+		\add_action('wp_enqueue_scripts', [$this, 'enqueue'], 99);
 	} // END public function init()
 
 	/**

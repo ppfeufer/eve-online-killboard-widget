@@ -37,6 +37,11 @@
 		flex-basis: 33.333333%;
 		text-align: center;
 	}
+
+	.eve-online-killboard-widget img {
+		max-width: 100%;
+		height: auto;
+	}
 }
 
 @media all and (min-width: 1200px) {

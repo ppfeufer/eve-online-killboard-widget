@@ -60,13 +60,13 @@ class GithubUpdater {
 	 * @see has_minimum_config()
 	 * @return void
 	 */
-	public function __construct($config = array()) {
-		$defaults = array(
+	public function __construct($config = []) {
+		$defaults = [
 			'slug' => \plugin_basename(__FILE__),
 			'proper_folder_name' => \dirname(\plugin_basename(__FILE__)),
 			'sslverify' => true,
 			'access_token' => '',
-		);
+		];
 
 		$this->config = \wp_parse_args($config, $defaults);
 
@@ -88,17 +88,17 @@ class GithubUpdater {
 	 * Fire all WordPress actions
 	 */
 	public function init() {
-		\add_filter('pre_set_site_transient_update_plugins', array($this, 'apiCheck'));
+		\add_filter('pre_set_site_transient_update_plugins', [$this, 'apiCheck']);
 
 		// Hook into the plugin details screen
-		\add_filter('plugins_api', array($this, 'getPluginInfo'), 10, 3);
-		\add_filter('upgrader_post_install', array($this, 'upgraderPostInstall'), 10, 3);
+		\add_filter('plugins_api', [$this, 'getPluginInfo'], 10, 3);
+		\add_filter('upgrader_post_install', [$this, 'upgraderPostInstall'], 10, 3);
 
 		// set timeout
-		\add_filter('http_request_timeout', array($this, 'httpRequestTimeout'));
+		\add_filter('http_request_timeout', [$this, 'httpRequestTimeout']);
 
 		// set sslverify for zip download
-		\add_filter('http_request_args', array($this, 'httpRequestSslVerify'), 10, 2);
+		\add_filter('http_request_args', [$this, 'httpRequestSslVerify'], 10, 2);
 	} // END public function init()
 
 	/**
@@ -107,9 +107,9 @@ class GithubUpdater {
 	 * @return boolean
 	 */
 	public function hasMinimumConfig() {
-		$this->missingConfig = array();
+		$this->missingConfig = [];
 
-		$requiredParams = array(
+		$requiredParams = [
 			'api_url',
 			'raw_url',
 			'github_url',
@@ -117,7 +117,7 @@ class GithubUpdater {
 			'requires',
 			'tested',
 			'readme',
-		);
+		];
 
 		foreach($requiredParams as $requiredParameter) {
 			if(empty($this->config[$requiredParameter])) {
@@ -149,7 +149,7 @@ class GithubUpdater {
 			$parsedUrl = \parse_url($this->config['zip_url']); // $scheme, $host, $path
 
 			$zipUrl = $parsedUrl['scheme'] . '://api.github.com/repos' . $parsedUrl['path'];
-			$zipUrl = \add_query_arg(array('access_token' => $this->config['access_token']), $zipUrl);
+			$zipUrl = \add_query_arg(['access_token' => $this->config['access_token']], $zipUrl);
 
 			$this->config['zip_url'] = $zipUrl;
 		} // END if(!empty($this->config['access_token']))
@@ -282,12 +282,12 @@ class GithubUpdater {
 	 */
 	public function remoteGet($query) {
 		if(!empty($this->config['access_token'])) {
-			$query = \add_query_arg(array('access_token' => $this->config['access_token']), $query);
+			$query = \add_query_arg(['access_token' => $this->config['access_token']], $query);
 		} // END if(!empty($this->config['access_token']))
 
-		$rawResponse = \wp_remote_get($query, array(
+		$rawResponse = \wp_remote_get($query, [
 			'sslverify' => $this->config['sslverify']
-		));
+		]);
 
 		return $rawResponse;
 	} // END public function remoteGet($query)
@@ -389,7 +389,7 @@ class GithubUpdater {
 			$response = new \stdClass;
 			$response->new_version = $this->config['new_version'];
 			$response->slug = $this->config['proper_folder_name'];
-			$response->url = \add_query_arg(array('access_token' => $this->config['access_token']), $this->config['github_url']);
+			$response->url = \add_query_arg(['access_token' => $this->config['access_token']], $this->config['github_url']);
 			$response->package = $this->config['zip_url'];
 
 			// If response is false, don't alter the transient
@@ -425,7 +425,7 @@ class GithubUpdater {
 		$response->tested = $this->config['tested'];
 		$response->downloaded = 0;
 		$response->last_updated = $this->config['last_updated'];
-		$response->sections = array('description' => $this->config['description']);
+		$response->sections = ['description' => $this->config['description']];
 		$response->download_link = $this->config['zip_url'];
 
 		return $response;

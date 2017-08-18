@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
 				$.ajax({
 					type: 'post',
 					url: killboardWidgetL10n.ajax.url,
-					data: 'action=get-eve-killboard-widget-data&nonce=' + killboardWidgetL10n.ajax.eveKillboardWidget.nonce + '&type=' + killboardOptions.entityType + '&name=' + killboardOptions.entityName + '&count=' + killboardOptions.killCount + '&showLosses=' + killboardOptions.showLosses,
+					data: 'action=get-eve-killboard-widget-data&type=' + killboardOptions.entityType + '&name=' + killboardOptions.entityName + '&count=' + killboardOptions.killCount + '&showLosses=' + killboardOptions.showLosses,
 					dataType: 'json',
 					success: function(result) {
 						if(result !== null) {

@@ -52,24 +52,24 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 		 *
 		 * @see https://esi.tech.ccp.is/latest/
 		 */
-		$this->esiEndpoints = array(
+		$this->esiEndpoints = [
 			'corporation-information' => 'corporations/', // getting corporation information by ID - https://esi.tech.ccp.is/latest/corporations/98000030/
 			'alliance-information' => 'alliances/', // getting alliance information by ID - https://esi.tech.ccp.is/latest/alliances/99000102/
 			'character-information' => 'characters/', // getting character information by ID - https://esi.tech.ccp.is/latest/characters/90607580/
 			'type-information' => 'universe/types/', // getting types information by ID - https://esi.tech.ccp.is/latest/universe/types/670/
 			'system-information' => 'universe/systems/', // getting system information by ID - https://esi.tech.ccp.is/latest/universe/systems/30000003/
-		);
+		];
 
 		/**
 		 * Assigning Imagesever Endpoints
 		 */
-		$this->imageserverEndpoints = array(
+		$this->imageserverEndpoints = [
 			'alliance' => 'Alliance/',
 			'corporation' => 'Corporation/',
 			'character' => 'Character/',
 			'item' => 'Type/',
 			'inventory' => 'InventoryType/' // Ships and all the other stuff
-		);
+		];
 	} // END public function __construct()
 
 	/**
@@ -110,7 +110,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return array
 	 */
 	public function getCharacterData($characterID) {
-		$characterData = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID);
+		$characterData = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID . '/');
 		$characterPortraits = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID . '/portrait/');
 
 		return [
@@ -126,7 +126,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return array
 	 */
 	public function getCorpratinData($corporationID) {
-		$corporationData = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID);
+		$corporationData = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID . '/');
 		$corporationLogos = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID . '/icons/');
 
 		return [
@@ -142,7 +142,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return array
 	 */
 	public function getAllianceData($allianceID) {
-		$allianceData = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID);
+		$allianceData = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/');
 		$allianceLogos = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/icons/');
 
 		return [
@@ -158,7 +158,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return array
 	 */
 	public function getShipData($shipID) {
-		$shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID);
+		$shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID . '/');
 
 		return [
 			'data' => $shipData
@@ -172,7 +172,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return array
 	 */
 	public function getSystemData($systemID) {
-		$systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID);
+		$systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID . '/');
 
 		return [
 			'data' => $systemData
@@ -266,7 +266,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 		$data = CacheHelper::getInstance()->getTransientCache($transientName);
 
 		if($data === false) {
-			$data = RemoteHelper::getInstance()->getRemoteData('https://api.eveonline.com/eve/OwnerID.xml.aspx', array('names' => $name));
+			$data = RemoteHelper::getInstance()->getRemoteData('https://api.eveonline.com/eve/OwnerID.xml.aspx', ['names' => $name]);
 
 			/**
 			 * setting the transient caches

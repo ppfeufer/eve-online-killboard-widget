@@ -27,12 +27,12 @@ class KillboardWidget extends \WP_Widget {
 	public $name;
 
 	public function __construct() {
-		$widgetOptions = array(
+		$widgetOptions = [
 			'classname' => 'eve-online-killboard-widget',
 			'description' => \__('Displaying the latest kills (and maybe losses if you are tough enough) in your sidebar.', 'eve-online-killboard-widget')
-		);
+		];
 
-		$controlOptions = array();
+		$controlOptions = [];
 
 		parent::__construct('eve_online_killboard_widget', __('EVE Online Killboard Widget', 'eve-online-killboard-widget'), $widgetOptions, $controlOptions);
 	} // END public function __construct($id_base, $name, $widget_options = array(), $control_options = array())
@@ -48,14 +48,14 @@ class KillboardWidget extends \WP_Widget {
 		 *
 		 * @var array
 		 */
-		$instance = \wp_parse_args((array) $instance, array(
+		$instance = \wp_parse_args((array) $instance, [
 			'eve-online-killboard-widget-title' => '',
 			'eve-online-killboard-widget-number-of-kills' => 5,
 			'eve-online-killboard-widget-entity-type' => '',
 			'eve-online-killboard-widget-entity-name' => '',
 			'eve-online-killboard-widget-show-losses' => false,
 			'eve-online-killboard-widget-static-cache' => false
-		));
+		]);
 
 		$showLosses = $instance['eve-online-killboard-widget-show-losses'] ? 'checked="checked"' : '';
 		$staticCache = $instance['eve-online-killboard-widget-static-cache'] ? 'checked="checked"' : '';
@@ -121,14 +121,14 @@ class KillboardWidget extends \WP_Widget {
 		 *
 		 * @var array
 		 */
-		$newInstance = \wp_parse_args((array) $newInstance, array(
+		$newInstance = \wp_parse_args((array) $newInstance, [
 			'eve-online-killboard-widget-title' => '',
 			'eve-online-killboard-widget-number-of-kills' => 5,
 			'eve-online-killboard-widget-entity-type' => '',
 			'eve-online-killboard-widget-entity-name' => '',
 			'eve-online-killboard-widget-show-losses' => false,
 			'eve-online-killboard-widget-static-cache' => false
-		));
+		]);
 
 		/**
 		 * Sanitize the stuff rom our widget's form
