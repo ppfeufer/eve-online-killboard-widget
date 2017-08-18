@@ -297,7 +297,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 */
 	private function getEsiData($route) {
 		$returnValue = null;
-		$transientName = \sanitize_title('eve-killboard-data_' . $route);
+		$transientName = \sanitize_title('eve-online-killboard-widget-data_' . $route);
 		$data = CacheHelper::getInstance()->getTransientCache($transientName);
 
 		if($data === false) {
@@ -306,7 +306,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 			/**
 			 * setting the transient caches
 			 */
-			CacheHelper::getInstance()->setTransientCache($transientName, $data, 1 * \HOUR_IN_SECONDS);
+			CacheHelper::getInstance()->setTransientCache($transientName, $data, 2);
 		} // END if($data === false)
 
 		if(!empty($data)) {
