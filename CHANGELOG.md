@@ -2,7 +2,11 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.6...HEAD)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7...HEAD)
+- in development
+
+## [0.7](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.7) - 2017-08-18
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.6...v0.7)
 ### Added
 - Image optimization for cached images
 - max-width for images
