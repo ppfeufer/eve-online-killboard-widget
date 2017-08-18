@@ -85,46 +85,17 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
 	 */
 	public function createCacheDirectory($directory = '') {
 		$wpFileSystem =  new \WP_Filesystem_Direct(null);
+		$dirToCreate = \trailingslashit($this->getPluginCacheDir() . $directory);
 
-		if($wpFileSystem->is_writable($wpFileSystem->wp_content_dir())) {
-			/**
-			 * Fix for Windows Server since they are to stupid to create nested dirs
-			 */
-			if(\strtoupper(\substr(\PHP_OS, 0, 3)) === 'WIN') {
-				if(!$wpFileSystem->is_dir(\trailingslashit($this->getPluginCacheDir()))) {
-					$subdirs = \explode('/', \str_replace(\trailingslashit(\WP_CONTENT_DIR), '', $this->getPluginCacheDir()));
+		\wp_mkdir_p($dirToCreate);
 
-					$createDir = '';
-					foreach($subdirs as $dir) {
-						$createDir .= '/' . $dir;
-
-						if(!$wpFileSystem->is_dir(\trailingslashit(\WP_CONTENT_DIR) . $createDir) && !empty($dir)) {
-							$wpFileSystem->mkdir(\trailingslashit(\WP_CONTENT_DIR) . $createDir, 0755);
-
-							if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php')) {
-								$wpFileSystem->put_contents(
-									\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php',
-									'',
-									0644 // predefined mode settings for WP files
-								);
-							} // END if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php'))
-						} // END if(!$wpFileSystem->is_dir(\trailingslashit(\WP_CONTENT_DIR) . $createDir) && !empty($dir))
-					} // END foreach($subdirs as $dir)
-				} // END if(!$wpFileSystem->is_dir(\trailingslashit($this->getPluginCacheDir())))
-			} // END if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-
-			if(!$wpFileSystem->is_dir(\trailingslashit($this->getPluginCacheDir()) . $directory)) {
-				$wpFileSystem->mkdir(\trailingslashit($this->getPluginCacheDir()) . $directory, 0755);
-
-				if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php')) {
-					$wpFileSystem->put_contents(
-						\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php',
-						'',
-						0644
-					);
-				} // END if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php'))
-			} // END if(!$wpFileSystem->is_dir(\trailingslashit($this->getThemeCacheDir()) . $directory))
-		} // END if($wpFileSystem->is_writable($wpFileSystem->wp_content_dir()))
+		if(!$wpFileSystem->is_file($dirToCreate . '/index.php')) {
+			$wpFileSystem->put_contents(
+				$dirToCreate . '/index.php',
+				'',
+				0644
+			);
+		} // END if(!$wpFileSystem->is_file(\trailingslashit($this->getPluginCacheDir()) . $directory . '/index.php'))
 	} // END public function createCacheDirectories()
 
 	/**

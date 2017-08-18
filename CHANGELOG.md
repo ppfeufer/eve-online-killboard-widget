@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7.1...HEAD)
-- in development
+### Changed
+- Creation of cache directories
 
 ## [0.7.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.7.1) - 2017-08-18
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7...v0.7.1)
