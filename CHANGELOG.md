@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7...HEAD)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7.1...HEAD)
 - in development
+
+## [0.7.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.7.1) - 2017-08-18
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7...v0.7.1)
+### Fixed
+- Excessively high cache time for ESI API information reduced from 3600 hours (108.3 days) down to 2 hours.
 
 ## [0.7](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.7) - 2017-08-18
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.6...v0.7)
