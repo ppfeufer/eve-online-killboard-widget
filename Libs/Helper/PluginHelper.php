@@ -12,7 +12,7 @@ class PluginHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return string
 	 */
 	public function getPluginPath($file = '') {
-		return \trailingslashit(\plugin_dir_path(\dirname(\dirname(__FILE__)))) . $file;
+		return \WP_PLUGIN_DIR . '/eve-online-killboard-widget/' . $file;
 	} // END public function getPluginPath($file = '')
 
 	/**
@@ -22,6 +22,6 @@ class PluginHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return string
 	 */
 	public function getPluginUri($file = '') {
-		return \plugins_url($file, \dirname(\dirname(__FILE__)));
+		return \WP_PLUGIN_URL . '/eve-online-killboard-widget/' . $file;
 	} // END public function getPluginUri()
 } // END class PluginHelper
