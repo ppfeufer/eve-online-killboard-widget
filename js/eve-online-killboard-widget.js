@@ -9,15 +9,15 @@ jQuery(document).ready(function($) {
 		 * Ajax Call EVE Killboard Data
 		 */
 		var getKillboardWidgetDataData = {
-			ajaxCall: function() {
+			ajaxCall: function(data) {
 				$.ajax({
 					type: 'post',
 					url: killboardWidgetL10n.ajax.url,
-					data: 'action=get-eve-killboard-widget-data&type=' + killboardOptions.entityType + '&name=' + killboardOptions.entityName + '&count=' + killboardOptions.killCount + '&showLosses=' + killboardOptions.showLosses,
+					data: 'action=get-eve-killboard-widget-data&type=' + data.entityType + '&name=' + data.entityName + '&count=' + data.killCount + '&showLosses=' + data.showLosses,
 					dataType: 'json',
 					success: function(result) {
 						if(result !== null) {
-							$('.killboard-widget-kill-list').html(result.html).promise().done(function() {
+							$('#eve_online_killboard_widget-' + data.number + ' .killboard-widget-kill-list').html(result.html).promise().done(function() {
 								$('[data-toggle="eve-killboard-tooltip"]').tooltip();
 							});
 						} // END if(result !== null)
@@ -125,9 +125,11 @@ jQuery(document).ready(function($) {
 		imageLoader(cImageSrc, startAnimation);
 
 		/**
-		 * Call the ajax to get the market data
+		 * Call the ajax to get the killboard data
 		 */
-		getKillboardWidgetDataData.ajaxCall();
+		$(killboardOptions).each(function() {
+			getKillboardWidgetDataData.ajaxCall($(this)[0]);
+		});
 	} // END if($('.eve-online-killboard-widget .loaderImage').length)
 
 	$('[data-toggle="eve-killboard-tooltip"]').tooltip();

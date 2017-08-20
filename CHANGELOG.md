@@ -5,6 +5,7 @@
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.8...HEAD)
 ### Added
 - Pilot to the list of possible entities to select from
+- Possibility to have multiple widgets for different entities (Pilot/Corp/Alliance)
 
 ### Changed
 - Complete rework of the API stuff. No more XML API calls. HOORAY \o/
