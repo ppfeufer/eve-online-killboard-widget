@@ -61,6 +61,7 @@ class KillboardWidget extends \WP_Widget {
 		$staticCache = $instance['eve-online-killboard-widget-static-cache'] ? 'checked="checked"' : '';
 
 		$typeArray = [
+			'character' => \__('Pilot', 'eve-online-killboard-widget'),
 			'corporation' => \__('Corporation', 'eve-online-killboard-widget'),
 			'alliance' => \__('Alliance', 'eve-online-killboard-widget')
 		];
@@ -76,6 +77,7 @@ class KillboardWidget extends \WP_Widget {
 
 		foreach($typeArray as $value => $output) {
 			$selected = '';
+
 			if($instance['eve-online-killboard-widget-entity-type'] === $value) {
 				$selected = ' selected';
 			} // END if($instance['eve-online-killboard-widget-entity-type'] === $value)
