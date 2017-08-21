@@ -26,6 +26,14 @@ class KillboardWidget extends \WP_Widget {
 	 */
 	public $name;
 
+	/**
+	 * Unique ID number of the current instance.
+	 *
+	 * @since 2.8.0
+	 * @var bool|int
+	 */
+	public $number = false;
+
 	public function __construct() {
 		$widgetOptions = [
 			'classname' => 'eve-online-killboard-widget',
@@ -61,6 +69,7 @@ class KillboardWidget extends \WP_Widget {
 		$staticCache = $instance['eve-online-killboard-widget-static-cache'] ? 'checked="checked"' : '';
 
 		$typeArray = [
+			'character' => \__('Pilot', 'eve-online-killboard-widget'),
 			'corporation' => \__('Corporation', 'eve-online-killboard-widget'),
 			'alliance' => \__('Alliance', 'eve-online-killboard-widget')
 		];
@@ -76,6 +85,7 @@ class KillboardWidget extends \WP_Widget {
 
 		foreach($typeArray as $value => $output) {
 			$selected = '';
+
 			if($instance['eve-online-killboard-widget-entity-type'] === $value) {
 				$selected = ' selected';
 			} // END if($instance['eve-online-killboard-widget-entity-type'] === $value)
@@ -182,15 +192,24 @@ class KillboardWidget extends \WP_Widget {
 				$widgetHtml .= '</div>';
 				$widgetHtml .= $args['after_widget'];
 
+//				$jsOptions = json_encode([
+//					'entityType' => $instance['eve-online-killboard-widget-entity-type'],
+//					'entityName' => $instance['eve-online-killboard-widget-entity-name'],
+//					'killCount' => $instance['eve-online-killboard-widget-number-of-kills'],
+//					'showLosses' => $instance['eve-online-killboard-widget-show-losses']
+//				]);
+
 				$jsOptions = json_encode([
 					'entityType' => $instance['eve-online-killboard-widget-entity-type'],
 					'entityName' => $instance['eve-online-killboard-widget-entity-name'],
 					'killCount' => $instance['eve-online-killboard-widget-number-of-kills'],
-					'showLosses' => $instance['eve-online-killboard-widget-show-losses']
+					'showLosses' => $instance['eve-online-killboard-widget-show-losses'],
+					'number' => $this->number
 				]);
 
 				$widgetHtml .= '<script type="text/javascript">'
-					. 'var killboardOptions = ' . $jsOptions . ';' . "\n"
+					.'if((killboardOptions instanceof Array) === false) {var killboardOptions = [];}'
+					. 'killboardOptions.push(' . $jsOptions . ');' . "\n"
 					. '</script>';
 				break;
 		} // END switch((int) $instance['eve-online-killboard-widget-static-cache'])

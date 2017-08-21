@@ -3,7 +3,12 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.8...HEAD)
-- in development
+### Added
+- Pilot to the list of possible entities to select from
+- Possibility to have multiple widgets for different entities (Pilot/Corp/Alliance)
+
+### Changed
+- Complete rework of the API stuff. No more XML API calls. HOORAY \o/
 
 ## [0.8](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.8) - 2017-08-18
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.7.1...v0.8)
