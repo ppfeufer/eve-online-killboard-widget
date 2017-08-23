@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.9...HEAD)
--in development
+### Changed
+- Implemented a better check if we have a kill or a loss mail
 
 ## [0.9](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.9) - 2017-08-21
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.8...v0.9)
