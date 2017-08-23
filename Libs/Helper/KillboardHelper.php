@@ -66,42 +66,49 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	public function getWidgetHtml(array $killList) {
 		$widgetHtml = null;
 
-		foreach($killList as $killmail) {
-			$countAttackers = \count($killmail->attackers);
+		foreach($killList as $killMail) {
+			$countAttackers = \count($killMail->attackers);
 			$stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
 
-			$killType = ' kill-list-kill-mail';
-			if($killmail->victim->corporationID === (int) $this->entityID || $killmail->victim->allianceID === (int) $this->entityID) {
-				$killType = ' kill-list-loss-mail';
-			} // END if($killmail->victim->corporationID === $this->entityID || $killmail->victim->allianceID === $this->entityID)
+			$victimEntityIdsArray = [
+				'characterID' => (int) $killMail->victim->characterID,
+				'corporationID' => (int) $killMail->victim->corporationID,
+				'allianceID' => (int) $killMail->victim->allianceID
+			];
 
-			$systeInformation = $this->getSystemInformation($killmail->solarSystemID);
+			// Check if we have a kill or a loss mail
+			$killType = ' kill-list-kill-mail';
+			if(\in_array((int) $this->entityID, $victimEntityIdsArray)) {
+				$killType = ' kill-list-loss-mail';
+			} // END if(\in_array((int) $this->entityID, $victimEntityIdsArray))
+
+			$systemInformation = $this->getSystemInformation($killMail->solarSystemID);
 			$widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
 						. '	<div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
 						. '		<figure>'
-						. '			<a href="' . $this->getKillboardLink($killmail->killID) . '" rel="external" target="_blank">'
-						.				$this->getVictimImage($killmail->victim)
+						. '			<a href="' . $this->getKillboardLink($killMail->killID) . '" rel="external" target="_blank">'
+						.				$this->getVictimImage($killMail->victim)
 						. '			</a>'
 						. '		</figure>'
 						. '		<div class="eve-online-killboard-widget-pilot-information clearfix">'
 						. '			<span class="victimShipImage">'
-						.				$this->getVictimShipImage($killmail->victim, 32)
+						.				$this->getVictimShipImage($killMail->victim, 32)
 						. '			</span>'
 						. '			<span class="victimCorpImage">'
-						.				$this->getVictimCorpImage($killmail->victim, 32)
+						.				$this->getVictimCorpImage($killMail->victim, 32)
 						. '			</span>'
 						. '			<span class="victimAllianceImage">'
-						.				$this->getVictimAllianceImage($killmail->victim, 32)
+						.				$this->getVictimAllianceImage($killMail->victim, 32)
 						. '			</span>'
 						. '		</div>'
 						. '	</div>'
 						. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
 						. '		<ul>'
-						. '			<li>' . $this->getVictimType($killmail->victim) . ': ' . $this->getVictimName($killmail->victim) . '</li>'
-						. '			<li>Loss: ' . $this->getVictimShip($killmail->victim) . '</li>'
-						. '			<li>ISK lost: ' . $this->getIskLoss($killmail->zkb) . '</li>'
-						. '			<li>System: ' . $systeInformation->name . ' (' . \round($systeInformation->security_status, 2) . ')</li>'
-						. '			<li>Killed by: ' . $this->getFinalBlow($killmail->attackers) . $stringInvolved . '</li>'
+						. '			<li>' . $this->getVictimType($killMail->victim) . ': ' . $this->getVictimName($killMail->victim) . '</li>'
+						. '			<li>Loss: ' . $this->getVictimShip($killMail->victim) . '</li>'
+						. '			<li>ISK lost: ' . $this->getIskLoss($killMail->zkb) . '</li>'
+						. '			<li>System: ' . $systemInformation->name . ' (' . \round($systemInformation->security_status, 2) . ')</li>'
+						. '			<li>Killed by: ' . $this->getFinalBlow($killMail->attackers) . $stringInvolved . '</li>'
 						. '		</ul>'
 						. '	</div>'
 						. '</div>';

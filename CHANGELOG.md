@@ -2,8 +2,16 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.9...HEAD)
--in development
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.10...HEAD)
+- in development
+
+## [0.10](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.10) - 2017-08-23
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.9...v0.10)
+### Changed
+- Implemented a better check if we have a kill or a loss mail
+
+### Fixed
+- Missing `$args['after_widget']` added again
 
 ## [0.9](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.9) - 2017-08-21
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.8...v0.9)

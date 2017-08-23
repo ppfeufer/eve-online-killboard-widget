@@ -190,14 +190,6 @@ class KillboardWidget extends \WP_Widget {
 				$widgetHtml .= '<p style="text-align: center;">' . \__('Loading killboard data, please wait ...', 'eve-online-killboard-widget') . '</p>';
 				$widgetHtml .= '<p><span class="loaderImage"></span></p>';
 				$widgetHtml .= '</div>';
-				$widgetHtml .= $args['after_widget'];
-
-//				$jsOptions = json_encode([
-//					'entityType' => $instance['eve-online-killboard-widget-entity-type'],
-//					'entityName' => $instance['eve-online-killboard-widget-entity-name'],
-//					'killCount' => $instance['eve-online-killboard-widget-number-of-kills'],
-//					'showLosses' => $instance['eve-online-killboard-widget-show-losses']
-//				]);
 
 				$jsOptions = json_encode([
 					'entityType' => $instance['eve-online-killboard-widget-entity-type'],
@@ -215,6 +207,8 @@ class KillboardWidget extends \WP_Widget {
 		} // END switch((int) $instance['eve-online-killboard-widget-static-cache'])
 
 		echo $widgetHtml;
+
+		echo $args['after_widget'];
 	} // END public function widget($args, $instance)
 
 	/**
