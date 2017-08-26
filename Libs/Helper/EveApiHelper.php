@@ -141,9 +141,15 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return type
 	 */
 	public function getEveIdFromName($name, $type) {
+		$returnData = null;
+
 		$data = $this->getEsiData($this->esiEndpoints['search'] . '?search=' . \urlencode(\wp_specialchars_decode($name, \ENT_QUOTES)) . '&strict=true&categories=' . $type);
 
-		return $data->{$type}['0'];
+		if(isset($data->{$type}['0'])) {
+			$returnData = $data->{$type}['0'];
+		} // END if(isset($data->{$type}['0']))
+
+		return $returnData;
 	} // END public function getEveIdFromName($name, $type)
 
 	/**
