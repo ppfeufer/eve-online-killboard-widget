@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.11...HEAD)
-- in development
+### Fixed
+- Implemented a check if teh cache might be empty, so redo it
 
 ## [0.12](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.12) - 2017-08-26
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.11...v0.12)
