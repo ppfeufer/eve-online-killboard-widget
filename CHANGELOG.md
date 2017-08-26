@@ -5,6 +5,12 @@
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.11...HEAD)
 - in development
 
+## [0.12](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.12) - 2017-08-26
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.11...v0.12)
+### Changed
+- Set different transient cache times for different API calls
+- Renamed transient cache to build a common cache for my plugins that uses the same API calls
+
 ## [0.11](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.11) - 2017-08-24
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.10...v0.11)
 ### Changed
