@@ -89,7 +89,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return array
 	 */
 	public function getShipData($shipID) {
-		$shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID . '/');
+		$shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID . '/', 3600);
 
 		return [
 			'data' => $shipData
@@ -103,7 +103,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * @return array
 	 */
 	public function getSystemData($systemID) {
-		$systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID . '/');
+		$systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID . '/', 3600);
 
 		return [
 			'data' => $systemData
@@ -143,7 +143,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	public function getEveIdFromName($name, $type) {
 		$returnData = null;
 
-		$data = $this->getEsiData($this->esiEndpoints['search'] . '?search=' . \urlencode(\wp_specialchars_decode($name, \ENT_QUOTES)) . '&strict=true&categories=' . $type);
+		$data = $this->getEsiData($this->esiEndpoints['search'] . '?search=' . \urlencode(\wp_specialchars_decode($name, \ENT_QUOTES)) . '&strict=true&categories=' . $type, 3600);
 
 		if(isset($data->{$type}['0'])) {
 			$returnData = $data->{$type}['0'];
@@ -156,11 +156,12 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 * Getting data from the ESI
 	 *
 	 * @param string $route
+	 * @param int $cacheTime Caching time in hours (Default: 120)
 	 * @return object
 	 */
-	private function getEsiData($route) {
+	private function getEsiData($route, $cacheTime = 120) {
 		$returnValue = null;
-		$transientName = \sanitize_title('eve-online-killboard-widget-data_' . $route);
+		$transientName = \sanitize_title('eve-esi-data_' . $route);
 		$data = CacheHelper::getInstance()->getTransientCache($transientName);
 
 		if($data === false) {
@@ -169,7 +170,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 			/**
 			 * setting the transient caches
 			 */
-			CacheHelper::getInstance()->setTransientCache($transientName, $data, 2);
+			CacheHelper::getInstance()->setTransientCache($transientName, $data, $cacheTime);
 		} // END if($data === false)
 
 		if(!empty($data)) {
