@@ -164,16 +164,18 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 		$transientName = \sanitize_title('eve-esi-data_' . $route);
 		$data = CacheHelper::getInstance()->getTransientCache($transientName);
 
-		if($data === false) {
+		if($data === false || empty($data)) {
 			$data = RemoteHelper::getInstance()->getRemoteData($this->esiUrl . $route);
 
 			/**
 			 * setting the transient caches
 			 */
-			CacheHelper::getInstance()->setTransientCache($transientName, $data, $cacheTime);
+			if(!isset($data->error) && !empty($data)) {
+				CacheHelper::getInstance()->setTransientCache($transientName, $data, $cacheTime);
+			} // END if(!isset($data->error))
 		} // END if($data === false)
 
-		if(!empty($data)) {
+		if(!empty($data) && !isset($data->error)) {
 			$returnValue = \json_decode($data);
 		} // END if(!empty($data))
 
