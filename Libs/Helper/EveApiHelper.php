@@ -189,7 +189,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 					case 'corporation':
 						$corporationSheet = $this->getCorporationData($entityID);
 
-						if($corporationSheet['data']->name === $name) {
+						if($corporationSheet['data']->corporation_name === $name) {
 							$returnData = $entityID;
 							break;
 						} // END if($corporationSheet['data']->name === $name)
@@ -198,7 +198,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 					case 'alliance':
 						$allianceSheet = $this->getAllianceData($entityID);
 
-						if($allianceSheet['data']->name === $name) {
+						if($allianceSheet['data']->alliance_name === $name) {
 							$returnData = $entityID;
 							break;
 						} // END if($allianceSheet['data']->name === $name)
