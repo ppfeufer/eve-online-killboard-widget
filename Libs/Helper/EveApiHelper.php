@@ -82,6 +82,30 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 		return $this->imageserverUrl;
 	} // END public function getImageServerUrl()
 
+	public function getCharacterData($characterID) {
+		$characterData = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID . '/');
+
+		return [
+			'data' => $characterData
+		];
+	} // END public function getCharacterData($characterID)
+
+	public function getCorporationData($corporationID) {
+		$corporationData = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID . '/');
+
+		return [
+			'data' => $corporationData
+		];
+	} // END public function getCorporationData($corporationID)
+
+	public function getAllianceData($allianceID) {
+		$allianceData = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/', 3600);
+
+		return [
+			'data' => $allianceData
+		];
+	} // END public function getAllianceData($allianceID)
+
 	/**
 	 * Getting all the needed ship information from the ESI
 	 *
@@ -145,9 +169,43 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 
 		$data = $this->getEsiData($this->esiEndpoints['search'] . '?search=' . \urlencode(\wp_specialchars_decode($name, \ENT_QUOTES)) . '&strict=true&categories=' . $type, 3600);
 
-		if(isset($data->{$type}['0'])) {
-			$returnData = $data->{$type}['0'];
-		} // END if(isset($data->{$type}['0']))
+		if(!isset($data->error) && !empty($data)) {
+			/**
+			 * -= FIX =-
+			 * CCPs strict mode is not really strict, so we have to check manually ....
+			 * Please CCP, get your shit sorted ...
+			 */
+			foreach($data->{$type} as $entityID) {
+				switch($type) {
+					case 'character':
+						$characterSheet = $this->getCharacterData($entityID);
+
+						if($characterSheet['data']->name === $name) {
+							$returnData = $entityID;
+							break;
+						} // END if($characterSheet['data']->name === $name)
+						break;
+
+					case 'corporation':
+						$corporationSheet = $this->getCorporationData($entityID);
+
+						if($corporationSheet['data']->name === $name) {
+							$returnData = $entityID;
+							break;
+						} // END if($corporationSheet['data']->name === $name)
+						break;
+
+					case 'alliance':
+						$allianceSheet = $this->getAllianceData($entityID);
+
+						if($allianceSheet['data']->name === $name) {
+							$returnData = $entityID;
+							break;
+						} // END if($allianceSheet['data']->name === $name)
+						break;
+				} // END switch($type)
+			} // END foreach($data->{$type} as $entityID)
+		} // END if(!isset($data->error) && !empty($data))
 
 		return $returnData;
 	} // END public function getEveIdFromName($name, $type)
