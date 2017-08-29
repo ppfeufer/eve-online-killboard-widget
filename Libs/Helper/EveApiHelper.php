@@ -180,7 +180,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 					case 'character':
 						$characterSheet = $this->getCharacterData($entityID);
 
-						if($characterSheet['data']->name === $name) {
+						if($this->isValidEsiData($characterSheet) === true && \strtolower($characterSheet['data']->name) === \strtolower($name)) {
 							$returnData = $entityID;
 							break;
 						} // END if($characterSheet['data']->name === $name)
@@ -189,7 +189,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 					case 'corporation':
 						$corporationSheet = $this->getCorporationData($entityID);
 
-						if($corporationSheet['data']->corporation_name === $name) {
+						if($this->isValidEsiData($corporationSheet) === true && \strtolower($corporationSheet['data']->corporation_name) === \strtolower($name)) {
 							$returnData = $entityID;
 							break;
 						} // END if($corporationSheet['data']->name === $name)
@@ -198,7 +198,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 					case 'alliance':
 						$allianceSheet = $this->getAllianceData($entityID);
 
-						if($allianceSheet['data']->alliance_name === $name) {
+						if($this->isValidEsiData($allianceSheet) === true && \strtolower($allianceSheet['data']->alliance_name) === \strtolower($name)) {
 							$returnData = $entityID;
 							break;
 						} // END if($allianceSheet['data']->name === $name)
@@ -239,4 +239,20 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 
 		return $returnValue;
 	} // END private function getEsiData($route)
+
+	/**
+	 * Check if we have valid ESI data or not
+	 *
+	 * @param array $esiData
+	 * @return boolean
+	 */
+	public function isValidEsiData($esiData) {
+		$returnValue = false;
+
+		if(!\is_null($esiData) && isset($esiData['data']) && !\is_null($esiData['data']) && !isset($esiData['data']->error)) {
+			$returnValue = true;
+		} // END if(!\is_null($esiData) && isset($esiData['data']) && !\is_null($esiData['data']) && !isset($esiData['data']->error))
+
+		return $returnValue;
+	} // END public function isValidEsiData($esiData)
 } // END class EveApi
