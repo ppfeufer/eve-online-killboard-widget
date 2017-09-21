@@ -89,18 +89,18 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 						. '			<a href="' . $this->getKillboardLink($killMail->killID) . '" rel="external" target="_blank">'
 						.				$this->getVictimImage($killMail->victim)
 						. '			</a>'
+						. '			<div class="eve-online-killboard-widget-pilot-information clearfix">'
+						. '				<span class="victimShipImage">'
+						.					$this->getVictimShipImage($killMail->victim, 32)
+						. '				</span>'
+						. '				<span class="victimCorpImage">'
+						.					$this->getVictimCorpImage($killMail->victim, 32)
+						. '				</span>'
+						. '				<span class="victimAllianceImage">'
+						.					$this->getVictimAllianceImage($killMail->victim, 32)
+						. '				</span>'
+						. '			</div>'
 						. '		</figure>'
-						. '		<div class="eve-online-killboard-widget-pilot-information clearfix">'
-						. '			<span class="victimShipImage">'
-						.				$this->getVictimShipImage($killMail->victim, 32)
-						. '			</span>'
-						. '			<span class="victimCorpImage">'
-						.				$this->getVictimCorpImage($killMail->victim, 32)
-						. '			</span>'
-						. '			<span class="victimAllianceImage">'
-						.				$this->getVictimAllianceImage($killMail->victim, 32)
-						. '			</span>'
-						. '		</div>'
 						. '	</div>'
 						. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
 						. '		<ul>'

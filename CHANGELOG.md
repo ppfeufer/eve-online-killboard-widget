@@ -6,6 +6,7 @@
 ### Fixed
 - Implemented a check if teh cache might be empty, so redo it
 - Additional check for CCPs strict mode, which is actually not so strict and still can give more than one result ... (CCPLEASE get your shit sorted ...)
+- Positioning
 
 ## [0.12](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.12) - 2017-08-26
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.11...v0.12)
