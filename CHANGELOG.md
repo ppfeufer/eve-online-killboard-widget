@@ -1,9 +1,16 @@
 
 # Change Log
 
-## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.11...HEAD)
+## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.13...development)
 - in development
+
+## [0.13](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.13) - 2017-09-25
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.12...v0.13)
+### Fixed
+- Implemented a check if the cache might be empty, so redo it
+- Additional check for CCPs strict mode, which is actually not so strict and still can give more than one result ... (CCPLEASE get your shit sorted ...)
+- Positioning
 
 ## [0.12](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.12) - 2017-08-26
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.11...v0.12)

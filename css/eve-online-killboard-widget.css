@@ -23,12 +23,16 @@
 		border-right: 1px solid rgb(0,255,0);
 	}
 
+	.eve-online-killboard-widget .killboard-entry figure {
+		position: relative;
+	}
+
 	.eve-online-killboard-widget-pilot-information {
 		position: absolute;
 		display: flex;
 		bottom: 0;
-		right: 15px;
-		left: 15px;
+		right: 0;
+		left: 0;
 		background: rgba(0,0,0,0.65);
 	}
 
