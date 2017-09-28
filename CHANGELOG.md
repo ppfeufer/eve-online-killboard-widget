@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.13...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.14...development)
 - in development
+
+## [0.14](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.14) - 2017-09-29
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.13...v0.14)
+### Changed
+- Updated the code to the recent changes in field names and so on in the zKillboard API (thanks zkb dude ...)
 
 ## [0.13](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.13) - 2017-09-25
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.12...v0.13)
