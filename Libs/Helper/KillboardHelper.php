@@ -287,8 +287,9 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		$finalBlow = null;
 
 		foreach($attackerData as $attacker) {
-			if($attacker->final_blow === 1) {
-				$finalBlow = $attacker->characterName;
+			if($attacker->final_blow === true) {
+				$finalBlowPilotData = EveApiHelper::getInstance()->getCharacterData($attacker->character_id);
+				$finalBlow = $finalBlowPilotData['data']->name;
 			} // END if($attacker->finalBlow === 1)
 		} // END foreach($attackerData as $attacker)
 
