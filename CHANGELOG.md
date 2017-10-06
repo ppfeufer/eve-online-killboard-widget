@@ -2,7 +2,14 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.14...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.15...development)
+- in develoment
+
+## [0.15](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.15) - 2017-10-06
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.14...v0.15)
+### Fixed
+- Pilot name for final blow is now displayed again
+
 ### Changed
 - Tooltip behaviour and CSS
 
