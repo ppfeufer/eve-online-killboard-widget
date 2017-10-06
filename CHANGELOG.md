@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.14...development)
-- in development
+### Changed
+- Tooltip behaviour and CSS
 
 ## [0.14](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.14) - 2017-09-29
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.13...v0.14)
