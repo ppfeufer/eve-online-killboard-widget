@@ -69,6 +69,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 			'corporation' => 'Corporation/',
 			'character' => 'Character/',
 			'item' => 'Type/',
+			'ship' => 'Render/',
 			'inventory' => 'InventoryType/' // Ships and all the other stuff
 		];
 	} // END public function __construct()
@@ -146,7 +147,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	public function getShipImageById($shipTypeID, $imageOnly = true, $size = 128) {
 		$ship = $this->getShipData($shipTypeID);
 
-		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->imageserverUrl . $this->imageserverEndpoints['inventory'] . $shipTypeID . '_' . $size. '.png');
+		$imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->imageserverUrl . $this->imageserverEndpoints['ship'] . $shipTypeID . '_' . $size. '.png');
 
 		if($imageOnly === true) {
 			return $imagePath;
