@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.15...development)
-- in develoment
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.16...development)
+- in development
+
+## [0.16](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.16) - 2017-10-16
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.16...v0.16)
+### Fixed
+- Image API end point for ships
 
 ## [0.15](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.15) - 2017-10-06
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.14...v0.15)
