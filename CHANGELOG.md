@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.17...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.18...development)
 - in development
+
+## [0.18](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.18) - 2017-10-17
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.17...v0.18)
+### Fixed
+- Image API end point for render fixed (Really to many end points ....)
 
 ## [0.17](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.17) - 2017-10-17
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.16...v0.17)

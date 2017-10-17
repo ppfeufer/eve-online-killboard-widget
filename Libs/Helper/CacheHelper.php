@@ -39,6 +39,7 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
 		$this->createCacheDirectory('images/character');
 		$this->createCacheDirectory('images/corporation');
 		$this->createCacheDirectory('images/alliance');
+		$this->createCacheDirectory('images/render');
 	} // END public function checkOrCreateCacheDirectories()
 
 	/**
