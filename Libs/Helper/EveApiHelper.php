@@ -69,7 +69,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 			'corporation' => 'Corporation/',
 			'character' => 'Character/',
 			'item' => 'Type/',
-			'ship' => 'Render/',
+			'ship' => 'Type/',
 			'inventory' => 'InventoryType/' // Ships and all the other stuff
 		];
 	} // END public function __construct()
@@ -81,6 +81,10 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 	 */
 	public function getImageServerUrl() {
 		return $this->imageserverUrl;
+	} // END public function getImageServerUrl()
+
+	public function getImageServerEndpont($route) {
+		return $this->imageserverEndpoints[$route];
 	} // END public function getImageServerUrl()
 
 	public function getCharacterData($characterID) {
