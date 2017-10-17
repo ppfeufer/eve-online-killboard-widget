@@ -187,7 +187,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		}
 
 		if(!isset($victimData->character_id)) {
-			$victimImage = '<img src="' . ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('ship') . $victimData->ship_type_id . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->ship_type_id . '">';
+			$victimImage = '<img src="' . ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('render', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('render') . $victimData->ship_type_id . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->ship_type_id . '">';
 		}
 
 		return $victimImage;

@@ -70,6 +70,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 			'character' => 'Character/',
 			'item' => 'Type/',
 			'ship' => 'Type/',
+			'render' => 'Render/',
 			'inventory' => 'InventoryType/' // Ships and all the other stuff
 		];
 	} // END public function __construct()
