@@ -2,11 +2,16 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.16...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.17...development)
 - in development
 
+## [0.17](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.17) - 2017-10-17
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.16...v0.17)
+### Fixed
+- Image API end point for ships (To many end point that do te same here ...), and this time we have the right images for T2 ships :-)
+
 ## [0.16](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.16) - 2017-10-16
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.16...v0.16)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.15...v0.16)
 ### Fixed
 - Image API end point for ships
 

@@ -11,6 +11,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	private $zkbLink = null;
 	private $zkbApiLink = null;
 	private $entityID = null;
+	private $eveApi = null;
 
 	/**
 	 * constructor
@@ -31,7 +32,8 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	 * @return array
 	 */
 	public function getKillList(array $widgetSettings) {
-		$this->entityID = EveApiHelper::getInstance()->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
+		$this->eveApi = EveApiHelper::getInstance();
+		$this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
 
 		$transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only');
 		if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
@@ -180,12 +182,12 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		$victimImage = null;
 
 		if(isset($victimData->character_id)) {
-			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', EveApiHelper::getInstance()->getImageServerUrl() . 'Character/' . $victimData->character_id . '_' . $size. '.jpg');
+			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('character') . $victimData->character_id . '_' . $size. '.jpg');
 			$victimImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-character-id-' . $victimData->character_id . '" alt="' . \esc_html($this->getVictimName($victimData)) . '">';
 		}
 
 		if(!isset($victimData->character_id)) {
-			$victimImage = '<img src="' . ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('render', EveApiHelper::getInstance()->getImageServerUrl() . 'Render/' . $victimData->ship_type_id . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->ship_type_id . '">';
+			$victimImage = '<img src="' . ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('ship') . $victimData->ship_type_id . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->ship_type_id . '">';
 		}
 
 		return $victimImage;
@@ -195,8 +197,8 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		$victimCorporationImage = null;
 
 		if($victimData->corporation_id) {
-			$corpData = EveApiHelper::getInstance()->getCorporationData($victimData->corporation_id);
-			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', EveApiHelper::getInstance()->getImageServerUrl() . 'Corporation/' . $victimData->corporation_id . '_' . $size. '.png');
+			$corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
+			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->corporation_id . '_' . $size. '.png');
 			$victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->corporation_id . '" alt="' . \esc_html($corpData['data']->corporation_name) . '" data-title="' . \esc_html($corpData['data']->corporation_name) . '" data-toggle="eve-killboard-tooltip">';
 		}
 
@@ -213,7 +215,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 				break;
 
 			default:
-				$victimShipImage = EveApiHelper::getInstance()->getShipImageById($victimData->ship_type_id, false, $size);
+				$victimShipImage = $this->eveApi->getShipImageById($victimData->ship_type_id, false, $size);
 				break;
 		} // END switch($victimData->shipTypeID)
 
@@ -224,8 +226,8 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		$victimAllianceImage = null;
 
 		if(isset($victimData->alliance_id)) {
-			$allianceData = EveApiHelper::getInstance()->getAllianceData($victimData->alliance_id);
-			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', EveApiHelper::getInstance()->getImageServerUrl() . 'Alliance/' . $victimData->alliance_id . '_' . $size. '.png');
+			$allianceData = $this->eveApi->getAllianceData($victimData->alliance_id);
+			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->alliance_id . '_' . $size. '.png');
 			$victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->alliance_id . '" alt="' . \esc_html($allianceData['data']->alliance_name) . '" data-title="' . \esc_html($allianceData['data']->alliance_name) . '" data-toggle="eve-killboard-tooltip">';
 		}
 
@@ -260,12 +262,12 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 
 		switch($victimType) {
 			case 'Pilot':
-				$pilotData = EveApiHelper::getInstance()->getCharacterData($victimData->character_id);
+				$pilotData = $this->eveApi->getCharacterData($victimData->character_id);
 				$victimName = $pilotData['data']->name;
 				break;
 
 			case 'Corp':
-				$corpData = EveApiHelper::getInstance()->getCorporationData($victimData->corporation_id);
+				$corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
 				$victimName = $corpData['data']->corporation_name;
 				break;
 
@@ -288,7 +290,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 
 		foreach($attackerData as $attacker) {
 			if($attacker->final_blow === true) {
-				$finalBlowPilotData = EveApiHelper::getInstance()->getCharacterData($attacker->character_id);
+				$finalBlowPilotData = $this->eveApi->getCharacterData($attacker->character_id);
 				$finalBlow = $finalBlowPilotData['data']->name;
 			} // END if($attacker->finalBlow === 1)
 		} // END foreach($attackerData as $attacker)
@@ -307,7 +309,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	 * @return string
 	 */
 	public function getVictimShip(\stdClass $victimData) {
-		$ship = EveApiHelper::getInstance()->getShipData($victimData->ship_type_id);
+		$ship = $this->eveApi->getShipData($victimData->ship_type_id);
 
 		return $ship['data']->name;
 	} // END public function getVictimShip(\stdClass $victimData)
@@ -319,7 +321,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	 * @return string
 	 */
 	public function getSystemInformation($systemID) {
-		$system = EveApiHelper::getInstance()->getSystemData($systemID);
+		$system = $this->eveApi->getSystemData($systemID);
 
 		return $system['data'];
 	} // END public function getSystem($systemID)
