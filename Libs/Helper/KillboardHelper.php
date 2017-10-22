@@ -42,7 +42,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 
 		$data = \get_transient($transientName);
 
-		if($data === false) {
+		if($data === false || empty($data)) {
 			$zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/limit/' . $widgetSettings['eve-online-killboard-widget-number-of-kills'] . '/npc/0/';
 			if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
 				$zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/limit/' . $widgetSettings['eve-online-killboard-widget-number-of-kills'] . '/npc/0/';
