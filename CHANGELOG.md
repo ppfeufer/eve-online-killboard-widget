@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.18...development)
-- in development
+### Changed
+- Plugin dir base name detection simplified
 
 ## [0.18](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.18) - 2017-10-17
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.17...v0.18)
