@@ -21,6 +21,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	protected function __construct() {
 		parent::__construct();
 
+		$this->eveApi = EveApiHelper::getInstance();
 		$this->zkbApiLink = 'https://zkillboard.com/api/';
 		$this->zkbLink = 'https://zkillboard.com/';
 	} // END protected function __construct()
@@ -32,7 +33,6 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	 * @return array
 	 */
 	public function getKillList(array $widgetSettings) {
-		$this->eveApi = EveApiHelper::getInstance();
 		$this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
 
 		$transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only');
@@ -42,7 +42,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 
 		$data = \get_transient($transientName);
 
-		if($data === false) {
+		if($data === false || empty($data)) {
 			$zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/limit/' . $widgetSettings['eve-online-killboard-widget-number-of-kills'] . '/npc/0/';
 			if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
 				$zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/limit/' . $widgetSettings['eve-online-killboard-widget-number-of-kills'] . '/npc/0/';
@@ -199,7 +199,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		if($victimData->corporation_id) {
 			$corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
 			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->corporation_id . '_' . $size. '.png');
-			$victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->corporation_id . '" alt="' . \esc_html($corpData['data']->corporation_name) . '" data-title="' . \esc_html($corpData['data']->corporation_name) . '" data-toggle="eve-killboard-tooltip">';
+			$victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->corporation_id . '" alt="' . \esc_html($corpData['data']->name) . '" data-title="' . \esc_html($corpData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
 		}
 
 
@@ -228,7 +228,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		if(isset($victimData->alliance_id)) {
 			$allianceData = $this->eveApi->getAllianceData($victimData->alliance_id);
 			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->alliance_id . '_' . $size. '.png');
-			$victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->alliance_id . '" alt="' . \esc_html($allianceData['data']->alliance_name) . '" data-title="' . \esc_html($allianceData['data']->alliance_name) . '" data-toggle="eve-killboard-tooltip">';
+			$victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->alliance_id . '" alt="' . \esc_html($allianceData['data']->name) . '" data-title="' . \esc_html($allianceData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
 		}
 
 		return $victimAllianceImage;
@@ -268,7 +268,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 
 			case 'Corp':
 				$corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
-				$victimName = $corpData['data']->corporation_name;
+				$victimName = $corpData['data']->name;
 				break;
 
 			default:

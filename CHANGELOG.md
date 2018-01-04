@@ -2,8 +2,16 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.18...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.19...development)
 - in development
+
+## [0.19](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.19) - 2018-01-04
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.18...v0.19)
+### Changed
+- Plugin dir base name detection simplified
+
+### Fixed
+- Field name for corporation_name and alliance_name in ESI endpoints. Thanks CCP for changing them again :-(
 
 ## [0.18](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.18) - 2017-10-17
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.17...v0.18)
