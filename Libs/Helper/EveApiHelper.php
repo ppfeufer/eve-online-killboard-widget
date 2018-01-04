@@ -195,7 +195,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 					case 'corporation':
 						$corporationSheet = $this->getCorporationData($entityID);
 
-						if($this->isValidEsiData($corporationSheet) === true && \strtolower($corporationSheet['data']->corporation_name) === \strtolower($name)) {
+						if($this->isValidEsiData($corporationSheet) === true && \strtolower($corporationSheet['data']->name) === \strtolower($name)) {
 							$returnData = $entityID;
 							break;
 						} // END if($corporationSheet['data']->name === $name)
@@ -204,7 +204,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 					case 'alliance':
 						$allianceSheet = $this->getAllianceData($entityID);
 
-						if($this->isValidEsiData($allianceSheet) === true && \strtolower($allianceSheet['data']->alliance_name) === \strtolower($name)) {
+						if($this->isValidEsiData($allianceSheet) === true && \strtolower($allianceSheet['data']->name) === \strtolower($name)) {
 							$returnData = $entityID;
 							break;
 						} // END if($allianceSheet['data']->name === $name)
