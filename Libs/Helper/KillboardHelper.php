@@ -34,8 +34,8 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 	 */
 	public function getKillList(array $widgetSettings) {
 		$this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
-
 		$transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only');
+
 		if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
 			$transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills');
 		} // END if($showLosses === true)
@@ -43,12 +43,14 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 		$data = \get_transient($transientName);
 
 		if($data === false || empty($data)) {
-			$zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/limit/' . $widgetSettings['eve-online-killboard-widget-number-of-kills'] . '/npc/0/';
+			$zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/';
+
 			if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-				$zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/limit/' . $widgetSettings['eve-online-killboard-widget-number-of-kills'] . '/npc/0/';
+				$zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/';
 			} // END if($showLosses === true)
 
-			$data = \json_decode(RemoteHelper::getInstance()->getRemoteData($zkbUrl));
+			$zkbData = RemoteHelper::getInstance()->getRemoteData($zkbUrl);
+			$data = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
 
 			/**
 			 * setting the transient caches
