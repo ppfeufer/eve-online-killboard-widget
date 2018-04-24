@@ -19,7 +19,7 @@ class RemoteHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 
 		$remoteUrl = $url . $params;
 
-		$get = \wp_remote_get($remoteUrl);
+		$get = \wp_remote_get($remoteUrl, ['timeout' => 10]);
 		$data = \wp_remote_retrieve_body($get);
 
 		return $data;
