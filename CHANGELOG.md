@@ -5,7 +5,7 @@
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.21...development)
 - in development
 
-## [0.20](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.21) - 2018-05-29
+## [0.21](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.21) - 2018-05-29
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.20...v0.21)
 ### Changed
 - Changed ESI URL to the new one
