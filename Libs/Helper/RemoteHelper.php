@@ -2,26 +2,42 @@
 
 namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 
+\defined('ABSPATH') or die();
+
 class RemoteHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
-	/**
-	 * Getting data from a remote source
-	 *
-	 * @param string $url
-	 * @param array $parameter
-	 * @return mixed
-	 */
-	public function getRemoteData($url, array $parameter = []) {
-		$params = '';
+    /**
+     * Getting data from a remote source
+     *
+     * @param string $url
+     * @param array $parameter
+     * @return mixed
+     */
+    public function getRemoteData($url, $parameter = [], $method = 'get') {
+        $returnValue = null;
+        $params = '';
 
-		if(\count($parameter) > 0) {
-			$params = '?' . \http_build_query($parameter);
-		} // END if(\count($parameter > 0))
+        switch($method) {
+            case 'get':
+                if(\count($parameter) > 0) {
+                    $params = '?' . \http_build_query($parameter);
+                }
 
-		$remoteUrl = $url . $params;
+                $remoteData = \wp_remote_get($url . $params);
+                break;
 
-		$get = \wp_remote_get($remoteUrl, ['timeout' => 10]);
-		$data = \wp_remote_retrieve_body($get);
+            case 'post':
+                $remoteData = \wp_remote_post($url, [
+                    'headers' => ['Content-Type' => 'application/json; charset=utf-8'],
+                    'body' => \json_encode($parameter),
+                    'method' => 'POST'
+                ]);
+                break;
+        }
 
-		return $data;
-	} // END private function getRemoteData($url, array $parameter)
-} // END class RemoteHelper extends \WordPress\Plugin\EveOnlineTranquilityStatus\Singletons\AbstractSingleton
+        if(\wp_remote_retrieve_response_code($remoteData) === 200) {
+            $returnValue = \json_decode(\wp_remote_retrieve_body($remoteData));
+        }
+
+        return $returnValue;
+    }
+}

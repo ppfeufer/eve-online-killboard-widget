@@ -8,337 +8,337 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 \defined('ABSPATH') or die();
 
 class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
-	private $zkbLink = null;
-	private $zkbApiLink = null;
-	private $entityID = null;
-	private $eveApi = null;
+    private $zkbLink = null;
+    private $zkbApiLink = null;
+    private $entityID = null;
+    private $eveApi = null;
 
-	/**
-	 * constructor
-	 *
-	 * no external instanciation allowed
-	 */
-	protected function __construct() {
-		parent::__construct();
+    /**
+     * constructor
+     *
+     * no external instanciation allowed
+     */
+    protected function __construct() {
+        parent::__construct();
 
-		$this->eveApi = EveApiHelper::getInstance();
-		$this->zkbApiLink = 'https://zkillboard.com/api/';
-		$this->zkbLink = 'https://zkillboard.com/';
-	} // END protected function __construct()
+        $this->eveApi = EveApiHelper::getInstance();
+        $this->zkbApiLink = 'https://zkillboard.com/api/';
+        $this->zkbLink = 'https://zkillboard.com/';
+    }
 
-	/**
-	 * Getting the kill list from zKillboard
-	 *
-	 * @param array $widgetSettings
-	 * @return array
-	 */
-	public function getKillList(array $widgetSettings) {
-		$this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
-		$transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only');
+    /**
+     * Getting the kill list from zKillboard
+     *
+     * @param array $widgetSettings
+     * @return array
+     */
+    public function getKillList(array $widgetSettings) {
+        $this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
+        $transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only');
 
-		if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-			$transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills');
-		} // END if($showLosses === true)
+        if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
+            $transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills');
+        }
 
-		$data = \get_transient($transientName);
+        $data = \get_transient($transientName);
 
-		if($data === false || empty($data)) {
-			$zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/';
+        if($data === false || empty($data)) {
+            $zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/';
 
-			if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-				$zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/';
-			} // END if($showLosses === true)
+            if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
+                $zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/';
+            }
 
-			$zkbData = RemoteHelper::getInstance()->getRemoteData($zkbUrl);
-			$data = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
+            $zkbData = RemoteHelper::getInstance()->getRemoteData($zkbUrl);
+            $data = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
 
-			/**
-			 * setting the transient caches
-			 */
-			\set_transient($transientName, $data, 300);
-		} // END if($data === false)
+            /**
+             * setting the transient caches
+             */
+            \set_transient($transientName, $data, 300);
+        }
 
-		return $data;
-	} // END public function getKillList($killCount)
+        return $data;
+    }
 
-	/**
-	 * Getting the HTML for our widget
-	 *
-	 * @param array $killList
-	 * @return string
-	 */
-	public function getWidgetHtml(array $killList) {
-		$widgetHtml = null;
+    /**
+     * Getting the HTML for our widget
+     *
+     * @param array $killList
+     * @return string
+     */
+    public function getWidgetHtml(array $killList) {
+        $widgetHtml = null;
 
-		foreach($killList as $killMail) {
-			$countAttackers = \count($killMail->attackers);
-			$stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
+        foreach($killList as $killMail) {
+            $countAttackers = \count($killMail->attackers);
+            $stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
 
-			$victimEntityIdsArray = [
-				'characterID' => (isset($killMail->victim->character_id)) ? (int) $killMail->victim->character_id : null,
-				'corporationID' => (isset($killMail->victim->corporation_id)) ? (int) $killMail->victim->corporation_id : null,
-				'allianceID' => (isset($killMail->victim->alliance_id)) ? (int) $killMail->victim->alliance_id : null
-			];
+            $victimEntityIdsArray = [
+                'characterID' => (isset($killMail->victim->character_id)) ? (int) $killMail->victim->character_id : null,
+                'corporationID' => (isset($killMail->victim->corporation_id)) ? (int) $killMail->victim->corporation_id : null,
+                'allianceID' => (isset($killMail->victim->alliance_id)) ? (int) $killMail->victim->alliance_id : null
+            ];
 
-			// Check if we have a kill or a loss mail
-			$killType = ' kill-list-kill-mail';
-			if(\in_array((int) $this->entityID, $victimEntityIdsArray)) {
-				$killType = ' kill-list-loss-mail';
-			} // END if(\in_array((int) $this->entityID, $victimEntityIdsArray))
+            // Check if we have a kill or a loss mail
+            $killType = ' kill-list-kill-mail';
+            if(\in_array((int) $this->entityID, $victimEntityIdsArray)) {
+                $killType = ' kill-list-loss-mail';
+            }
 
-			$systemInformation = $this->getSystemInformation($killMail->solar_system_id);
-			$widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
-						. '	<div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
-						. '		<figure>'
-						. '			<a href="' . $this->getKillboardLink($killMail->killmail_id) . '" rel="external" target="_blank">'
-						.				$this->getVictimImage($killMail->victim)
-						. '			</a>'
-						. '			<div class="eve-online-killboard-widget-pilot-information">'
-						. '				<span class="victimShipImage">'
-						.					$this->getVictimShipImage($killMail->victim, 32)
-						. '				</span>'
-						. '				<span class="victimCorpImage">'
-						.					$this->getVictimCorpImage($killMail->victim, 32)
-						. '				</span>'
-						. '				<span class="victimAllianceImage">'
-						.					$this->getVictimAllianceImage($killMail->victim, 32)
-						. '				</span>'
-						. '			</div>'
-						. '		</figure>'
-						. '	</div>'
-						. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
-						. '		<ul>'
-						. '			<li>' . $this->getVictimType($killMail->victim) . ': ' . $this->getVictimName($killMail->victim) . '</li>'
-						. '			<li>Loss: ' . $this->getVictimShip($killMail->victim) . '</li>'
-						. '			<li>ISK lost: ' . $this->getIskLoss($killMail->zkb) . '</li>'
-						. '			<li>System: ' . $systemInformation->name . ' (' . \round($systemInformation->security_status, 2) . ')</li>'
-						. '			<li>Killed by: ' . $this->getFinalBlow($killMail->attackers) . $stringInvolved . '</li>'
-						. '		</ul>'
-						. '	</div>'
-						. '</div>';
-		} // END foreach($array as $killmail)
+            $systemInformation = $this->getSystemInformation($killMail->solar_system_id);
+            $widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
+                        . '    <div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
+                        . '        <figure>'
+                        . '            <a href="' . $this->getKillboardLink($killMail->killmail_id) . '" rel="external" target="_blank">'
+                        .                $this->getVictimImage($killMail->victim)
+                        . '            </a>'
+                        . '            <div class="eve-online-killboard-widget-pilot-information">'
+                        . '                <span class="victimShipImage">'
+                        .                    $this->getVictimShipImage($killMail->victim, 32)
+                        . '                </span>'
+                        . '                <span class="victimCorpImage">'
+                        .                    $this->getVictimCorpImage($killMail->victim, 32)
+                        . '                </span>'
+                        . '                <span class="victimAllianceImage">'
+                        .                    $this->getVictimAllianceImage($killMail->victim, 32)
+                        . '                </span>'
+                        . '            </div>'
+                        . '        </figure>'
+                        . '    </div>'
+                        . '    <div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
+                        . '        <ul>'
+                        . '            <li>' . $this->getVictimType($killMail->victim) . ': ' . $this->getVictimName($killMail->victim) . '</li>'
+                        . '            <li>Loss: ' . $this->getVictimShip($killMail->victim) . '</li>'
+                        . '            <li>ISK lost: ' . $this->getIskLoss($killMail->zkb) . '</li>'
+                        . '            <li>System: ' . $systemInformation->name . ' (' . \round($systemInformation->security_status, 2) . ')</li>'
+                        . '            <li>Killed by: ' . $this->getFinalBlow($killMail->attackers) . $stringInvolved . '</li>'
+                        . '        </ul>'
+                        . '    </div>'
+                        . '</div>';
+        }
 
-		return $widgetHtml;
-	} // END public function getWidgetHtml(array $killList)
+        return $widgetHtml;
+    }
 
-	/**
-	 * Getting dummy HTML for the killboard widget, which will be
-	 * replaced with the real killboard information after the ajax call
-	 *
-	 * @return string
-	 */
-	public function getDummyHtml() {
-		return '<div class="row killboard-entry">'
-				. '	<div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
-				. '		<figure>'
-				.			$this->getDummyImage()
-				. '		</figure>'
-				. '	</div>'
-				. '	<div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
-				. '		<ul>'
-				. '			<li>Pilot:</li>'
-				. '			<li>Loss:</li>'
-				. '			<li>ISK lost:</li>'
-				. '			<li>System:</li>'
-				. '			<li>Killed by:</li>'
-				. '		</ul>'
-				. '	</div>'
-				. '</div>';
-	} // END public function getDummyHtml()
+    /**
+     * Getting dummy HTML for the killboard widget, which will be
+     * replaced with the real killboard information after the ajax call
+     *
+     * @return string
+     */
+    public function getDummyHtml() {
+        return '<div class="row killboard-entry">'
+                . '    <div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
+                . '        <figure>'
+                .            $this->getDummyImage()
+                . '        </figure>'
+                . '    </div>'
+                . '    <div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
+                . '        <ul>'
+                . '            <li>Pilot:</li>'
+                . '            <li>Loss:</li>'
+                . '            <li>ISK lost:</li>'
+                . '            <li>System:</li>'
+                . '            <li>Killed by:</li>'
+                . '        </ul>'
+                . '    </div>'
+                . '</div>';
+    }
 
-	/**
-	 * Getting the dummy image
-	 *
-	 * @param boolean $linkOnly
-	 * @return string
-	 */
-	public function getDummyImage($linkOnly = false) {
-		$dummyImage = PluginHelper::getInstance()->getPluginUri('images/dummy.jpg');
-		$returnValue = $dummyImage;
+    /**
+     * Getting the dummy image
+     *
+     * @param boolean $linkOnly
+     * @return string
+     */
+    public function getDummyImage($linkOnly = false) {
+        $dummyImage = PluginHelper::getInstance()->getPluginUri('images/dummy.jpg');
+        $returnValue = $dummyImage;
 
-		if($linkOnly === false) {
-			$returnValue = '<img src="' . $dummyImage . '" class="eve-character-image">';
-		} // END if($linkOnly === false)
+        if($linkOnly === false) {
+            $returnValue = '<img src="' . $dummyImage . '" class="eve-character-image">';
+        }
 
-		return $returnValue;
-	} // END public function getDummyImage($linkOnly = false)
+        return $returnValue;
+    }
 
-	/**
-	 * Getting the link to teh killmail on ZKB
-	 *
-	 * @param int $killID
-	 * @return string
-	 */
-	public function getKillboardLink($killID) {
-		return $this->zkbLink . 'kill/' . $killID . '/';
-	} // END public function getKillboardLink($killID)
+    /**
+     * Getting the link to teh killmail on ZKB
+     *
+     * @param int $killID
+     * @return string
+     */
+    public function getKillboardLink($killID) {
+        return $this->zkbLink . 'kill/' . $killID . '/';
+    }
 
-	/**
-	 * Getting victims image
-	 *
-	 * @param \stdClass $victimData
-	 * @param int $size
-	 * @return string
-	 */
-	public function getVictimImage(\stdClass $victimData, $size = 256) {
-		$victimImage = null;
+    /**
+     * Getting victims image
+     *
+     * @param \stdClass $victimData
+     * @param int $size
+     * @return string
+     */
+    public function getVictimImage(\stdClass $victimData, $size = 256) {
+        $victimImage = null;
 
-		if(isset($victimData->character_id)) {
-			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('character') . $victimData->character_id . '_' . $size. '.jpg');
-			$victimImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-character-id-' . $victimData->character_id . '" alt="' . \esc_html($this->getVictimName($victimData)) . '">';
-		}
+        if(isset($victimData->character_id)) {
+            $imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('character', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('character') . $victimData->character_id . '_' . $size. '.jpg');
+            $victimImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-character-id-' . $victimData->character_id . '" alt="' . \esc_html($this->getVictimName($victimData)) . '">';
+        }
 
-		if(!isset($victimData->character_id)) {
-			$victimImage = '<img src="' . ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('render', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('render') . $victimData->ship_type_id . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->ship_type_id . '">';
-		}
+        if(!isset($victimData->character_id)) {
+            $victimImage = '<img src="' . ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('render', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('render') . $victimData->ship_type_id . '_' . $size . '.png') . '" class="eve-structure-image eve-online-id-' . $victimData->ship_type_id . '">';
+        }
 
-		return $victimImage;
-	} // END public function getVictimImage(\stdClass $victimData, $size = 256)
+        return $victimImage;
+    }
 
-	public function getVictimCorpImage(\stdClass $victimData, $size = 256) {
-		$victimCorporationImage = null;
+    public function getVictimCorpImage(\stdClass $victimData, $size = 256) {
+        $victimCorporationImage = null;
 
-		if($victimData->corporation_id) {
-			$corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
-			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->corporation_id . '_' . $size. '.png');
-			$victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->corporation_id . '" alt="' . \esc_html($corpData['data']->name) . '" data-title="' . \esc_html($corpData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
-		}
+        if($victimData->corporation_id) {
+            $corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
+            $imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('corporation', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->corporation_id . '_' . $size. '.png');
+            $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->corporation_id . '" alt="' . \esc_html($corpData['data']->name) . '" data-title="' . \esc_html($corpData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
+        }
 
 
-		return $victimCorporationImage;
-	} // END public function getVictimImage(\stdClass $victimData, $size = 256)
+        return $victimCorporationImage;
+    }
 
-	public function getVictimShipImage(\stdClass $victimData, $size = 256) {
-		$victimShipImage = null;
+    public function getVictimShipImage(\stdClass $victimData, $size = 256) {
+        $victimShipImage = null;
 
-		switch($victimData->ship_type_id) {
-			case 0:
-				$victimShipImage = null;
-				break;
+        switch($victimData->ship_type_id) {
+            case 0:
+                $victimShipImage = null;
+                break;
 
-			default:
-				$victimShipImage = $this->eveApi->getShipImageById($victimData->ship_type_id, false, $size);
-				break;
-		} // END switch($victimData->shipTypeID)
+            default:
+                $victimShipImage = $this->eveApi->getShipImageById($victimData->ship_type_id, false, $size);
+                break;
+        }
 
-		return $victimShipImage;
-	} // END public function getVictimImage(\stdClass $victimData, $size = 256)
+        return $victimShipImage;
+    }
 
-	public function getVictimAllianceImage(\stdClass $victimData, $size = 128) {
-		$victimAllianceImage = null;
+    public function getVictimAllianceImage(\stdClass $victimData, $size = 128) {
+        $victimAllianceImage = null;
 
-		if(isset($victimData->alliance_id)) {
-			$allianceData = $this->eveApi->getAllianceData($victimData->alliance_id);
-			$imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->alliance_id . '_' . $size. '.png');
-			$victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->alliance_id . '" alt="' . \esc_html($allianceData['data']->name) . '" data-title="' . \esc_html($allianceData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
-		}
+        if(isset($victimData->alliance_id)) {
+            $allianceData = $this->eveApi->getAllianceData($victimData->alliance_id);
+            $imageUrl = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('alliance', $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->alliance_id . '_' . $size. '.png');
+            $victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->alliance_id . '" alt="' . \esc_html($allianceData['data']->name) . '" data-title="' . \esc_html($allianceData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
+        }
 
-		return $victimAllianceImage;
-	} // END public function getVictimImage(\stdClass $victimData, $size = 256)
+        return $victimAllianceImage;
+    }
 
-	/**
-	 * Getting the victims type
-	 *
-	 * @param \stdClass $victimData
-	 * @return string
-	 */
-	public function getVictimType(\stdClass $victimData) {
-		$victimType = \__('Pilot', 'yulai-federation');
+    /**
+     * Getting the victims type
+     *
+     * @param \stdClass $victimData
+     * @return string
+     */
+    public function getVictimType(\stdClass $victimData) {
+        $victimType = \__('Pilot', 'yulai-federation');
 
-		if(!isset($victimData->character_id)) {
-			$victimType = \__('Corp', 'yulai-federation');
-		} // END if(isset($victimData->character_id))
+        if(!isset($victimData->character_id)) {
+            $victimType = \__('Corp', 'yulai-federation');
+        }
 
-		return $victimType;
-	} // END public function getVictimType(\stdClass $victimData)
+        return $victimType;
+    }
 
-	/**
-	 * Getting the victims name
-	 *
-	 * @param \stdClass $victimData
-	 * @return string
-	 */
-	public function getVictimName(\stdClass $victimData) {
-		$victimType = $this->getVictimType($victimData);
-		$victimName = null;
+    /**
+     * Getting the victims name
+     *
+     * @param \stdClass $victimData
+     * @return string
+     */
+    public function getVictimName(\stdClass $victimData) {
+        $victimType = $this->getVictimType($victimData);
+        $victimName = null;
 
-		switch($victimType) {
-			case 'Pilot':
-				$pilotData = $this->eveApi->getCharacterData($victimData->character_id);
-				$victimName = $pilotData['data']->name;
-				break;
+        switch($victimType) {
+            case 'Pilot':
+                $pilotData = $this->eveApi->getCharacterData($victimData->character_id);
+                $victimName = $pilotData['data']->name;
+                break;
 
-			case 'Corp':
-				$corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
-				$victimName = $corpData['data']->name;
-				break;
+            case 'Corp':
+                $corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
+                $victimName = $corpData['data']->name;
+                break;
 
-			default:
-				$victimName = null;
-				break;
-		}
+            default:
+                $victimName = null;
+                break;
+        }
 
-		return $victimName;
-	} // END public function getVictimName(\stdClass $victimData)
+        return $victimName;
+    }
 
-	/**
-	 * Get the final blow
-	 *
-	 * @param array $attackerData
-	 * @return string
-	 */
-	public function getFinalBlow(array $attackerData) {
-		$finalBlow = null;
+    /**
+     * Get the final blow
+     *
+     * @param array $attackerData
+     * @return string
+     */
+    public function getFinalBlow(array $attackerData) {
+        $finalBlow = null;
 
-		foreach($attackerData as $attacker) {
-			if($attacker->final_blow === true) {
-				$finalBlowPilotData = $this->eveApi->getCharacterData($attacker->character_id);
-				$finalBlow = $finalBlowPilotData['data']->name;
-			} // END if($attacker->finalBlow === 1)
-		} // END foreach($attackerData as $attacker)
+        foreach($attackerData as $attacker) {
+            if($attacker->final_blow === true) {
+                $finalBlowPilotData = $this->eveApi->getCharacterData($attacker->character_id);
+                $finalBlow = $finalBlowPilotData['data']->name;
+            }
+        }
 
-		return $finalBlow;
-	} // END public function getFinalBlow(array $attackerData)
+        return $finalBlow;
+    }
 
-	public function getIskLoss(\stdClass $zkbData) {
-		return $this->sanitizeIskLoss($zkbData->totalValue);
-	} // END public function getIskLoss(\stdClass $zkbData)
+    public function getIskLoss(\stdClass $zkbData) {
+        return $this->sanitizeIskLoss($zkbData->totalValue);
+    }
 
-	/**
-	 * getting the victims ship type
-	 *
-	 * @param \stdClass $victimData
-	 * @return string
-	 */
-	public function getVictimShip(\stdClass $victimData) {
-		$ship = $this->eveApi->getShipData($victimData->ship_type_id);
+    /**
+     * getting the victims ship type
+     *
+     * @param \stdClass $victimData
+     * @return string
+     */
+    public function getVictimShip(\stdClass $victimData) {
+        $ship = $this->eveApi->getShipData($victimData->ship_type_id);
 
-		return $ship['data']->name;
-	} // END public function getVictimShip(\stdClass $victimData)
+        return $ship['data']->name;
+    }
 
-	/**
-	 * Getting the sytem name from ID
-	 *
-	 * @param type $systemID
-	 * @return string
-	 */
-	public function getSystemInformation($systemID) {
-		$system = $this->eveApi->getSystemData($systemID);
+    /**
+     * Getting the sytem name from ID
+     *
+     * @param type $systemID
+     * @return string
+     */
+    public function getSystemInformation($systemID) {
+        $system = $this->eveApi->getSystemData($systemID);
 
-		return $system['data'];
-	} // END public function getSystem($systemID)
+        return $system['data'];
+    }
 
-	private function sanitizeIskLoss($isk) {
-		if($isk < 1000) {
-			$isk = \number_format($isk, 0);
-		} elseif(($isk/1000) < 1000) {
-			$isk = \number_format(($isk/1000), 0) . 'K';
-		} elseif(($isk/1000/1000) < 1000) {
-			$isk = \number_format(($isk/1000/1000), 0) . 'M';
-		} else {
-			$isk = \number_format(($isk/1000/1000/1000), 0, '.', ',') . 'B';
-		} // END if($isk < 1000)
+    private function sanitizeIskLoss($isk) {
+        if($isk < 1000) {
+            $isk = \number_format($isk, 0);
+        } elseif(($isk/1000) < 1000) {
+            $isk = \number_format(($isk/1000), 0) . 'K';
+        } elseif(($isk/1000/1000) < 1000) {
+            $isk = \number_format(($isk/1000/1000), 0) . 'M';
+        } else {
+            $isk = \number_format(($isk/1000/1000/1000), 0, '.', ',') . 'B';
+        }
 
-		return $isk;
-	} // END private function sanitizeIskLoss($isk)
-} // END class ZkbKillboardHelper
+        return $isk;
+    }
+}
