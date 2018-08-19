@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/ppfeufer/eve-online-killboard-widget
  * Git URI: https://github.com/ppfeufer/eve-online-killboard-widget
  * Description: A widget to display your latest kills and/or losses on your WordPress website.
- * Version: 0.21
+ * Version: 0.22.0
  * Author: Rounon Dax
  * Author URI: http://yulaifederation.net
  * Text Domain: eve-online-killboard-widget
@@ -18,110 +18,109 @@ const WP_GITHUB_FORCE_UPDATE = true;
 require_once(\trailingslashit(\dirname(__FILE__)) . 'inc/autoloader.php');
 
 class EveOnlineKillboardWidget {
-	private $textDomain = null;
-	private $localizationDirectory = null;
-	private $pluginDir = null;
+    private $textDomain = null;
+    private $localizationDirectory = null;
+    private $pluginDir = null;
 
-	/**
-	 * Plugin constructor
-	 *
-	 * @param boolean $init
-	 */
-	public function __construct() {
-		/**
-		 * Initializing Variables
-		 */
-		$this->textDomain = 'eve-online-killboard-widget';
-		$this->pluginDir = \plugin_dir_path(__FILE__);
-		$this->localizationDirectory = $this->pluginDir . '/l10n/';
+    /**
+     * Plugin constructor
+     *
+     * @param boolean $init
+     */
+    public function __construct() {
+        /**
+         * Initializing Variables
+         */
+        $this->textDomain = 'eve-online-killboard-widget';
+        $this->pluginDir = \plugin_dir_path(__FILE__);
+        $this->localizationDirectory = $this->pluginDir . '/l10n/';
 
-		$this->loadTextDomain();
-	} // END public function __construct()
+        $this->loadTextDomain();
+    }
 
-	/**
-	 * Initialize the plugin
-	 */
-	public function init() {
-		// Loading CSS
-		$cssLoader = new Libs\ResourceLoader\CssLoader;
-		$cssLoader->init();
+    /**
+     * Initialize the plugin
+     */
+    public function init() {
+        // Loading CSS
+        $cssLoader = new Libs\ResourceLoader\CssLoader;
+        $cssLoader->init();
 
-		// Loading JavaScript
-		$javascriptLoader = new Libs\ResourceLoader\JavascriptLoader;
-		$javascriptLoader->init();
+        // Loading JavaScript
+        $javascriptLoader = new Libs\ResourceLoader\JavascriptLoader;
+        $javascriptLoader->init();
 
-		// Initialize the widget
-		\add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugin\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
+        // Initialize the widget
+        \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugin\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
 
-		new Libs\AjaxApi;
+        new Libs\AjaxApi;
 
-		/**
-		 * start backend only libs
-		 */
-		if(\is_admin()) {
-			/**
-			 * Check Github for updates
-			 */
-			$githubConfig = [
-				'slug' => \plugin_basename(__FILE__),
-//				'proper_folder_name' => \dirname(\plugin_basename(__FILE__)),
-				'proper_folder_name' => Libs\Helper\PluginHelper::getInstance()->getPluginDirName(),
-				'api_url' => 'https://api.github.com/repos/ppfeufer/eve-online-killboard-widget',
-				'raw_url' => 'https://raw.github.com/ppfeufer/eve-online-killboard-widget/master',
-				'github_url' => 'https://github.com/ppfeufer/eve-online-killboard-widget',
-				'zip_url' => 'https://github.com/ppfeufer/eve-online-killboard-widget/archive/master.zip',
-				'sslverify' => true,
-				'requires' => '4.7',
-				'tested' => '4.8',
-				'readme' => 'README.md',
-				'access_token' => '',
-			];
+        /**
+         * start backend only libs
+         */
+        if(\is_admin()) {
+            /**
+             * Check Github for updates
+             */
+            $githubConfig = [
+                'slug' => \plugin_basename(__FILE__),
+                'proper_folder_name' => Libs\Helper\PluginHelper::getInstance()->getPluginDirName(),
+                'api_url' => 'https://api.github.com/repos/ppfeufer/eve-online-killboard-widget',
+                'raw_url' => 'https://raw.github.com/ppfeufer/eve-online-killboard-widget/master',
+                'github_url' => 'https://github.com/ppfeufer/eve-online-killboard-widget',
+                'zip_url' => 'https://github.com/ppfeufer/eve-online-killboard-widget/archive/master.zip',
+                'sslverify' => true,
+                'requires' => '4.7',
+                'tested' => '4.8',
+                'readme' => 'README.md',
+                'access_token' => '',
+            ];
 
-			new Libs\GithubUpdater($githubConfig);
-		} // END if(\is_admin())
-	} // END public function init()
+            new Libs\GithubUpdater($githubConfig);
+        }
+    }
 
-	/**
-	 * Setting up our text domain for translations
-	 */
-	public function loadTextDomain() {
-		if(\function_exists('\load_plugin_textdomain')) {
-			\load_plugin_textdomain($this->getTextDomain(), false, $this->getLocalizationDirectory());
-		} // END if(function_exists('\load_plugin_textdomain'))
-	} // END public function addTextDomain()
+    /**
+     * Setting up our text domain for translations
+     */
+    public function loadTextDomain() {
+        if(\function_exists('\load_plugin_textdomain')) {
+            \load_plugin_textdomain($this->getTextDomain(), false, $this->getLocalizationDirectory());
+        }
+    }
 
-	/**
-	 * Getting the Plugin's Textdomain for translations
-	 *
-	 * @return string Plugin Textdomain
-	 */
-	public function getTextDomain() {
-		return $this->textDomain;
-	} // END public function getTextDomain()
+    /**
+     * Getting the Plugin's Textdomain for translations
+     *
+     * @return string Plugin Textdomain
+     */
+    public function getTextDomain() {
+        return $this->textDomain;
+    }
 
-	/**
-	 * Getting the Plugin's Localization Directory for translations
-	 *
-	 * @return string Plugin Localization Directory
-	 */
-	public function getLocalizationDirectory() {
-		return $this->localizationDirectory;
-	} // END public function getLocalizationDirectory()
-} // END class EveOnlineFittingManager
+    /**
+     * Getting the Plugin's Localization Directory for translations
+     *
+     * @return string Plugin Localization Directory
+     */
+    public function getLocalizationDirectory() {
+        return $this->localizationDirectory;
+    }
+}
 
 /**
  * Start the show ....
  */
 function initializePlugin() {
-	$killboardWidget = new EveOnlineKillboardWidget;
+    $killboardWidget = new EveOnlineKillboardWidget;
 
-	/**
-	 * Initialize the plugin
-	 *
-	 * @todo https://premium.wpmudev.org/blog/activate-deactivate-uninstall-hooks/
-	 */
-	$killboardWidget->init();
-} // END function initializePlugin()
+    /**
+     * Initialize the plugin
+     *
+     * @todo https://premium.wpmudev.org/blog/activate-deactivate-uninstall-hooks/
+     */
+    $killboardWidget->init();
+}
 
 // Start the show
 \add_action('plugins_loaded', 'WordPress\Plugin\EveOnlineKillboardWidget\initializePlugin');

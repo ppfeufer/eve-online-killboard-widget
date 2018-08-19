@@ -2,10 +2,21 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.21...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.0...development)
 - in development
 
-## [0.20](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.21) - 2018-05-29
+## [0.22.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.0) - 2018-08-19
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.21...v0.22.0)
+### Fixed
+- A json_decode that was to much has been removed
+
+### Changed
+- URL to CCP's image server
+
+### Removed
+- Local image cache (diesn't work reliably on all machines)
+
+## [0.21](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.21) - 2018-05-29
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.20...v0.21)
 ### Changed
 - Changed ESI URL to the new one
