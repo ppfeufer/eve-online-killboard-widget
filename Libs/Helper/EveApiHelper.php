@@ -152,7 +152,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     public function getShipImageById($shipTypeID, $imageOnly = true, $size = 128) {
         $ship = $this->getShipData($shipTypeID);
 
-        $imagePath = ImageHelper::getInstance()->getLocalCacheImageUriForRemoteImage('ship', $this->imageserverUrl . $this->imageserverEndpoints['ship'] . $shipTypeID . '_' . $size. '.png');
+        $imagePath = $this->imageserverUrl . $this->imageserverEndpoints['ship'] . $shipTypeID . '_' . $size. '.png';
 
         if($imageOnly === true) {
             return $imagePath;
@@ -227,8 +227,6 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $returnValue = null;
         $transientName = \sanitize_title('eve-esi-data_' . $route);
         $data = CacheHelper::getInstance()->getTransientCache($transientName);
-//        echo '<pre>' . print_r($data, true) . '</pre>';
-        $data = '';
 
         if($data === false || empty($data)) {
             $data = RemoteHelper::getInstance()->getRemoteData($this->esiUrl . $route);
