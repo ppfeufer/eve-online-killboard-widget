@@ -5,6 +5,11 @@
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.0...development)
 - in development
 
+## [0.22.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.1) - 2018-08-19
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.0...v0.22.1)
+### Changed
+- Should have removed the right json_decode ...
+
 ## [0.22.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.0) - 2018-08-19
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.21...v0.22.0)
 ### Fixed
