@@ -92,7 +92,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $characterData = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID . '/');
 
         return [
-            'data' => $characterData
+            'data' => \json_decode($characterData)
         ];
     }
 
@@ -100,7 +100,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $corporationData = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID . '/');
 
         return [
-            'data' => $corporationData
+            'data' => \json_decode($corporationData)
         ];
     }
 
@@ -108,7 +108,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $allianceData = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/', 3600);
 
         return [
-            'data' => $allianceData
+            'data' => \json_decode($allianceData)
         ];
     }
 
@@ -122,7 +122,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID . '/', 3600);
 
         return [
-            'data' => $shipData
+            'data' => \json_decode($shipData)
         ];
     }
 
@@ -136,7 +136,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID . '/', 3600);
 
         return [
-            'data' => $systemData
+            'data' => \json_decode($systemData)
         ];
     }
 
@@ -173,7 +173,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     public function getEveIdFromName($name, $type) {
         $returnData = null;
 
-        $data = $this->getEsiData($this->esiEndpoints['search'] . '?search=' . \urlencode(\wp_specialchars_decode($name, \ENT_QUOTES)) . '&strict=true&categories=' . $type, 3600);
+        $data = \json_decode($this->getEsiData($this->esiEndpoints['search'] . '?search=' . \urlencode(\wp_specialchars_decode($name, \ENT_QUOTES)) . '&strict=true&categories=' . $type, 3600));
 
         if(!isset($data->error) && !empty($data)) {
             /**
@@ -227,9 +227,10 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $returnValue = null;
         $transientName = \sanitize_title('eve-esi-data_' . $route);
         $data = CacheHelper::getInstance()->getTransientCache($transientName);
+//        $data = '';
 
         if($data === false || empty($data)) {
-            $data = RemoteHelper::getInstance()->getRemoteData($this->esiUrl . $route);
+            $data = \json_encode(RemoteHelper::getInstance()->getRemoteData($this->esiUrl . $route));
 
             /**
              * setting the transient caches
@@ -240,7 +241,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         if(!empty($data) && !isset($data->error)) {
-            $returnValue = $data;
+            $returnValue = \json_decode($data);
         }
 
         return $returnValue;

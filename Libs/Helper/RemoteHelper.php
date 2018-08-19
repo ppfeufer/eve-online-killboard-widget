@@ -35,7 +35,7 @@ class RemoteHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         if(\wp_remote_retrieve_response_code($remoteData) === 200) {
-            $returnValue = \json_decode(\wp_remote_retrieve_body($remoteData));
+            $returnValue = \wp_remote_retrieve_body($remoteData);
         }
 
         return $returnValue;
