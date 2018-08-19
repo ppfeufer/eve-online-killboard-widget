@@ -14,7 +14,7 @@
 - URL to CCP's image server
 
 ### Removed
-- Local image cache (diesn't work reliably on all machines)
+- Local image cache (doesn't work reliably on all machines)
 
 ## [0.21](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.21) - 2018-05-29
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.20...v0.21)
