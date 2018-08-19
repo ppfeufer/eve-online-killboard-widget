@@ -51,7 +51,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 
             $zkbData = RemoteHelper::getInstance()->getRemoteData($zkbUrl);
 
-            $data = \array_slice($zkbData, 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
+            $data = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
 
             /**
              * setting the transient caches
