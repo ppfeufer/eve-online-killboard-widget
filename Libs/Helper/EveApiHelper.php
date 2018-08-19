@@ -45,7 +45,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         parent::__construct();
 
         $this->esiUrl = 'https://esi.evetech.net/latest/';
-        $this->imageserverUrl = 'https://image.eveonline.com/';
+        $this->imageserverUrl = 'https://imageserver.eveonline.com/';
 
         /**
          * Assigning ESI Endpoints
@@ -227,6 +227,8 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $returnValue = null;
         $transientName = \sanitize_title('eve-esi-data_' . $route);
         $data = CacheHelper::getInstance()->getTransientCache($transientName);
+//        echo '<pre>' . print_r($data, true) . '</pre>';
+        $data = '';
 
         if($data === false || empty($data)) {
             $data = RemoteHelper::getInstance()->getRemoteData($this->esiUrl . $route);
@@ -240,7 +242,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         if(!empty($data) && !isset($data->error)) {
-            $returnValue = \json_decode($data);
+            $returnValue = $data;
         }
 
         return $returnValue;
