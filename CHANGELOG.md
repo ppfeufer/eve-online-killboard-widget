@@ -2,8 +2,17 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.2...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.3...development)
 - in development
+
+## [0.22.3](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.3) - 2018-09-10
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.2...v0.22.3)
+### Fixed
+- Names for transient cache
+- Cache times for transient cache
+
+### Protip
+After this update make sure you go to your widget settings and save it again. The way the widget settings are handled has been changed slightly to improve performance.
 
 ## [0.22.2](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.2) - 2018-09-10
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.1...v0.22.2)
