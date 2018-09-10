@@ -34,7 +34,11 @@ class KillboardWidget extends \WP_Widget {
      */
     public $number = false;
 
+    protected $eveApiHelper = null;
+
     public function __construct() {
+        $this->eveApiHelper = Helper\EveApiHelper::getInstance();
+
         $widgetOptions = [
             'classname' => 'eve-online-killboard-widget',
             'description' => \__('Displaying the latest kills (and maybe losses if you are tough enough) in your sidebar.', 'eve-online-killboard-widget')
@@ -141,13 +145,14 @@ class KillboardWidget extends \WP_Widget {
         ]);
 
         /**
-         * Sanitize the stuff rom our widget's form
+         * Sanitize the stuff from our widget's form
          *
          * @var array
          */
         $instance['eve-online-killboard-widget-title'] = (string) \esc_html($newInstance['eve-online-killboard-widget-title']);
         $instance['eve-online-killboard-widget-entity-type'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']);
         $instance['eve-online-killboard-widget-entity-name'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']);
+        $instance['eve-online-killboard-widget-entity-id'] = $this->eveApiHelper->getEveIdFromName((string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']), (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']));
         $instance['eve-online-killboard-widget-number-of-kills'] = (int) $newInstance['eve-online-killboard-widget-number-of-kills'];
         $instance['eve-online-killboard-widget-show-losses'] = $newInstance['eve-online-killboard-widget-show-losses'] ? 1 : 0;
         $instance['eve-online-killboard-widget-static-cache'] = $newInstance['eve-online-killboard-widget-static-cache'] ? 1 : 0;

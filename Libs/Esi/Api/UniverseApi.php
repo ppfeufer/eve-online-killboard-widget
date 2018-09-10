@@ -111,6 +111,12 @@ class UniverseApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Sw
         return $regionData;
     }
 
+    /**
+     * Get the ID of a name in EVE
+     *
+     * @param array $names
+     * @return object
+     */
     public function getIdFromName(array $names) {
         $this->esiRoute = $this->esiEndpoints['universe_ids'];
         $this->esiVersion = 'v1';

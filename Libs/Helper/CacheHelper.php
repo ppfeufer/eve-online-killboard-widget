@@ -172,7 +172,7 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
     }
 
     /**
-     * Setting the transient cahe
+     * Setting the transient cache
      *
      * @param string $transientName cache name
      * @param mixed $data the data that is needed to be cached
