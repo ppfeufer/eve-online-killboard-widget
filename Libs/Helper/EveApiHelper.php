@@ -105,7 +105,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return [
-            'data' => $characterData
+            'data' => (\gettype($characterData) === 'string') ? \json_decode($characterData) : $characterData
         ];
     }
 
@@ -120,7 +120,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return [
-            'data' => $corporationData
+            'data' => (\gettype($corporationData) === 'string') ? \json_decode($corporationData) : $corporationData
         ];
     }
 
@@ -135,7 +135,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return [
-            'data' => $allianceData
+            'data' => (\gettype($allianceData) === 'string') ? \json_decode($allianceData) : $allianceData
         ];
     }
 
@@ -156,7 +156,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return [
-            'data' => $shipData
+            'data' => (\gettype($shipData) === 'string') ? \json_decode($shipData) : $shipData
         ];
     }
 
@@ -177,7 +177,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return [
-            'data' => $systemData
+            'data' => (\gettype($systemData) === 'string') ? \json_decode($systemData) : $systemData
         ];
     }
 
@@ -216,6 +216,13 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 
         $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
         $esiData = $universeApi->getIdFromName([(string) \esc_html($name)]);
+
+        /**
+         * make sure we have an object
+         */
+        if(\gettype($esiData) === 'string') {
+            $esiData = \json_decode($esiData);
+        }
 
         switch($type) {
             case 'alliance':
