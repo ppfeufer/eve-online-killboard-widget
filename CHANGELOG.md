@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.3...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.4...development)
 - in development
+
+## [0.22.4](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.4) - 2018-09-10
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.3...v0.22.4)
+### Fixed
+- Calling the right RemoteHelper (Issue #33)
 
 ## [0.22.3](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.3) - 2018-09-10
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.2...v0.22.3)

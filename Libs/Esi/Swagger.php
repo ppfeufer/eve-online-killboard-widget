@@ -46,7 +46,7 @@ class Swagger {
     /**
      * Remote Helper
      *
-     * @var \WordPress\Plugin\EveOnlineIntelTool\Libs\Helper\RemoteHelper
+     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper
      */
     public $remoteHelper = null;
 
@@ -54,7 +54,7 @@ class Swagger {
      * Constructor
      */
     public function __construct() {
-        $this->remoteHelper = \WordPress\Plugin\EveOnlineIntelTool\Libs\Helper\RemoteHelper::getInstance();
+        $this->remoteHelper = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
     }
 
     /**
