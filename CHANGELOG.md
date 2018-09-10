@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.4...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.5...development)
 - in development
+
+## [0.22.5](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.5) - 2018-09-10
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.4...v0.22.5)
+### Fixed
+- An issue with WordPress transient cache vs. jSon data ...
 
 ## [0.22.4](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.4) - 2018-09-10
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.3...v0.22.4)
