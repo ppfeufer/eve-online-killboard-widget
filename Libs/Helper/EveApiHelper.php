@@ -18,13 +18,6 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     private $esiUrl = null;
 
     /**
-     * ESI Endpoints
-     *
-     * @var array
-     */
-    private $esiEndpoints = null;
-
-    /**
      * Image Server URL
      *
      * @var string
@@ -39,6 +32,13 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     private $imageserverEndpoints = null;
 
     /**
+     * cacheHelper
+     *
+     * @var CacheHelper
+     */
+    protected $cacheHelper = null;
+
+    /**
      * The Constructor
      */
     protected function __construct() {
@@ -46,20 +46,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
 
         $this->esiUrl = 'https://esi.evetech.net/latest/';
         $this->imageserverUrl = 'https://imageserver.eveonline.com/';
-
-        /**
-         * Assigning ESI Endpoints
-         *
-         * @see https://esi.evetech.net/latest/
-         */
-        $this->esiEndpoints = [
-            'alliance-information' => 'alliances/', // getting alliance information by ID - https://esi.evetech.net/latest/alliances/99000102/
-            'character-information' => 'characters/', // getting character information by ID - https://esi.evetech.net/latest/characters/90607580/
-            'corporation-information' => 'corporations/', // getting corporation information by ID - https://esi.evetech.net/latest/corporations/98000030/
-            'search' => 'search/', // Search for entities that match a given sub-string. - https://esi.evetech.net/latest/search/?search=Yulai%20Federation&strict=true&categories=alliance
-            'system-information' => 'universe/systems/', // getting system information by ID - https://esi.evetech.net/latest/universe/systems/30000003/
-            'type-information' => 'universe/types/', // getting types information by ID - https://esi.evetech.net/latest/universe/types/670/
-        ];
+        $this->cacheHelper = CacheHelper::getInstance();
 
         /**
          * Assigning Imagesever Endpoints
@@ -89,26 +76,47 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     }
 
     public function getCharacterData($characterID) {
-        $characterData = $this->getEsiData($this->esiEndpoints['character-information'] . $characterID . '/');
+        $characterData = $this->cacheHelper->getTransientCache('eve_killboard_widget_corporation_data_' . $characterID);
+
+        if($characterData === false || empty($characterData)) {
+            $characterApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi;
+            $characterData = $characterApi->findById($characterID);
+
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $characterID, $characterData, 99);
+        }
 
         return [
-            'data' => \json_decode($characterData)
+            'data' => $characterData
         ];
     }
 
     public function getCorporationData($corporationID) {
-        $corporationData = $this->getEsiData($this->esiEndpoints['corporation-information'] . $corporationID . '/');
+        $corporationData = $this->cacheHelper->getTransientCache('eve_killboard_widget_corporation_data_' . $corporationID);
+
+        if($corporationData === false || empty($corporationData)) {
+            $corporationApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi;
+            $corporationData = $corporationApi->findById($corporationID);
+
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $corporationID, $corporationData, 99);
+        }
 
         return [
-            'data' => \json_decode($corporationData)
+            'data' => $corporationData
         ];
     }
 
     public function getAllianceData($allianceID) {
-        $allianceData = $this->getEsiData($this->esiEndpoints['alliance-information'] . $allianceID . '/', 3600);
+        $allianceData = $this->cacheHelper->getTransientCache('eve_killboard_widget_alliance_data_' . $allianceID);
+
+        if($allianceData === false || empty($allianceData)) {
+            $allianceApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi;
+            $allianceData = $allianceApi->findById($allianceID);
+
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $allianceID, $allianceData, 99);
+        }
 
         return [
-            'data' => \json_decode($allianceData)
+            'data' => $allianceData
         ];
     }
 
@@ -119,10 +127,17 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
      * @return array
      */
     public function getShipData($shipID) {
-        $shipData = $this->getEsiData($this->esiEndpoints['type-information'] . $shipID . '/', 3600);
+        $shipData = $this->cacheHelper->getTransientCache('eve_killboard_widget_ship_data_' . $shipID);
+
+        if($shipData === false || empty($shipData)) {
+            $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
+            $shipData = $universeApi->findTypeById($shipID);
+
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $shipID, $shipData, 99);
+        }
 
         return [
-            'data' => \json_decode($shipData)
+            'data' => $shipData
         ];
     }
 
@@ -133,10 +148,17 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
      * @return array
      */
     public function getSystemData($systemID) {
-        $systemData = $this->getEsiData($this->esiEndpoints['system-information'] . $systemID . '/', 3600);
+        $systemData = $this->cacheHelper->getTransientCache('eve_killboard_widget_system_data_' . $systemID);
+
+        if($systemData === false || empty($systemData)) {
+            $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
+            $systemData = $universeApi->findSystemById($systemID);
+
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $systemID, $systemData, 99);
+        }
 
         return [
-            'data' => \json_decode($systemData)
+            'data' => $systemData
         ];
     }
 
@@ -173,93 +195,35 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     public function getEveIdFromName($name, $type) {
         $returnData = null;
 
-        $data = \json_decode($this->getEsiData($this->esiEndpoints['search'] . '?search=' . \urlencode(\wp_specialchars_decode($name, \ENT_QUOTES)) . '&strict=true&categories=' . $type, 3600));
+        $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
+        $esiData = $universeApi->getIdFromName([(string) \esc_html($name)]);
 
-        if(!isset($data->error) && !empty($data)) {
-            /**
-             * -= FIX =-
-             * CCPs strict mode is not really strict, so we have to check manually ....
-             * Please CCP, get your shit sorted ...
-             */
-            foreach($data->{$type} as $entityID) {
-                switch($type) {
-                    case 'character':
-                        $characterSheet = $this->getCharacterData($entityID);
-
-                        if($this->isValidEsiData($characterSheet) === true && \strtolower($characterSheet['data']->name) === \strtolower($name)) {
-                            $returnData = $entityID;
-                            break;
-                        }
-                        break;
-
-                    case 'corporation':
-                        $corporationSheet = $this->getCorporationData($entityID);
-
-                        if($this->isValidEsiData($corporationSheet) === true && \strtolower($corporationSheet['data']->name) === \strtolower($name)) {
-                            $returnData = $entityID;
-                            break;
-                        }
-                        break;
-
-                    case 'alliance':
-                        $allianceSheet = $this->getAllianceData($entityID);
-
-                        if($this->isValidEsiData($allianceSheet) === true && \strtolower($allianceSheet['data']->name) === \strtolower($name)) {
-                            $returnData = $entityID;
-                            break;
-                        }
-                        break;
+        switch($type) {
+            case 'alliance':
+                foreach($esiData->alliances as $alliance) {
+                    if($alliance->name === (string) \esc_html($name)) {
+                        $returnData = $alliance->id;
+                    }
                 }
-            }
+                break;
+
+            case 'corporation':
+                foreach($esiData->corporations as $corporation) {
+                    if($corporation->name === (string) \esc_html($name)) {
+                        $returnData = $corporation->id;
+                    }
+                }
+                break;
+
+            case 'character':
+                foreach($esiData->characters as $character) {
+                    if($character->name === (string) \esc_html($name)) {
+                        $returnData = $character->id;
+                    }
+                }
+                break;
         }
 
         return $returnData;
-    }
-
-    /**
-     * Getting data from the ESI
-     *
-     * @param string $route
-     * @param int $cacheTime Caching time in hours (Default: 120)
-     * @return object
-     */
-    private function getEsiData($route, $cacheTime = 120) {
-        $returnValue = null;
-        $transientName = \sanitize_title('eve-esi-data_' . $route);
-        $data = CacheHelper::getInstance()->getTransientCache($transientName);
-//        $data = '';
-
-        if($data === false || empty($data)) {
-            $data = \json_encode(RemoteHelper::getInstance()->getRemoteData($this->esiUrl . $route));
-
-            /**
-             * setting the transient caches
-             */
-            if(!isset($data->error) && !empty($data)) {
-                CacheHelper::getInstance()->setTransientCache($transientName, $data, $cacheTime);
-            }
-        }
-
-        if(!empty($data) && !isset($data->error)) {
-            $returnValue = \json_decode($data);
-        }
-
-        return $returnValue;
-    }
-
-    /**
-     * Check if we have valid ESI data or not
-     *
-     * @param array $esiData
-     * @return boolean
-     */
-    public function isValidEsiData($esiData) {
-        $returnValue = false;
-
-        if(!\is_null($esiData) && isset($esiData['data']) && !\is_null($esiData['data']) && !isset($esiData['data']->error)) {
-            $returnValue = true;
-        }
-
-        return $returnValue;
     }
 }

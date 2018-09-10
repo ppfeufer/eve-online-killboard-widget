@@ -33,7 +33,23 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
      * @return array
      */
     public function getKillList(array $widgetSettings) {
-        $this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
+        if(isset($widgetSettings['eve-online-killboard-widget-entity-id'])) {
+            $this->entityID = $widgetSettings['eve-online-killboard-widget-entity-id'];
+        }
+
+        /**
+         * In case we don't have the entity ID set by the widget's settings ...
+         */
+        if(\is_null($this->entityID)) {
+            $this->entityID = \get_transient('eve_online_killboard_widget_entity_id_' . \sanitize_title($widgetSettings['eve-online-killboard-widget-entity-name']));
+
+            if($this->entityID === false || empty($this->entityID)) {
+                $this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
+
+                \set_transient('eve_online_killboard_widget_entity_id_' . \sanitize_title($widgetSettings['eve-online-killboard-widget-entity-name']), $this->entityID, 1800);
+            }
+        }
+
         $transientName = \sanitize_title('eve_online_killboard-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only');
 
         if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {

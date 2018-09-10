@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.0...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.2...development)
 - in development
+
+## [0.22.2](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.2) - 2018-09-10
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.1...v0.22.2)
+### Fixed
+- Some ESI calls that went wrong
 
 ## [0.22.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.1) - 2018-08-19
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.0...v0.22.1)

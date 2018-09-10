@@ -28,4 +28,3 @@ Works best with the [EVE Online WordPress Theme](https://github.com/ppfeufer/eve
 ### Additional Information
 - [License](LICENSE)
 - [Changelog](CHANGELOG.md)
-- [Discord](https://discord.gg/YymuCZa)
