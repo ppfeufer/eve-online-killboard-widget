@@ -17,6 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api;
 
 \defined('ABSPATH') or die();
@@ -52,7 +53,7 @@ class UniverseApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Sw
     }
 
     /**
-     * Fine group data by group ID
+     * Find group data by group ID
      *
      * @param int $groupID
      * @return object
@@ -67,7 +68,7 @@ class UniverseApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Sw
     }
 
     /**
-     * Fine system data by system ID
+     * Find system data by system ID
      *
      * @param int $systemID
      * @return object
@@ -82,7 +83,7 @@ class UniverseApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Sw
     }
 
     /**
-     * Fine constellation data by constellation ID
+     * Find constellation data by constellation ID
      *
      * @param int $constellationID
      * @return object
@@ -97,7 +98,7 @@ class UniverseApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Sw
     }
 
     /**
-     * Fine region data by region ID
+     * Find region data by region ID
      *
      * @param int $regionID
      * @return object
