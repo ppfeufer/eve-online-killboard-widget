@@ -76,13 +76,13 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     }
 
     public function getCharacterData($characterID) {
-        $characterData = $this->cacheHelper->getTransientCache('eve_killboard_widget_corporation_data_' . $characterID);
+        $characterData = $this->cacheHelper->getTransientCache('eve_killboard_widget_character_data_' . $characterID);
 
         if($characterData === false || empty($characterData)) {
             $characterApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi;
             $characterData = $characterApi->findById($characterID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $characterID, $characterData, 99);
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_character_data_' . $characterID, $characterData);
         }
 
         return [
@@ -97,7 +97,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
             $corporationApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi;
             $corporationData = $corporationApi->findById($corporationID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $corporationID, $corporationData, 99);
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_corporation_data_' . $corporationID, $corporationData);
         }
 
         return [
@@ -112,7 +112,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
             $allianceApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi;
             $allianceData = $allianceApi->findById($allianceID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $allianceID, $allianceData, 99);
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_alliance_data_' . $allianceID, $allianceData, 999999);
         }
 
         return [
@@ -133,7 +133,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
             $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
             $shipData = $universeApi->findTypeById($shipID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $shipID, $shipData, 99);
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_ship_data_' . $shipID, $shipData, 999999);
         }
 
         return [
@@ -154,7 +154,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
             $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
             $systemData = $universeApi->findSystemById($systemID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $systemID, $systemData, 99);
+            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $systemID, $systemData, 999999);
         }
 
         return [
