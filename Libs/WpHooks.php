@@ -53,6 +53,7 @@ class WpHooks {
      */
     public function init() {
         $this->initHooks();
+        $this->initActions();
     }
 
     /**
@@ -60,6 +61,18 @@ class WpHooks {
      */
     public function initHooks() {
         \register_activation_hook($this->pluginFile, [$this, 'checkDatabaseForUpdates']);
+    }
+
+    /**
+     * Initialize our actions
+     */
+    public function initActions() {
+        /**
+         * in case of plugin update this need to be fired
+         * since the activation doesn't fire on update
+         * thx wordpress for removing update hooks ...
+         */
+        \add_action('plugins_loaded', [$this, 'checkDatabaseForUpdates']);
     }
 
     /**

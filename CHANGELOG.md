@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.0...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.1...development)
 - in development
+
+## [0.23.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.23.1) - 2018-09-14
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.0...v0.23.1)
+### Fixed
+- Activation hook is apparently not being fired on plugin update, so we have to apply a little workaround here. Thanks WordPress for removing that hook ...
 
 ## [0.23.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.23.0) - 2018-09-14
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.5...v0.23.0)
