@@ -29,3 +29,5 @@ Works best with the [EVE Online WordPress Theme](https://github.com/ppfeufer/eve
 - [License](LICENSE)
 - [Changelog](CHANGELOG.md)
 - [Discord](https://discord.gg/YymuCZa)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/09f9a24507f1428cb4f92902d8af332c)](https://www.codacy.com/app/ppfeufer/eve-online-killboard-widget?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ppfeufer/eve-online-killboard-widget&amp;utm_campaign=Badge_Grade)
