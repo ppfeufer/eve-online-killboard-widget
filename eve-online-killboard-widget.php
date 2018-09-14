@@ -23,6 +23,13 @@ class EveOnlineKillboardWidget {
     private $pluginDir = null;
 
     /**
+     * Database version
+     *
+     * @var string
+     */
+    private $databaseVersion = null;
+
+    /**
      * Plugin constructor
      *
      * @param boolean $init
@@ -34,6 +41,7 @@ class EveOnlineKillboardWidget {
         $this->textDomain = 'eve-online-killboard-widget';
         $this->pluginDir = \plugin_dir_path(__FILE__);
         $this->localizationDirectory = $this->pluginDir . '/l10n/';
+        $this->databaseVersion = '20180914';
 
         $this->loadTextDomain();
     }
@@ -42,6 +50,11 @@ class EveOnlineKillboardWidget {
      * Initialize the plugin
      */
     public function init() {
+        // Firing hooks
+        new Libs\WpHooks([
+            'newDatabaseVersion' => $this->databaseVersion
+        ]);
+
         // Loading CSS
         $cssLoader = new Libs\ResourceLoader\CssLoader;
         $cssLoader->init();
@@ -50,10 +63,10 @@ class EveOnlineKillboardWidget {
         $javascriptLoader = new Libs\ResourceLoader\JavascriptLoader;
         $javascriptLoader->init();
 
+        new Libs\AjaxApi;
+
         // Initialize the widget
         \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugin\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
-
-        new Libs\AjaxApi;
 
         /**
          * start backend only libs
@@ -123,4 +136,4 @@ function initializePlugin() {
 }
 
 // Start the show
-\add_action('plugins_loaded', 'WordPress\Plugin\EveOnlineKillboardWidget\initializePlugin');
+initializePlugin();

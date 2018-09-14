@@ -218,6 +218,7 @@ class KillboardWidget extends \WP_Widget {
                 $jsOptions = json_encode([
                     'entityType' => $instance['eve-online-killboard-widget-entity-type'],
                     'entityName' => $instance['eve-online-killboard-widget-entity-name'],
+                    'entityId' => $instance['eve-online-killboard-widget-entity-id'],
                     'killCount' => $instance['eve-online-killboard-widget-number-of-kills'],
                     'showLosses' => $instance['eve-online-killboard-widget-show-losses'],
                     'number' => $this->number

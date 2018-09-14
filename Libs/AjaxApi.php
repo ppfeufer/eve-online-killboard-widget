@@ -45,6 +45,7 @@ class AjaxApi {
         $killList = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList([
             'eve-online-killboard-widget-entity-type' => \esc_html(\filter_input(\INPUT_POST, 'type')),
             'eve-online-killboard-widget-entity-name' => \esc_html(\filter_input(\INPUT_POST, 'name')),
+            'eve-online-killboard-widget-entity-id' => \esc_html(\filter_input(\INPUT_POST, 'id')),
             'eve-online-killboard-widget-number-of-kills' => \filter_input(\INPUT_POST, 'count'),
             'eve-online-killboard-widget-show-losses' => \filter_input(\INPUT_POST, 'showLosses')
         ]);

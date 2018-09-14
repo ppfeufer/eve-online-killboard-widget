@@ -37,11 +37,19 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
     private $cacheDirectoryBase;
 
     /**
+     * databgaseHelper
+     *
+     * @var DatabaseHelper
+     */
+    private $databaseHelper;
+
+    /**
      * Constructor
      */
     protected function __construct() {
         parent::__construct();
 
+        $this->databaseHelper = DatabaseHelper::getInstance();
         $this->cacheDirectoryBase = $this->getPluginCacheDir();
 
         $this->checkOrCreateCacheDirectories();
@@ -180,11 +188,11 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
     /**
      * Getting transient cache information / data
      *
-     * @param string $transientName
+     * @param string $route
      * @return mixed
      */
-    public function getTransientCache($transientName) {
-        $data = \get_transient($transientName);
+    public function getTransientCache($route) {
+        $data = $this->databaseHelper->getDatabaseCache($route);
 
         return $data;
     }
@@ -192,11 +200,17 @@ class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Single
     /**
      * Setting the transient cache
      *
-     * @param string $transientName cache name
-     * @param mixed $data the data that is needed to be cached
-     * @param type $time cache time in hours (default: 2)
+     * @param string $route
+     * @param string $value
+     * @param int $validUntil
+     * @param boolean $returnData
+     * @return mixed
      */
-    public function setTransientCache($transientName, $data, $time = 2) {
-        \set_transient($transientName, $data, $time * \HOUR_IN_SECONDS);
+    public function setTransientCache($route, $value, $validUntil, $returnData = false) {
+        $returnValue = $this->databaseHelper->setDatabaseCache($route, $value, $validUntil, $returnData);
+
+        if($returnData === true) {
+            return $returnValue;
+        }
     }
 }
