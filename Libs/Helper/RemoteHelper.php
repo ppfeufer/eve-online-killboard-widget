@@ -23,6 +23,8 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 \defined('ABSPATH') or die();
 
 class RemoteHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+    protected $userAgent = null;
+
     /**
      * Getting data from a remote source
      *
@@ -40,12 +42,22 @@ class RemoteHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
                     $params = '?' . \http_build_query($parameter);
                 }
 
-                $remoteData = \wp_remote_get($url . $params);
+                $remoteData = \wp_remote_get($url . $params, [
+                    'timeout' => 60,
+                    'user-agent' => $this->getUserAgent(),
+                    'headers' => [
+                        'Accept-Encoding' => 'gzip',
+                        'User-Agent' => $this->getUserAgent()
+                    ]
+                ]);
                 break;
 
             case 'post':
                 $remoteData = \wp_remote_post($url, [
-                    'headers' => ['Content-Type' => 'application/json; charset=utf-8'],
+                    'user-agent' => $this->getUserAgent(),
+                    'headers' => [
+                        'Content-Type' => 'application/json; charset=utf-8'
+                    ],
                     'body' => \json_encode($parameter),
                     'method' => 'POST'
                 ]);
@@ -57,5 +69,23 @@ class RemoteHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return $returnValue;
+    }
+
+    /**
+     * Getting the userAgant
+     *
+     * @return string
+     */
+    public function getUserAgent() {
+        return $this->userAgent;
+    }
+
+    /**
+     * Setting the userAgent
+     *
+     * @param string $userAgent
+     */
+    public function setUserAgent($userAgent) {
+        $this->userAgent = $userAgent;
     }
 }

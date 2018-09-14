@@ -2,8 +2,16 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.5...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.0...development)
 - in development
+
+## [0.23.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.23.0) - 2018-09-14
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.5...v0.23.0)
+### Added
+- Highlight for solo kills in zkillboard style
+
+### Changed
+- Cache handling is now done with an own database table instead of WP transient cache. This should keep the wp_options table clean.
 
 ## [0.22.5](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.22.5) - 2018-09-10
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.22.4...v0.22.5)
