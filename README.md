@@ -1,5 +1,7 @@
 # EVE Online Killboard Widget for WordPress
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/09f9a24507f1428cb4f92902d8af332c)](https://app.codacy.com/app/ppfeufer/eve-online-killboard-widget?utm_source=github.com&utm_medium=referral&utm_content=ppfeufer/eve-online-killboard-widget&utm_campaign=Badge_Grade_Dashboard)
+
 ## Show your latest kill and losses in your WordPress Sidebar
 
 This widget connects to zKillboard and parses the latest x-amount of kills for you to display in your sidebar.
