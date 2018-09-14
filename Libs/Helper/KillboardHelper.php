@@ -179,8 +179,9 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
                         . '            <li>Loss: ' . $this->getVictimShip($killMail->victim) . '</li>'
                         . '            <li>ISK lost: ' . $this->getIskLoss($killMail->zkb) . '</li>'
                         . '            <li>System: ' . $systemInformation->name . ' (' . \round($systemInformation->security_status, 2) . ')</li>'
-                        . '            <li>Killed by: ' . $this->getFinalBlow($killMail->attackers) . $stringInvolved . '</li>'
-                        . '        </ul>'
+                        . '            <li>Killed by: ' . $this->getFinalBlow($killMail->attackers) . $stringInvolved . '</li>';
+            $widgetHtml .= ($killMail->zkb->solo) ? '            <li><span class="eve-online-killboard-widget-solokill"><small>SOLO</small></span></li>' : '';
+            $widgetHtml .= '        </ul>'
                         . '    </div>'
                         . '</div>';
         }
