@@ -27,9 +27,31 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 \defined('ABSPATH') or die();
 
 class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+    /**
+     * link to zkillboard
+     *
+     * @var string
+     */
     private $zkbLink = null;
+
+    /**
+     * Link to zkillboard API
+     * @var string
+     */
     private $zkbApiLink = null;
+
+    /**
+     * entityID
+     *
+     * @var int
+     */
     private $entityID = null;
+
+    /**
+     * eveApi
+     *
+     * @var EveApiHelper
+     */
     private $eveApi = null;
 
     /**
@@ -40,6 +62,13 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
     private $cacheHelper = null;
 
     /**
+     * remoteHelper
+     *
+     * @var RemoteHelper
+     */
+    private $remoteHelper = null;
+
+    /**
      * constructor
      *
      * no external instanciation allowed
@@ -47,10 +76,11 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
     protected function __construct() {
         parent::__construct();
 
-        $this->eveApi = EveApiHelper::getInstance();
         $this->zkbApiLink = 'https://zkillboard.com/api/';
         $this->zkbLink = 'https://zkillboard.com/';
+        $this->eveApi = EveApiHelper::getInstance();
         $this->cacheHelper = CacheHelper::getInstance();
+        $this->remoteHelper = RemoteHelper::getInstance();
     }
 
     /**
@@ -77,10 +107,10 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
             }
         }
 
-        $transientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only');
+        $transientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only.zkb_only');
 
         if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-            $transientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills');
+            $transientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills.zkb_only');
         }
 
         $data = $this->cacheHelper->getTransientCache($transientName);
@@ -92,7 +122,6 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
              * setting the transient caches
              */
             $this->cacheHelper->setTransientCache($transientName, $data, \strtotime('+5 Minutes'));
-
         }
 
         return $data;
@@ -109,20 +138,67 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
 
         $returnValue = null;
 
-        $remoteHelper = RemoteHelper::getInstance();
-        $remoteHelper->setUserAgent('Killboard Widget for WordPress » https://github.com/ppfeufer/eve-online-killboard-widget // WordPress/' . $wp_version . '; ' . home_url());
+        $this->remoteHelper->setUserAgent('Killboard Widget for WordPress » https://github.com/ppfeufer/eve-online-killboard-widget // WordPress/' . $wp_version . '; ' . home_url());
 
-//        $zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/zkbOnly/';
-        $zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/';
+        $zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/zkbOnly/';
 
         if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-//            $zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/zkbOnly/';
-            $zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/';
+            $zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/zkbOnly/';
         }
 
-        $zkbData = $remoteHelper->getRemoteData($zkbUrl);
+        $zkbData = $this->remoteHelper->getRemoteData($zkbUrl);
         if(!\is_null($zkbData)) {
-            $returnValue = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
+            $zkbDataKills = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
+
+            $killmails = null;
+            foreach($zkbDataKills as $kill) {
+                $killmailDetail = $this->getKillDetails($kill->killmail_id);
+
+                if(!\is_null($killmailDetail)) {
+                    $killmails[$kill->killmail_id] = $killmailDetail;
+                }
+            }
+
+            $returnValue = $killmails;
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Getting killmail details
+     *
+     * @param int $killmailID
+     * @param boolean $cache
+     * @return object
+     */
+    private function getKillDetails($killmailID, $cache = false) {
+        $returnValue = null;
+
+        switch($cache) {
+            case true:
+                $returnValue = $this->cacheHelper->getTransientCache('eve_killboard_widget_killmail_details_' . $killmailID);
+
+                if($returnValue === false || empty($returnValue)) {
+                    $killDetails = $this->remoteHelper->getRemoteData($this->zkbApiLink . 'killID/' . $killmailID . '/');
+
+                    if(!\is_null($killDetails)) {
+                        $killmailDetails = \json_decode($killDetails);
+                        $returnValue = $killmailDetails['0'];
+
+                        $this->cacheHelper->setTransientCache('eve_killboard_widget_killmail_details_' . $killmailID, $killmailDetails['0'], \strtotime('+12 years'));
+                    }
+                }
+                break;
+
+            case false:
+                $killDetails = $this->remoteHelper->getRemoteData($this->zkbApiLink . 'killID/' . $killmailID . '/');
+
+                if(!\is_null($killDetails)) {
+                    $killmailDetails = \json_decode($killDetails);
+                    $returnValue = $killmailDetails['0'];
+                }
+                break;
         }
 
         return $returnValue;
@@ -158,17 +234,17 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
                         . '    <div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
                         . '        <figure>'
                         . '            <a href="' . $this->getKillboardLink($killMail->killmail_id) . '" rel="external" target="_blank">'
-                        .                $this->getVictimImage($killMail->victim)
+                        .                  $this->getVictimImage($killMail->victim)
                         . '            </a>'
                         . '            <div class="eve-online-killboard-widget-pilot-information">'
                         . '                <span class="victimShipImage">'
-                        .                    $this->getVictimShipImage($killMail->victim, 32)
+                        .                      $this->getVictimShipImage($killMail->victim, 32)
                         . '                </span>'
                         . '                <span class="victimCorpImage">'
-                        .                    $this->getVictimCorpImage($killMail->victim, 32)
+                        .                      $this->getVictimCorpImage($killMail->victim, 32)
                         . '                </span>'
                         . '                <span class="victimAllianceImage">'
-                        .                    $this->getVictimAllianceImage($killMail->victim, 32)
+                        .                      $this->getVictimAllianceImage($killMail->victim, 32)
                         . '                </span>'
                         . '            </div>'
                         . '        </figure>'
@@ -179,14 +255,31 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
                         . '            <li>Loss: ' . $this->getVictimShip($killMail->victim) . '</li>'
                         . '            <li>ISK lost: ' . $this->getIskLoss($killMail->zkb) . '</li>'
                         . '            <li>System: ' . $systemInformation->name . ' (' . \round($systemInformation->security_status, 2) . ')</li>'
-                        . '            <li>Killed by: ' . $this->getFinalBlow($killMail->attackers) . $stringInvolved . '</li>';
-            $widgetHtml .= ($killMail->zkb->solo) ? '            <li><span class="eve-online-killboard-widget-solokill"><small>SOLO</small></span></li>' : '';
-            $widgetHtml .= '        </ul>'
+                        . '            <li>Killed by: ' . $this->getFinalBlow($killMail->attackers) . $stringInvolved . '</li>'
+                        .              $this->getBadges($killMail)
+                        . '        </ul>'
                         . '    </div>'
                         . '</div>';
         }
 
         return $widgetHtml;
+    }
+
+    private function getBadges($killMail) {
+        $returnValue = null;
+        $badgeSoloKill = false;
+
+        if($killMail->zkb->solo || \count($killMail->attackers) === 1) {
+            $badgeSoloKill = '<span class="eve-online-killboard-widget-solokill"><small>SOLO</small></span>';
+        }
+
+        if($badgeSoloKill) {
+            $returnValue = '<li class="eve-online-killboard-widget-badges">';
+            $returnValue .= $badgeSoloKill;
+            $returnValue .= '</li>';
+        }
+
+        return $returnValue;
     }
 
     /**

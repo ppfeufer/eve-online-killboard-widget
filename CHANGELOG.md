@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.1...development)
-- in development
+### Changed
+- The way to fetch killmails from zKillboard has been improved. This should improve overall performance as well.
 
 ## [0.23.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.23.1) - 2018-09-14
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.0...v0.23.1)
