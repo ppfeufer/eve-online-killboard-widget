@@ -58,6 +58,13 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     protected $cacheHelper = null;
 
     /**
+     * esiKillmails
+     *
+     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi
+     */
+    protected $esiKillmails = null;
+
+    /**
      * The Constructor
      */
     protected function __construct() {
@@ -66,6 +73,8 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $this->esiUrl = 'https://esi.evetech.net/latest/';
         $this->imageserverUrl = 'https://imageserver.eveonline.com/';
         $this->cacheHelper = CacheHelper::getInstance();
+
+        $this->esiKillmails = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi;
 
         /**
          * Assigning Imagesever Endpoints
@@ -251,5 +260,30 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return $returnData;
+    }
+
+    /**
+     * Get public killmails
+     *
+     * @param int $killmailID
+     * @param string $killmailHash
+     * @param boolean $cache
+     * @return json
+     */
+    public function getPublicKillmail($killmailID, $killmailHash, $cache = false) {
+        $returnValue = null;
+
+        $esiData = $this->esiKillmails->getPublicKillmail($killmailID, $killmailHash);
+
+        /**
+         * make sure we have an object
+         */
+        if(\gettype($esiData) === 'string') {
+            $esiData = \json_decode($esiData);
+
+            $returnValue = $esiData;
+        }
+
+        return $returnValue;
     }
 }

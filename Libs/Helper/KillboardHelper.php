@@ -114,6 +114,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
         }
 
         $data = $this->cacheHelper->getTransientCache($transientName);
+        $data = false;
 
         if($data === false || empty($data)) {
             $data = $this->getZkillboardData($widgetSettings);
@@ -123,7 +124,7 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
              */
             $this->cacheHelper->setTransientCache($transientName, $data, \strtotime('+5 Minutes'));
         }
-
+//DebugHelper::debug($data);
         return $data;
     }
 
@@ -147,12 +148,14 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
         }
 
         $zkbData = $this->remoteHelper->getRemoteData($zkbUrl);
+//        DebugHelper::debug(\json_decode($zkbData));
         if(!\is_null($zkbData)) {
             $zkbDataKills = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
 
             $killmails = null;
             foreach($zkbDataKills as $kill) {
                 $killmailDetail = $this->getKillDetails($kill->killmail_id);
+//                $killmailDetail = $this->eveApi->getPublicKillmail($kill->killmail_id, $kill->zkb->hash);
 
                 if(!\is_null($killmailDetail)) {
                     $killmails[$kill->killmail_id] = $killmailDetail;
