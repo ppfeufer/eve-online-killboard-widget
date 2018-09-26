@@ -85,9 +85,7 @@ class Swagger {
      * @return stdClass Object
      */
     public function callEsi() {
-//        $esiUrl = \trailingslashit($this->esiUrl . $this->esiVersion);
         $esiUrl = \trailingslashit($this->getEsiUrl() . $this->getEsiVersion());
-//        $callUrl = $esiUrl . $this->esiRoute;
         $esiRoute = $this->getEsiRoute();
 
         if(\count($this->getEsiRouteParameter()) > 0) {
@@ -96,15 +94,13 @@ class Swagger {
 
         $callUrl = $esiUrl . $esiRoute;
 
-//        switch($method) {
         switch($this->getEsiMethod()) {
             case 'get':
                 $data = $this->remoteHelper->getRemoteData($callUrl);
                 break;
 
             case 'post':
-//                $data = $this->remoteHelper->getRemoteData($callUrl, $parameter, $method);
-                $data = $this->remoteHelper->getRemoteData($callUrl, $this->getEsiPostParameter(), $this->getEsiMethod());
+                $data = $this->remoteHelper->getRemoteData($callUrl, $this->getEsiMethod(), $this->getEsiPostParameter());
                 break;
         }
 

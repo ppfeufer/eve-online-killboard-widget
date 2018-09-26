@@ -32,7 +32,7 @@ class RemoteHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
      * @param array $parameter
      * @return mixed
      */
-    public function getRemoteData($url, $parameter = [], $method = 'get') {
+    public function getRemoteData($url, $method = 'get', $parameter = []) {
         $returnValue = null;
         $params = '';
 
