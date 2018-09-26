@@ -5,6 +5,11 @@
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.2...development)
 - in development
 
+## [0.24.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.24.0) - 2018-09-26
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.2...v0.24.0)
+### Changed
+- Adapted to [changes in zKillboard API](https://www.reddit.com/r/evetech/comments/9hszlv/zkill_major_breaking_change_for_api/)
+
 ## [0.23.2](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.23.2) - 2018-09-15
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.1...v0.23.2)
 ### Changed

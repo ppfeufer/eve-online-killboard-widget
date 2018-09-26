@@ -22,30 +22,24 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api;
 
 \defined('ABSPATH') or die();
 
-class AllianceApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Swagger {
+class KillmailsApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Swagger {
     /**
      * Used ESI enpoints in this class
      *
      * @var array ESI enpoints
      */
     protected $esiEndpoints = [
-        'alliances_allianceId' => 'alliances/{alliance_id}/?datasource=tranquility',
-        'alliances_icons' => 'alliances/{alliance_id}/icons/?datasource=tranquility'
+        'killmails_killmailid_killmailhash' => 'killmails/{killmail_id}/{killmail_hash}/?datasource=tranquility'
     ];
 
-    /**
-     * Find alliance data by alliance ID
-     *
-     * @param int $allianceID
-     * @return object
-     */
-    public function findById($allianceID) {
+    public function getPublicKillmail($killmailID, $killmailHash) {
         $this->setEsiMethod('get');
-        $this->setEsiRoute($this->esiEndpoints['alliances_allianceId']);
+        $this->setEsiRoute($this->esiEndpoints['killmails_killmailid_killmailhash']);
         $this->setEsiRouteParameter([
-            '/{alliance_id}/' => $allianceID
+            '/{killmail_id}/' => $killmailID,
+            '/{killmail_hash}/' => $killmailHash
         ]);
-        $this->setEsiVersion('v3');
+        $this->setEsiVersion('v1');
 
         $allianceData = $this->callEsi();
 

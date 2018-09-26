@@ -58,6 +58,41 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     protected $cacheHelper = null;
 
     /**
+     * esiKillmails
+     *
+     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi
+     */
+    protected $esiKillmails = null;
+
+    /**
+     * esiCharacter
+     *
+     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi
+     */
+    protected $esiCharacter = null;
+
+    /**
+     * esiCorporation
+     *
+     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi
+     */
+    protected $esiCorporation = null;
+
+    /**
+     * esiAlliance
+     *
+     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi
+     */
+    protected $esiAlliance = null;
+
+    /**
+     * esiUniverse
+     *
+     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi
+     */
+    protected $esiUniverse = null;
+
+    /**
      * The Constructor
      */
     protected function __construct() {
@@ -66,6 +101,12 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $this->esiUrl = 'https://esi.evetech.net/latest/';
         $this->imageserverUrl = 'https://imageserver.eveonline.com/';
         $this->cacheHelper = CacheHelper::getInstance();
+
+        $this->esiKillmails = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi;
+        $this->esiCharacter = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi;
+        $this->esiCorporation = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi;
+        $this->esiAlliance = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi;
+        $this->esiUniverse = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
 
         /**
          * Assigning Imagesever Endpoints
@@ -98,8 +139,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $characterData = $this->cacheHelper->getTransientCache('eve_killboard_widget_character_data_' . $characterID);
 
         if($characterData === false || empty($characterData)) {
-            $characterApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi;
-            $characterData = $characterApi->findById($characterID);
+            $characterData = $this->esiCharacter->findById($characterID);
 
             $this->cacheHelper->setTransientCache('eve_killboard_widget_character_data_' . $characterID, $characterData, \strtotime('+12 hours'));
         }
@@ -113,8 +153,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $corporationData = $this->cacheHelper->getTransientCache('eve_killboard_widget_corporation_data_' . $corporationID);
 
         if($corporationData === false || empty($corporationData)) {
-            $corporationApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi;
-            $corporationData = $corporationApi->findById($corporationID);
+            $corporationData = $this->esiCorporation->findById($corporationID);
 
             $this->cacheHelper->setTransientCache('eve_killboard_widget_corporation_data_' . $corporationID, $corporationData, \strtotime('+12 hours'));
         }
@@ -128,8 +167,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $allianceData = $this->cacheHelper->getTransientCache('eve_killboard_widget_alliance_data_' . $allianceID);
 
         if($allianceData === false || empty($allianceData)) {
-            $allianceApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi;
-            $allianceData = $allianceApi->findById($allianceID);
+            $allianceData = $this->esiAlliance->findById($allianceID);
 
             $this->cacheHelper->setTransientCache('eve_killboard_widget_alliance_data_' . $allianceID, $allianceData, \strtotime('+12 years'));
         }
@@ -149,8 +187,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $shipData = $this->cacheHelper->getTransientCache('eve_killboard_widget_ship_data_' . $shipID);
 
         if($shipData === false || empty($shipData)) {
-            $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
-            $shipData = $universeApi->findTypeById($shipID);
+            $shipData = $this->esiUniverse->findTypeById($shipID);
 
             $this->cacheHelper->setTransientCache('eve_killboard_widget_ship_data_' . $shipID, $shipData, \strtotime('+12 years'));
         }
@@ -170,8 +207,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $systemData = $this->cacheHelper->getTransientCache('eve_killboard_widget_system_data_' . $systemID);
 
         if($systemData === false || empty($systemData)) {
-            $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
-            $systemData = $universeApi->findSystemById($systemID);
+            $systemData = $this->esiUniverse->findSystemById($systemID);
 
             $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $systemID, $systemData, \strtotime('+12 years'));
         }
@@ -214,8 +250,7 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     public function getEveIdFromName($name, $type) {
         $returnData = null;
 
-        $universeApi = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
-        $esiData = $universeApi->getIdFromName([(string) \esc_html($name)]);
+        $esiData = $this->esiUniverse->getIdFromName([(string) \esc_html($name)]);
 
         /**
          * make sure we have an object
@@ -251,5 +286,39 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         }
 
         return $returnData;
+    }
+
+    /**
+     * Get public killmails
+     *
+     * @param int $killmailID
+     * @param string $killmailHash
+     * @param boolean $cache
+     * @return json
+     */
+    public function getPublicKillmail($killmailID, $killmailHash, $cache = false) {
+        /**
+         * usually we don't cache kill mails, but that can change at some point,
+         * so let's be prepared here ....
+         */
+        if($cache === false) {
+            // get kill mail from ESI
+            $killmailData = $this->esiKillmails->getPublicKillmail($killmailID, $killmailHash);
+        }
+
+        if($cache === true) {
+            // get cached kill mail
+            $killmailData = $this->cacheHelper->getTransientCache('eve_killboard_widget_killmail_data_' . $killmailID);
+
+            if($killmailData === false || empty($killmailData)) {
+                // get kill mail from ESI
+                $killmailData = $this->esiKillmails->getPublicKillmail($killmailID, $killmailHash);
+
+                // cache it
+                $this->cacheHelper->setTransientCache('eve_killboard_widget_killmail_data_' . $killmailID, $killmailData, \strtotime('+12 years'));
+            }
+        }
+
+        return (\gettype($killmailData) === 'string') ? \json_decode($killmailData) : $killmailData;
     }
 }
