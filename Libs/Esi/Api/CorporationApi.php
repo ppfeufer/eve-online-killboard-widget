@@ -40,8 +40,12 @@ class CorporationApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi
      * @return object
      */
     public function findById($corporationID) {
-        $this->esiRoute = \preg_replace('/{corporation_id}/', $corporationID, $this->esiEndpoints['corporations_corporationId']);
-        $this->esiVersion = 'v4';
+        $this->setEsiMethod('get');
+        $this->setEsiRoute($this->esiEndpoints['corporations_corporationId']);
+        $this->setEsiRouteParameter([
+            '/{corporation_id}/' => $corporationID
+        ]);
+        $this->setEsiVersion('v4');
 
         $corporationData = $this->callEsi();
 

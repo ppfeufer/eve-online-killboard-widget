@@ -33,13 +33,13 @@ class KillmailsApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\S
     ];
 
     public function getPublicKillmail($killmailID, $killmailHash) {
-        $replacements = [
+        $this->setEsiMethod('get');
+        $this->setEsiRoute($this->esiEndpoints['killmails_killmailid_killmailhash']);
+        $this->setEsiRouteParameter([
             '/{killmail_id}/' => $killmailID,
             '/{killmail_hash}/' => $killmailHash
-        ];
-
-        $this->esiRoute = \preg_replace(\array_keys($replacements), \array_values($replacements), $this->esiEndpoints['killmails_killmailid_killmailhash']);
-        $this->esiVersion = 'v1';
+        ]);
+        $this->setEsiVersion('v1');
 
         $allianceData = $this->callEsi();
 

@@ -40,8 +40,12 @@ class AllianceApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Sw
      * @return object
      */
     public function findById($allianceID) {
-        $this->esiRoute = \preg_replace('/{alliance_id}/', $allianceID, $this->esiEndpoints['alliances_allianceId']);
-        $this->esiVersion = 'v3';
+        $this->setEsiMethod('get');
+        $this->setEsiRoute($this->esiEndpoints['alliances_allianceId']);
+        $this->setEsiRouteParameter([
+            '/{alliance_id}/' => $allianceID
+        ]);
+        $this->setEsiVersion('v3');
 
         $allianceData = $this->callEsi();
 
