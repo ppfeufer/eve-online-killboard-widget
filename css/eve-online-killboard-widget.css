@@ -72,7 +72,6 @@
 
 @media all and (min-width: 1600px) {
     .eve-online-killboard-widget ul {
-        margin-top: 8px;
         font-size: 80%;
     }
 
