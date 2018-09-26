@@ -114,7 +114,6 @@ class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Si
         }
 
         $data = $this->cacheHelper->getTransientCache($transientName);
-        $data = false;
 
         if($data === false || empty($data)) {
             $data = $this->getZkillboardData($widgetSettings);

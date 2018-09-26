@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.2...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.24.1...development)
 - in development
+
+## [0.24.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.24.1) - 2018-09-26
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.24.0...v0.24.1)
+### Fixed
+- Reintroduced cahing on calls to zKillboard API
 
 ## [0.24.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.24.0) - 2018-09-26
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.23.2...v0.24.0)
