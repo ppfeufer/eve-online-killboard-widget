@@ -28,7 +28,7 @@ class Swagger {
      *
      * @var string
      */
-    protected $esiUrl = 'https://esi.evetech.net/';
+    private $esiUrl = 'https://esi.evetech.net/';
 
     /**
      * ESI Version
@@ -85,6 +85,10 @@ class Swagger {
      * @return stdClass Object
      */
     public function callEsi() {
+        if(!\is_a($this->remoteHelper, '\WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper')) {
+            $this->remoteHelper = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
+        }
+
         $esiUrl = \trailingslashit($this->getEsiUrl() . $this->getEsiVersion());
         $esiRoute = $this->getEsiRoute();
 
@@ -104,7 +108,18 @@ class Swagger {
                 break;
         }
 
+        $this->resetFieldsToDefaults();
+
         return $data;
+    }
+
+    /**
+     * Resetting field values to defaults
+     */
+    private function resetFieldsToDefaults() {
+        foreach(\get_class_vars(\get_class($this)) as $field => $defaultValue){
+            $this->$field = $defaultValue;
+        }
     }
 
     /**
