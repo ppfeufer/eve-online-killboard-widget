@@ -22,7 +22,7 @@
  * Killboard Widget
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs;
 
 \defined('ABSPATH') or die();
 
@@ -208,7 +208,7 @@ class KillboardWidget extends \WP_Widget {
                 $widgetHtml = '<div class="killboard-widget-kill-list">';
 
                 for($countI = 1; $countI <= $instance['eve-online-killboard-widget-number-of-kills']; $countI++) {
-                    $widgetHtml .= \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getDummyHtml();
+                    $widgetHtml .= \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getDummyHtml();
                 }
 
                 $widgetHtml .= '<p style="text-align: center;">' . \__('Loading killboard data, please wait ...', 'eve-online-killboard-widget') . '</p>';
@@ -244,10 +244,10 @@ class KillboardWidget extends \WP_Widget {
      */
     private function getWidgetData(array $instance) {
         $widgetHtml = null;
-        $killList = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList($instance);
+        $killList = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList($instance);
 
         if(!empty($killList) && \is_array($killList)) {
-            $widgetHtml = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
+            $widgetHtml = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
         }
 
         return $widgetHtml;

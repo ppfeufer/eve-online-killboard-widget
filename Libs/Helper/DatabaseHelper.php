@@ -17,11 +17,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
-class DatabaseHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
     /**
      * Option field name for database version
      *

@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi;
 
 \defined('ABSPATH') or die();
 
@@ -68,7 +68,7 @@ class Swagger {
     /**
      * Remote Helper
      *
-     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper
      */
     protected $remoteHelper = null;
 
@@ -76,7 +76,7 @@ class Swagger {
      * Constructor
      */
     public function __construct() {
-        $this->remoteHelper = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
+        $this->remoteHelper = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
     }
 
     /**
@@ -85,8 +85,8 @@ class Swagger {
      * @return stdClass Object
      */
     public function callEsi() {
-        if(!\is_a($this->remoteHelper, '\WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper')) {
-            $this->remoteHelper = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
+        if(!\is_a($this->remoteHelper, '\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper')) {
+            $this->remoteHelper = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
         }
 
         $esiUrl = \trailingslashit($this->getEsiUrl() . $this->getEsiVersion());

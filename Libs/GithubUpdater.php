@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs;
 
 \defined('ABSPATH') or die();
 

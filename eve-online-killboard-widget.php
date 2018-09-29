@@ -11,7 +11,7 @@
  * Domain Path: /l10n
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget;
+namespace WordPress\Plugins\EveOnlineKillboardWidget;
 const WP_GITHUB_FORCE_UPDATE = true;
 
 // Include the autoloader so we can dynamically include the rest of the classes.
@@ -66,7 +66,7 @@ class EveOnlineKillboardWidget {
         new Libs\AjaxApi;
 
         // Initialize the widget
-        \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugin\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
+        \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugins\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
 
         /**
          * start backend only libs

@@ -24,11 +24,11 @@
  * Getting some stuff from CCP's EVE API
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
-class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
     /**
      * ESI URL
      *
@@ -60,35 +60,35 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
     /**
      * esiKillmails
      *
-     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi
      */
     protected $esiKillmails = null;
 
     /**
      * esiCharacter
      *
-     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi
      */
     protected $esiCharacter = null;
 
     /**
      * esiCorporation
      *
-     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi
      */
     protected $esiCorporation = null;
 
     /**
      * esiAlliance
      *
-     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi
      */
     protected $esiAlliance = null;
 
     /**
      * esiUniverse
      *
-     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi
      */
     protected $esiUniverse = null;
 
@@ -102,11 +102,11 @@ class EveApiHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singl
         $this->imageserverUrl = 'https://imageserver.eveonline.com/';
         $this->cacheHelper = CacheHelper::getInstance();
 
-        $this->esiKillmails = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi;
-        $this->esiCharacter = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi;
-        $this->esiCorporation = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi;
-        $this->esiAlliance = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi;
-        $this->esiUniverse = new \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
+        $this->esiKillmails = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\KillmailsApi;
+        $this->esiCharacter = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\CharacterApi;
+        $this->esiCorporation = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\CorporationApi;
+        $this->esiAlliance = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\AllianceApi;
+        $this->esiUniverse = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api\UniverseApi;
 
         /**
          * Assigning Imagesever Endpoints

@@ -22,11 +22,11 @@
  * Killboard Widget
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
-class KillboardHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
     /**
      * link to zkillboard
      *

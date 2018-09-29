@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Api;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api;
 
 \defined('ABSPATH') or die();
 
-class CorporationApi extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi\Swagger {
+class CorporationApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
     /**
      * Used ESI enpoints in this class
      *

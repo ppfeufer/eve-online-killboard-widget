@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
-class PluginHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class PluginHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
     /**
      * Getting the Plugin Path
      *

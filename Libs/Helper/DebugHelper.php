@@ -24,7 +24,7 @@
  * Getting some stuff from CCP's EVE API
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 

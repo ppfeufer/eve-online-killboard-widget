@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
 \defined('ABSPATH') or die();
 
@@ -28,7 +28,7 @@ namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper;
 require_once(\ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php');
 require_once(\ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php');
 
-class CacheHelper extends \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class CacheHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
     /**
      * The base directoy of our cache
      *
