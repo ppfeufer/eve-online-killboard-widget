@@ -170,7 +170,7 @@ class KillboardWidget extends \WP_Widget {
         $instance['eve-online-killboard-widget-title'] = (string) \esc_html($newInstance['eve-online-killboard-widget-title']);
         $instance['eve-online-killboard-widget-entity-type'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']);
         $instance['eve-online-killboard-widget-entity-name'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']);
-        $instance['eve-online-killboard-widget-entity-id'] = $this->eveApiHelper->getEveIdFromName((string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']), (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']));
+        $instance['eve-online-killboard-widget-entity-id'] = $this->eveApiHelper->getEveIdByName((string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']), (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']));
         $instance['eve-online-killboard-widget-number-of-kills'] = (int) $newInstance['eve-online-killboard-widget-number-of-kills'];
         $instance['eve-online-killboard-widget-show-losses'] = $newInstance['eve-online-killboard-widget-show-losses'] ? 1 : 0;
         $instance['eve-online-killboard-widget-static-cache'] = $newInstance['eve-online-killboard-widget-static-cache'] ? 1 : 0;

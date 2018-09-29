@@ -17,37 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository;
 
 \defined('ABSPATH') or die();
 
-class AllianceApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
+class CorporationRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
     /**
      * Used ESI enpoints in this class
      *
      * @var array ESI enpoints
      */
     protected $esiEndpoints = [
-        'alliances_allianceId' => 'alliances/{alliance_id}/?datasource=tranquility',
-        'alliances_icons' => 'alliances/{alliance_id}/icons/?datasource=tranquility'
+        'corporations_corporationId' => 'corporations/{corporation_id}/?datasource=tranquility'
     ];
 
     /**
-     * Find alliance data by alliance ID
+     * Find corporation data by corporation ID
      *
-     * @param int $allianceID
+     * @param int $corporationID
      * @return object
      */
-    public function findById($allianceID) {
+    public function corporationsCorporationId($corporationID) {
         $this->setEsiMethod('get');
-        $this->setEsiRoute($this->esiEndpoints['alliances_allianceId']);
+        $this->setEsiRoute($this->esiEndpoints['corporations_corporationId']);
         $this->setEsiRouteParameter([
-            '/{alliance_id}/' => $allianceID
+            '/{corporation_id}/' => $corporationID
         ]);
-        $this->setEsiVersion('v3');
+        $this->setEsiVersion('v4');
 
-        $allianceData = $this->callEsi();
+        $corporationData = $this->callEsi();
 
-        return $allianceData;
+        return $corporationData;
     }
 }

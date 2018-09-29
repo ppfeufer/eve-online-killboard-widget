@@ -97,22 +97,24 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
          * In case we don't have the entity ID set by the widget's settings ...
          */
         if(\is_null($this->entityID)) {
-            $this->entityID = $this->cacheHelper->getTransientCache('eve_online_killboard_widget_entity_id_' . \sanitize_title($widgetSettings['eve-online-killboard-widget-entity-name']));
+            $entityIdTransientName = \sanitize_title('EVE Online :: ID ' . $widgetSettings['eve-online-killboard-widget-entity-type'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-name']);
+//            $this->entityID = $this->cacheHelper->getTransientCache('eve_online_killboard_widget_entity_id_' . \sanitize_title($widgetSettings['eve-online-killboard-widget-entity-name']));
+            $this->entityID = $this->cacheHelper->getTransientCache($entityIdTransientName);
 
             if($this->entityID === false || empty($this->entityID)) {
-                $this->entityID = $this->eveApi->getEveIdFromName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
+                $this->entityID = $this->eveApi->getEveIdByName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
 
-                $this->cacheHelper->setTransientCache('eve_online_killboard_widget_entity_id_' . \sanitize_title($widgetSettings['eve-online-killboard-widget-entity-name']), $this->entityID, \strtotime('+12 years'));
+                $this->cacheHelper->setTransientCache($entityIdTransientName, $this->entityID, \strtotime('+12 years'));
             }
         }
 
-        $transientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only.zkb_only');
+        $widgetSettingsTransientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills_kills-only.zkb_only');
 
         if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-            $transientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills.zkb_only');
+            $widgetSettingsTransientName = \sanitize_title('eve_online_killboard-' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '-' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '-' . \md5(\json_encode($widgetSettings)) . '.lastkills.zkb_only');
         }
 
-        $data = $this->cacheHelper->getTransientCache($transientName);
+        $data = $this->cacheHelper->getTransientCache($widgetSettingsTransientName);
 
         if($data === false || empty($data)) {
             $data = $this->getZkillboardData($widgetSettings);
@@ -120,7 +122,7 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
             /**
              * setting the transient caches
              */
-            $this->cacheHelper->setTransientCache($transientName, $data, \strtotime('+5 Minutes'));
+            $this->cacheHelper->setTransientCache($widgetSettingsTransientName, $data, \strtotime('+5 Minutes'));
         }
 
         return $data;
@@ -169,45 +171,6 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
     }
 
     /**
-     * Getting killmail details
-     *
-     * @param int $killmailID
-     * @param boolean $cache
-     * @return object
-     */
-    private function getKillDetails($killmailID, $cache = false) {
-        $returnValue = null;
-
-        switch($cache) {
-            case true:
-                $returnValue = $this->cacheHelper->getTransientCache('eve_killboard_widget_killmail_details_' . $killmailID);
-
-                if($returnValue === false || empty($returnValue)) {
-                    $killDetails = $this->remoteHelper->getRemoteData($this->zkbApiLink . 'killID/' . $killmailID . '/');
-
-                    if(!\is_null($killDetails)) {
-                        $killmailDetails = \json_decode($killDetails);
-                        $returnValue = $killmailDetails['0'];
-
-                        $this->cacheHelper->setTransientCache('eve_killboard_widget_killmail_details_' . $killmailID, $killmailDetails['0'], \strtotime('+12 years'));
-                    }
-                }
-                break;
-
-            case false:
-                $killDetails = $this->remoteHelper->getRemoteData($this->zkbApiLink . 'killID/' . $killmailID . '/');
-
-                if(!\is_null($killDetails)) {
-                    $killmailDetails = \json_decode($killDetails);
-                    $returnValue = $killmailDetails['0'];
-                }
-                break;
-        }
-
-        return $returnValue;
-    }
-
-    /**
      * Getting the HTML for our widget
      *
      * @param array $killList
@@ -217,13 +180,14 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
         $widgetHtml = null;
 
         foreach($killList as $killMailData) {
-            $countAttackers = \count($killMailData->killmail->attackers);
+            /* @var $killmail->killmail \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdKillmailHash */
+            $countAttackers = \count($killMailData->killmail->getAttackers());
             $stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
 
             $victimEntityIdsArray = [
-                'characterID' => (isset($killMailData->killmail->victim->character_id)) ? (int) $killMailData->killmail->victim->character_id : null,
-                'corporationID' => (isset($killMailData->killmail->victim->corporation_id)) ? (int) $killMailData->killmail->victim->corporation_id : null,
-                'allianceID' => (isset($killMailData->killmail->victim->alliance_id)) ? (int) $killMailData->killmail->victim->alliance_id : null
+                'characterID' => (!\is_null($killMailData->killmail->getVictim()->getCharacterId())) ? (int) $killMailData->killmail->getVictim()->getCharacterId() : null,
+                'corporationID' => (!\is_null($killMailData->killmail->getVictim()->getCorporationId())) ? (int) $killMailData->killmail->getVictim()->getCorporationId() : null,
+                'allianceID' => (!\is_null($killMailData->killmail->getVictim()->getAllianceId())) ? (int) $killMailData->killmail->getVictim()->getAllianceId() : null
             ];
 
             // Check if we have a kill or a loss mail
@@ -232,33 +196,33 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
                 $killType = ' kill-list-loss-mail';
             }
 
-            $systemInformation = $this->getSystemInformation($killMailData->killmail->solar_system_id);
+            $systemInformation = $this->getSystemInformation($killMailData->killmail->getSolarSystemId());
             $widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
                         . '    <div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
                         . '        <figure>'
-                        . '            <a href="' . $this->getKillboardLink($killMailData->killmail->killmail_id) . '" rel="external" target="_blank">'
-                        .                  $this->getVictimImage($killMailData->killmail->victim)
+                        . '            <a href="' . $this->getKillboardLink($killMailData->killmail->getKillmailId()) . '" rel="external" target="_blank">'
+                        .                  $this->getVictimImage($killMailData->killmail->getVictim())
                         . '            </a>'
                         . '            <div class="eve-online-killboard-widget-pilot-information">'
                         . '                <span class="victimShipImage">'
-                        .                      $this->getVictimShipImage($killMailData->killmail->victim, 32)
+                        .                      $this->getVictimShipImage($killMailData->killmail->getVictim(), 32)
                         . '                </span>'
                         . '                <span class="victimCorpImage">'
-                        .                      $this->getVictimCorpImage($killMailData->killmail->victim, 32)
+                        .                      $this->getVictimCorpImage($killMailData->killmail->getVictim(), 32)
                         . '                </span>'
                         . '                <span class="victimAllianceImage">'
-                        .                      $this->getVictimAllianceImage($killMailData->killmail->victim, 32)
+                        .                      $this->getVictimAllianceImage($killMailData->killmail->getVictim(), 32)
                         . '                </span>'
                         . '            </div>'
                         . '        </figure>'
                         . '    </div>'
                         . '    <div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
                         . '        <ul>'
-                        . '            <li>' . $this->getVictimType($killMailData->killmail->victim) . ': ' . $this->getVictimName($killMailData->killmail->victim) . '</li>'
-                        . '            <li>Loss: ' . $this->getVictimShip($killMailData->killmail->victim) . '</li>'
+                        . '            <li>' . $this->getVictimType($killMailData->killmail->getVictim()) . ': ' . $this->getVictimName($killMailData->killmail->getVictim()) . '</li>'
+                        . '            <li>Loss: ' . $this->getVictimShip($killMailData->killmail->getVictim()) . '</li>'
                         . '            <li>ISK lost: ' . $this->getIskLoss($killMailData->zkbData) . '</li>'
                         . '            <li>System: ' . $systemInformation->name . ' (' . \round($systemInformation->security_status, 2) . ')</li>'
-                        . '            <li>Killed by: ' . $this->getFinalBlow($killMailData->killmail->attackers) . $stringInvolved . '</li>'
+                        . '            <li>Killed by: ' . $this->getFinalBlow($killMailData->killmail->getAttackers()) . $stringInvolved . '</li>'
                         .              $this->getBadges($killMailData)
                         . '        </ul>'
                         . '    </div>'
@@ -272,7 +236,8 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
         $returnValue = null;
         $badgeSoloKill = false;
 
-        if($killMail->zkbData->solo || \count($killMail->killmail->attackers) === 1) {
+        /* @var $killmail->killmail \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdKillmailHash */
+        if($killMail->zkbData->solo || \count($killMail->killmail->getAttackers()) === 1) {
             $badgeSoloKill = '<span class="eve-online-killboard-widget-solokill"><small>SOLO</small></span>';
         }
 
@@ -340,61 +305,82 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
     /**
      * Getting victims image
      *
-     * @param \stdClass $victimData
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData
      * @param int $size
      * @return string
      */
-    public function getVictimImage(\stdClass $victimData, $size = 256) {
+    public function getVictimImage(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData, $size = 256) {
         $victimImage = null;
 
-        if(isset($victimData->character_id)) {
-            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('character') . $victimData->character_id . '_' . $size. '.jpg';
-            $victimImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-character-id-' . $victimData->character_id . '" alt="' . \esc_html($this->getVictimName($victimData)) . '">';
+        if(!\is_null($victimData->getCharacterId())) {
+            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('character') . $victimData->getCharacterId() . '_' . $size. '.jpg';
+            $victimImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-character-id-' . $victimData->getCharacterId() . '" alt="' . \esc_html($this->getVictimName($victimData)) . '">';
         }
 
-        if(!isset($victimData->character_id)) {
-            $victimImage = '<img src="' . $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('render') . $victimData->ship_type_id . '_' . $size . '.png' . '" class="eve-structure-image eve-online-id-' . $victimData->ship_type_id . '">';
+        if(\is_null($victimData->getCharacterId())) {
+            $victimImage = '<img src="' . $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('render') . $victimData->getShipTypeId() . '_' . $size . '.png' . '" class="eve-structure-image eve-online-id-' . $victimData->getShipTypeId() . '">';
         }
 
         return $victimImage;
     }
 
-    public function getVictimCorpImage(\stdClass $victimData, $size = 256) {
+    /**
+     * Getting victms corporation logo
+     *
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData
+     * @param int $size
+     * @return string
+     */
+    public function getVictimCorpImage(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData, $size = 256) {
         $victimCorporationImage = null;
 
-        if($victimData->corporation_id) {
-            $corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
-            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->corporation_id . '_' . $size. '.png';
-            $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->corporation_id . '" alt="' . \esc_html($corpData['data']->name) . '" data-title="' . \esc_html($corpData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
+        if($victimData->getCorporationId()) {
+            $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
+            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->getCorporationId() . '_' . $size. '.png';
+            $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->getCorporationId() . '" alt="' . \esc_html($corpData['data']->name) . '" data-title="' . \esc_html($corpData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
         }
 
 
         return $victimCorporationImage;
     }
 
-    public function getVictimShipImage(\stdClass $victimData, $size = 256) {
+    /**
+     * Getting victims ship image
+     *
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData
+     * @param int $size
+     * @return type
+     */
+    public function getVictimShipImage(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData, $size = 256) {
         $victimShipImage = null;
 
-        switch($victimData->ship_type_id) {
+        switch($victimData->getShipTypeId()) {
             case 0:
                 $victimShipImage = null;
                 break;
 
             default:
-                $victimShipImage = $this->eveApi->getShipImageById($victimData->ship_type_id, false, $size);
+                $victimShipImage = $this->eveApi->getShipImageByShipId($victimData->getShipTypeId(), false, $size);
                 break;
         }
 
         return $victimShipImage;
     }
 
-    public function getVictimAllianceImage(\stdClass $victimData, $size = 128) {
+    /**
+     * Getting victims alliance logo
+     *
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData
+     * @param type $size
+     * @return string
+     */
+    public function getVictimAllianceImage(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData, $size = 128) {
         $victimAllianceImage = null;
 
-        if(isset($victimData->alliance_id)) {
-            $allianceData = $this->eveApi->getAllianceData($victimData->alliance_id);
-            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->alliance_id . '_' . $size. '.png';
-            $victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->alliance_id . '" alt="' . \esc_html($allianceData['data']->name) . '" data-title="' . \esc_html($allianceData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
+        if(!\is_null($victimData->getAllianceId())) {
+            $allianceData = $this->eveApi->getAllianceDataByAllianceId($victimData->getAllianceId());
+            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->getAllianceId() . '_' . $size. '.png';
+            $victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->getAllianceId() . '" alt="' . \esc_html($allianceData->getName()) . '" data-title="' . \esc_html($allianceData->getName()) . '" data-toggle="eve-killboard-tooltip">';
         }
 
         return $victimAllianceImage;
@@ -403,13 +389,13 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
     /**
      * Getting the victims type
      *
-     * @param \stdClass $victimData
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData
      * @return string
      */
-    public function getVictimType(\stdClass $victimData) {
+    public function getVictimType(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData) {
         $victimType = \__('Pilot', 'eve-online-killboard-widget');
 
-        if(!isset($victimData->character_id)) {
+        if(\is_null($victimData->getCharacterId())) {
             $victimType = \__('Corp', 'eve-online-killboard-widget');
         }
 
@@ -419,21 +405,21 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
     /**
      * Getting the victims name
      *
-     * @param \stdClass $victimData
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData
      * @return string
      */
-    public function getVictimName(\stdClass $victimData) {
+    public function getVictimName(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData) {
         $victimType = $this->getVictimType($victimData);
         $victimName = null;
 
         switch($victimType) {
             case 'Pilot':
-                $pilotData = $this->eveApi->getCharacterData($victimData->character_id);
+                $pilotData = $this->eveApi->getCharacterDataByCharacterId($victimData->getCharacterId());
                 $victimName = $pilotData['data']->name;
                 break;
 
             case 'Corp':
-                $corpData = $this->eveApi->getCorporationData($victimData->corporation_id);
+                $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
                 $victimName = $corpData['data']->name;
                 break;
 
@@ -454,9 +440,10 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
     public function getFinalBlow(array $attackerData) {
         $finalBlow = null;
 
+        /* @var $attacker \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailAttacker */
         foreach($attackerData as $attacker) {
-            if($attacker->final_blow === true) {
-                $finalBlowPilotData = $this->eveApi->getCharacterData($attacker->character_id);
+            if($attacker->getFinalBlow() === true) {
+                $finalBlowPilotData = $this->eveApi->getCharacterDataByCharacterId($attacker->getCharacterId());
                 $finalBlow = $finalBlowPilotData['data']->name;
             }
         }
@@ -471,11 +458,11 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
     /**
      * getting the victims ship type
      *
-     * @param \stdClass $victimData
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData
      * @return string
      */
-    public function getVictimShip(\stdClass $victimData) {
-        $ship = $this->eveApi->getShipData($victimData->ship_type_id);
+    public function getVictimShip(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victimData) {
+        $ship = $this->eveApi->getShipDataByShipId($victimData->getShipTypeId());
 
         return $ship['data']->name;
     }
@@ -487,7 +474,7 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
      * @return string
      */
     public function getSystemInformation($systemID) {
-        $system = $this->eveApi->getSystemData($systemID);
+        $system = $this->eveApi->getSystemDataBySystemId($systemID);
 
         return $system['data'];
     }

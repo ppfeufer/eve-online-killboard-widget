@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository;
 
 \defined('ABSPATH') or die();
 
-class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
+class UniverseRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
     /**
      * Used ESI enpoints in this class
      *
@@ -30,10 +30,10 @@ class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\S
     protected $esiEndpoints = [
         'universe_ids' => 'universe/ids/?datasource=tranquility',
         'universe_types_typeID' => 'universe/types/{type_id}/?datasource=tranquility',
-        'universe_groups_groupID' => 'universe/groups/{group_id}/?datasource=tranquility',
+//        'universe_groups_groupID' => 'universe/groups/{group_id}/?datasource=tranquility',
         'universe_systems_systemID' => 'universe/systems/{system_id}/?datasource=tranquility',
-        'universe_constellations_constellationID' => 'universe/constellations/{constellation_id}/?datasource=tranquility',
-        'universe_regions_regionID' => 'universe/regions/{region_id}/?datasource=tranquility',
+//        'universe_constellations_constellationID' => 'universe/constellations/{constellation_id}/?datasource=tranquility',
+//        'universe_regions_regionID' => 'universe/regions/{region_id}/?datasource=tranquility',
     ];
 
     /**
@@ -42,7 +42,7 @@ class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\S
      * @param int $typeID
      * @return object
      */
-    public function findTypeById($typeID) {
+    public function universeTypesTypeId($typeID) {
         $this->setEsiMethod('get');
         $this->setEsiRoute($this->esiEndpoints['universe_types_typeID']);
         $this->setEsiRouteParameter([
@@ -61,18 +61,18 @@ class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\S
      * @param int $groupID
      * @return object
      */
-    public function findGroupById($groupID) {
-        $this->setEsiMethod('get');
-        $this->setEsiRoute($this->esiEndpoints['universe_groups_groupID']);
-        $this->setEsiRouteParameter([
-            '/{group_id}/' => $groupID
-        ]);
-        $this->setEsiVersion('v1');
-
-        $groupData = $this->callEsi();
-
-        return $groupData;
-    }
+//    public function universeGroupsGroupId($groupID) {
+//        $this->setEsiMethod('get');
+//        $this->setEsiRoute($this->esiEndpoints['universe_groups_groupID']);
+//        $this->setEsiRouteParameter([
+//            '/{group_id}/' => $groupID
+//        ]);
+//        $this->setEsiVersion('v1');
+//
+//        $groupData = $this->callEsi();
+//
+//        return $groupData;
+//    }
 
     /**
      * Find system data by system ID
@@ -80,7 +80,7 @@ class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\S
      * @param int $systemID
      * @return object
      */
-    public function findSystemById($systemID) {
+    public function universeSystemsSystemId($systemID) {
         $this->setEsiMethod('get');
         $this->setEsiRoute($this->esiEndpoints['universe_systems_systemID']);
         $this->setEsiRouteParameter([
@@ -99,18 +99,18 @@ class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\S
      * @param int $constellationID
      * @return object
      */
-    public function findConstellationById($constellationID) {
-        $this->setEsiMethod('get');
-        $this->setEsiRoute($constellationID, $this->esiEndpoints['universe_constellations_constellationID']);
-        $this->setEsiRouteParameter([
-            '/{constellation_id}/' => $constellationID
-        ]);
-        $this->setEsiVersion('v1');
-
-        $constellationData = $this->callEsi();
-
-        return $constellationData;
-    }
+//    public function universeConstellationsConstellationId($constellationID) {
+//        $this->setEsiMethod('get');
+//        $this->setEsiRoute($constellationID, $this->esiEndpoints['universe_constellations_constellationID']);
+//        $this->setEsiRouteParameter([
+//            '/{constellation_id}/' => $constellationID
+//        ]);
+//        $this->setEsiVersion('v1');
+//
+//        $constellationData = $this->callEsi();
+//
+//        return $constellationData;
+//    }
 
     /**
      * Find region data by region ID
@@ -118,18 +118,18 @@ class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\S
      * @param int $regionID
      * @return object
      */
-    public function findRegionById($regionID) {
-        $this->setEsiMethod('get');
-        $this->setEsiRoute($this->esiEndpoints['universe_regions_regionID']);
-        $this->setEsiRouteParameter([
-            '/{region_id}/' => $regionID
-        ]);
-        $this->setEsiVersion('v1');
-
-        $regionData = $this->callEsi();
-
-        return $regionData;
-    }
+//    public function universeRegionsRegionId($regionID) {
+//        $this->setEsiMethod('get');
+//        $this->setEsiRoute($this->esiEndpoints['universe_regions_regionID']);
+//        $this->setEsiRouteParameter([
+//            '/{region_id}/' => $regionID
+//        ]);
+//        $this->setEsiVersion('v1');
+//
+//        $regionData = $this->callEsi();
+//
+//        return $regionData;
+//    }
 
     /**
      * Get the ID of a name in EVE
@@ -137,7 +137,7 @@ class UniverseApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\S
      * @param array $names
      * @return object
      */
-    public function getIdFromName(array $names) {
+    public function universeIds(array $names) {
         $this->setEsiMethod('post');
         $this->setEsiPostParameter($names);
         $this->setEsiRoute($this->esiEndpoints['universe_ids']);

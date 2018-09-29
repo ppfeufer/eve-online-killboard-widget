@@ -17,37 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository;
 
 \defined('ABSPATH') or die();
 
-class CorporationApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
+class CharacterRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
     /**
      * Used ESI enpoints in this class
      *
      * @var array ESI enpoints
      */
     protected $esiEndpoints = [
-        'corporations_corporationId' => 'corporations/{corporation_id}/?datasource=tranquility',
-        'corporations_icons' => 'corporations/{corporation_id}/icons/?datasource=tranquility'
+        'characters_characterId' => 'characters/{character_id}/?datasource=tranquility',
+        'characters_characterId_portrait' => 'characters/{character_id}/portrait/?datasource=tranquility',
+        'characters_affiliation' => 'characters/affiliation/?datasource=tranquility'
     ];
 
     /**
-     * Find corporation data by corporation ID
+     * Find character data by charater ID
      *
-     * @param int $corporationID
+     * @param int $characterID
      * @return object
      */
-    public function findById($corporationID) {
+    public function charactersCharacterId($characterID) {
         $this->setEsiMethod('get');
-        $this->setEsiRoute($this->esiEndpoints['corporations_corporationId']);
+        $this->setEsiRoute($this->esiEndpoints['characters_characterId']);
         $this->setEsiRouteParameter([
-            '/{corporation_id}/' => $corporationID
+            '/{character_id}/' => $characterID
         ]);
         $this->setEsiVersion('v4');
 
-        $corporationData = $this->callEsi();
+        $characterData = $this->callEsi();
 
-        return $corporationData;
+        return $characterData;
     }
 }

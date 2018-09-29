@@ -17,31 +17,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Api;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository;
 
 \defined('ABSPATH') or die();
 
-class KillmailsApi extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
+class KillmailsRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Swagger {
     /**
      * Used ESI enpoints in this class
      *
      * @var array ESI enpoints
      */
     protected $esiEndpoints = [
-        'killmails_killmailid_killmailhash' => 'killmails/{killmail_id}/{killmail_hash}/?datasource=tranquility'
+        'killmails_killmailId_killmailHash' => 'killmails/{killmail_id}/{killmail_hash}/?datasource=tranquility'
     ];
 
-    public function getPublicKillmail($killmailID, $killmailHash) {
+    public function killmailsKillmailIdKillmailHash($killmailID, $killmailHash) {
+        $returnData = null;
+
         $this->setEsiMethod('get');
-        $this->setEsiRoute($this->esiEndpoints['killmails_killmailid_killmailhash']);
+        $this->setEsiRoute($this->esiEndpoints['killmails_killmailId_killmailHash']);
         $this->setEsiRouteParameter([
             '/{killmail_id}/' => $killmailID,
             '/{killmail_hash}/' => $killmailHash
         ]);
         $this->setEsiVersion('v1');
 
-        $allianceData = $this->callEsi();
+        $killmailData = $this->callEsi();
 
-        return $allianceData;
+        if(!\is_null($killmailData)) {
+            $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
+            $returnData = $jsonMapper->map(\json_decode($killmailData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdKillmailHash);
+        }
+
+        return $returnData;
     }
 }
