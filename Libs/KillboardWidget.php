@@ -3,10 +3,10 @@
 /**
  * Copyright (C) 2017 Rounon Dax
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,15 +14,14 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
  * Killboard Widget
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs;
 
 \defined('ABSPATH') or die();
 
@@ -171,7 +170,7 @@ class KillboardWidget extends \WP_Widget {
         $instance['eve-online-killboard-widget-title'] = (string) \esc_html($newInstance['eve-online-killboard-widget-title']);
         $instance['eve-online-killboard-widget-entity-type'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']);
         $instance['eve-online-killboard-widget-entity-name'] = (string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']);
-        $instance['eve-online-killboard-widget-entity-id'] = $this->eveApiHelper->getEveIdFromName((string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']), (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']));
+        $instance['eve-online-killboard-widget-entity-id'] = $this->eveApiHelper->getEveIdByName((string) \esc_html($newInstance['eve-online-killboard-widget-entity-name']), (string) \esc_html($newInstance['eve-online-killboard-widget-entity-type']));
         $instance['eve-online-killboard-widget-number-of-kills'] = (int) $newInstance['eve-online-killboard-widget-number-of-kills'];
         $instance['eve-online-killboard-widget-show-losses'] = $newInstance['eve-online-killboard-widget-show-losses'] ? 1 : 0;
         $instance['eve-online-killboard-widget-static-cache'] = $newInstance['eve-online-killboard-widget-static-cache'] ? 1 : 0;
@@ -208,7 +207,7 @@ class KillboardWidget extends \WP_Widget {
                 $widgetHtml = '<div class="killboard-widget-kill-list">';
 
                 for($countI = 1; $countI <= $instance['eve-online-killboard-widget-number-of-kills']; $countI++) {
-                    $widgetHtml .= \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getDummyHtml();
+                    $widgetHtml .= \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getDummyHtml();
                 }
 
                 $widgetHtml .= '<p style="text-align: center;">' . \__('Loading killboard data, please wait ...', 'eve-online-killboard-widget') . '</p>';
@@ -244,10 +243,10 @@ class KillboardWidget extends \WP_Widget {
      */
     private function getWidgetData(array $instance) {
         $widgetHtml = null;
-        $killList = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList($instance);
+        $killList = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList($instance);
 
         if(!empty($killList) && \is_array($killList)) {
-            $widgetHtml = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
+            $widgetHtml = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
         }
 
         return $widgetHtml;

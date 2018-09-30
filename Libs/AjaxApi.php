@@ -3,10 +3,10 @@
 /**
  * Copyright (C) 2017 Rounon Dax
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,11 +14,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs;
 
 \defined('ABSPATH') or die();
 
@@ -42,7 +41,7 @@ class AjaxApi {
      * Getting the market data for a fitting
      */
     public function ajaxGetKillboardData() {
-        $killList = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList([
+        $killList = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList([
             'eve-online-killboard-widget-entity-type' => \esc_html(\filter_input(\INPUT_POST, 'type')),
             'eve-online-killboard-widget-entity-name' => \esc_html(\filter_input(\INPUT_POST, 'name')),
             'eve-online-killboard-widget-entity-id' => \esc_html(\filter_input(\INPUT_POST, 'id')),
@@ -52,10 +51,9 @@ class AjaxApi {
 
         $widgetHtml = null;
         if(!empty($killList) && is_array($killList)) {
-            $widgetHtml = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
+            $widgetHtml = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
         }
 
-//        echo \json_encode(['html' => $widgetHtml]);
         \wp_send_json(['html' => $widgetHtml]);
 
         // always exit this API function

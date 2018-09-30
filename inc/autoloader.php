@@ -1,12 +1,12 @@
 <?php
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget;
+namespace WordPress\Plugins\EveOnlineKillboardWidget;
 
-\spl_autoload_register('\WordPress\Plugin\EveOnlineKillboardWidget\autoload');
+\spl_autoload_register('\WordPress\Plugins\EveOnlineKillboardWidget\autoload');
 
 function autoload($className) {
     // If the specified $className does not include our namespace, duck out.
-    if(\strpos($className, 'WordPress\Plugin\EveOnlineKillboardWidget') === false) {
+    if(\strpos($className, 'WordPress\Plugins\EveOnlineKillboardWidget') === false) {
         return;
     }
 

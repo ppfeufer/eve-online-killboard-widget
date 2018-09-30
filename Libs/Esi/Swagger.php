@@ -3,10 +3,10 @@
 /**
  * Copyright (C) 2017 Rounon Dax
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,11 +14,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget\Libs\Esi;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi;
 
 \defined('ABSPATH') or die();
 
@@ -28,7 +27,7 @@ class Swagger {
      *
      * @var string
      */
-    protected $esiUrl = 'https://esi.evetech.net/';
+    private $esiUrl = 'https://esi.evetech.net/';
 
     /**
      * ESI Version
@@ -68,7 +67,7 @@ class Swagger {
     /**
      * Remote Helper
      *
-     * @var \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper
      */
     protected $remoteHelper = null;
 
@@ -76,7 +75,7 @@ class Swagger {
      * Constructor
      */
     public function __construct() {
-        $this->remoteHelper = \WordPress\Plugin\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
+        $this->remoteHelper = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
     }
 
     /**
@@ -85,6 +84,10 @@ class Swagger {
      * @return stdClass Object
      */
     public function callEsi() {
+        if(!\is_a($this->remoteHelper, '\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper')) {
+            $this->remoteHelper = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\RemoteHelper::getInstance();
+        }
+
         $esiUrl = \trailingslashit($this->getEsiUrl() . $this->getEsiVersion());
         $esiRoute = $this->getEsiRoute();
 
@@ -104,7 +107,18 @@ class Swagger {
                 break;
         }
 
+        $this->resetFieldsToDefaults();
+
         return $data;
+    }
+
+    /**
+     * Resetting field values to defaults
+     */
+    private function resetFieldsToDefaults() {
+        foreach(\get_class_vars(\get_class($this)) as $field => $defaultValue){
+            $this->$field = $defaultValue;
+        }
     }
 
     /**

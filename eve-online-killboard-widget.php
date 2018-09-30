@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: EVE Online Killboard Widget for WordPress
  * Plugin URI: https://github.com/ppfeufer/eve-online-killboard-widget
@@ -11,7 +12,24 @@
  * Domain Path: /l10n
  */
 
-namespace WordPress\Plugin\EveOnlineKillboardWidget;
+/**
+ * Copyright (C) 2017 Rounon Dax
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+namespace WordPress\Plugins\EveOnlineKillboardWidget;
 const WP_GITHUB_FORCE_UPDATE = true;
 
 // Include the autoloader so we can dynamically include the rest of the classes.
@@ -66,7 +84,7 @@ class EveOnlineKillboardWidget {
         new Libs\AjaxApi;
 
         // Initialize the widget
-        \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugin\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
+        \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugins\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
 
         /**
          * start backend only libs
