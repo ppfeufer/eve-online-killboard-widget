@@ -30,10 +30,7 @@ class UniverseRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Lib
     protected $esiEndpoints = [
         'universe_ids' => 'universe/ids/?datasource=tranquility',
         'universe_types_typeID' => 'universe/types/{type_id}/?datasource=tranquility',
-//        'universe_groups_groupID' => 'universe/groups/{group_id}/?datasource=tranquility',
         'universe_systems_systemID' => 'universe/systems/{system_id}/?datasource=tranquility',
-//        'universe_constellations_constellationID' => 'universe/constellations/{constellation_id}/?datasource=tranquility',
-//        'universe_regions_regionID' => 'universe/regions/{region_id}/?datasource=tranquility',
     ];
 
     /**
@@ -61,25 +58,6 @@ class UniverseRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Lib
     }
 
     /**
-     * Find group data by group ID
-     *
-     * @param int $groupID
-     * @return object
-     */
-//    public function universeGroupsGroupId($groupID) {
-//        $this->setEsiMethod('get');
-//        $this->setEsiRoute($this->esiEndpoints['universe_groups_groupID']);
-//        $this->setEsiRouteParameter([
-//            '/{group_id}/' => $groupID
-//        ]);
-//        $this->setEsiVersion('v1');
-//
-//        $groupData = $this->callEsi();
-//
-//        return $groupData;
-//    }
-
-    /**
      * Find system data by system ID
      *
      * @param int $systemID
@@ -95,46 +73,13 @@ class UniverseRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Lib
 
         $systemData = $this->callEsi();
 
-        return $systemData;
+        if(!\is_null($systemData)) {
+            $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
+            $returnData = $jsonMapper->map(\json_decode($systemData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseSystemsSystemId);
+        }
+
+        return $returnData;
     }
-
-    /**
-     * Find constellation data by constellation ID
-     *
-     * @param int $constellationID
-     * @return object
-     */
-//    public function universeConstellationsConstellationId($constellationID) {
-//        $this->setEsiMethod('get');
-//        $this->setEsiRoute($constellationID, $this->esiEndpoints['universe_constellations_constellationID']);
-//        $this->setEsiRouteParameter([
-//            '/{constellation_id}/' => $constellationID
-//        ]);
-//        $this->setEsiVersion('v1');
-//
-//        $constellationData = $this->callEsi();
-//
-//        return $constellationData;
-//    }
-
-    /**
-     * Find region data by region ID
-     *
-     * @param int $regionID
-     * @return object
-     */
-//    public function universeRegionsRegionId($regionID) {
-//        $this->setEsiMethod('get');
-//        $this->setEsiRoute($this->esiEndpoints['universe_regions_regionID']);
-//        $this->setEsiRouteParameter([
-//            '/{region_id}/' => $regionID
-//        ]);
-//        $this->setEsiVersion('v1');
-//
-//        $regionData = $this->callEsi();
-//
-//        return $regionData;
-//    }
 
     /**
      * Get the ID of a name in EVE

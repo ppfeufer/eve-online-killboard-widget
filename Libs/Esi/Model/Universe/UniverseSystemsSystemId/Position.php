@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseSystemsSystemId;
 
-class KillmailsKillmailIdPosition {
+class Position {
     /**
      * x coordinate
      *

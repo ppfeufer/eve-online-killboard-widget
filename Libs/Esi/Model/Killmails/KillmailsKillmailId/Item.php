@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId;
 
-class KillmailsKillmailIdItem {
+class Item {
     /**
      * flag
      *
@@ -116,7 +116,7 @@ class KillmailsKillmailIdItem {
     public function setItems(array $items) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->items = $mapper->mapArray($items, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdItemItems');
+        $this->items = $mapper->mapArray($items, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\ItemItems');
     }
 
     /**

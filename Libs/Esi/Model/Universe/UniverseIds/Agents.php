@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds;
 
-class UniverseIdsFactions {
+class Agents {
     /**
      * id
      *

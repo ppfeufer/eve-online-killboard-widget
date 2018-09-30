@@ -199,17 +199,16 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * @return array
      */
     public function getSystemDataBySystemId($systemID) {
-        $systemData = $this->cacheHelper->getTransientCache('eve_killboard_widget_system_data_' . $systemID);
+        $transientName = \sanitize_title('ESI :: universe/systems/{system_id}/' . $systemID);
+        $systemData = $this->cacheHelper->getTransientCache($transientName);
 
         if($systemData === false || empty($systemData)) {
             $systemData = $this->esiUniverse->universeSystemsSystemId($systemID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_system_data_' . $systemID, $systemData, \strtotime('+12 years'));
+            $this->cacheHelper->setTransientCache($transientName, $systemData, \strtotime('+12 years'));
         }
 
-        return [
-            'data' => (\gettype($systemData) === 'string') ? \json_decode($systemData) : $systemData
-        ];
+        return $systemData;
     }
 
     /**
@@ -252,7 +251,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
         switch($type) {
             case 'alliance':
                 foreach($esiData->getAlliances() as $alliance) {
-                    /* @var $alliance \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsAlliances */
+                    /* @var $alliance \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Alliances */
                     if($alliance->getName() === (string) \esc_html($name)) {
                         $returnData = $alliance->getId();
                     }
@@ -261,7 +260,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
 
             case 'corporation':
                 foreach($esiData->getCorporations() as $corporation) {
-                    /* @var $corporation \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsCorporations */
+                    /* @var $corporation \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Corporations */
                     if($corporation->getName() === (string) \esc_html($name)) {
                         $returnData = $corporation->getId();
                     }
@@ -270,7 +269,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
 
             case 'character':
                 foreach($esiData->getCharacters() as $character) {
-                    /* @var $character \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsCharacters */
+                    /* @var $character \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Characters */
                     if($character->getName() === (string) \esc_html($name)) {
                         $returnData = $character->getId();
                     }

@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId;
 
-class KillmailsKillmailIdAttacker {
+class Victim {
     /**
      * allianceId
      *
@@ -36,16 +36,17 @@ class KillmailsKillmailIdAttacker {
 
     /**
      * corporationId
+     *
      * @var int
      */
     protected $corporationId = null;
 
     /**
-     * damageDone
+     * damageTaken
      *
      * @var int
      */
-    protected $damageDone = null;
+    protected $damageTaken = null;
 
     /**
      * factionId
@@ -55,40 +56,25 @@ class KillmailsKillmailIdAttacker {
     protected $factionId = null;
 
     /**
-     * finalBlow
+     * items
      *
-     * Was the attacker the one to achieve the final blow
-     *
-     * @var boolean
+     * @var array
      */
-    protected $finalBlow = false;
+    protected $items = null;
 
     /**
-     * securityStatus
+     * position
      *
-     * Security status for the attacker
-     *
-     * @var float
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Position
      */
-    protected $securityStatus = null;
+    protected $position = null;
 
     /**
      * shipTypeId
      *
-     * What ship was the attacker flying
-     *
      * @var int
      */
     protected $shipTypeId = null;
-
-    /**
-     * weaponTypeId
-     *
-     * What weapon was used by the attacker for the kill
-     *
-     * @var int
-     */
-    protected $weaponTypeId = null;
 
     /**
      * getAllianceId
@@ -145,21 +131,21 @@ class KillmailsKillmailIdAttacker {
     }
 
     /**
-     * getDamageDone
+     * getDamageTaken
      *
      * @return int
      */
-    public function getDamageDone() {
-        return $this->damageDone;
+    public function getDamageTaken() {
+        return $this->damageTaken;
     }
 
     /**
-     * setDamageDone
+     * setDamageTaken
      *
-     * @param int $damageDone
+     * @param int $damageTaken
      */
-    public function setDamageDone($damageDone) {
-        $this->damageDone = $damageDone;
+    public function setDamageTaken($damageTaken) {
+        $this->damageTaken = $damageTaken;
     }
 
     /**
@@ -181,47 +167,41 @@ class KillmailsKillmailIdAttacker {
     }
 
     /**
-     * getFinalBlow
+     * getItems
      *
-     * Was the attacker the one to achieve the final blow
-     *
-     * @return boolean
+     * @return array
      */
-    public function getFinalBlow() {
-        return $this->finalBlow;
+    public function getItems() {
+        return $this->items;
     }
 
     /**
-     * setFinalBlow
+     * setItems
      *
-     * Was the attacker the one to achieve the final blow
-     *
-     * @param boolean $finalBlow
+     * @param array $items
      */
-    public function setFinalBlow($finalBlow) {
-        $this->finalBlow = $finalBlow;
+    public function setItems(array $items) {
+        $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
+
+        $this->items = $mapper->mapArray($items, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Item');
     }
 
     /**
-     * getSecurityStatus
+     * getPosition
      *
-     * Security status for the attacker
-     *
-     * @return float
+     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Position
      */
-    public function getSecurityStatus() {
-        return $this->securityStatus;
+    public function getPosition() {
+        return $this->position;
     }
 
     /**
-     * setSecurityStatus
+     * setPosition
      *
-     * Security status for the attacker
-     *
-     * @param float $securityStatus
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Position $position
      */
-    public function setSecurityStatus($securityStatus) {
-        $this->securityStatus = $securityStatus;
+    public function setPosition(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Position $position) {
+        $this->position = $position;
     }
 
     /**
@@ -244,27 +224,5 @@ class KillmailsKillmailIdAttacker {
      */
     public function setShipTypeId($shipTypeId) {
         $this->shipTypeId = $shipTypeId;
-    }
-
-    /**
-     * getWaeponTypeId
-     *
-     * What weapon was used by the attacker for the kill
-     *
-     * @return int
-     */
-    public function getWaeponTypeId() {
-        return $this->weaponTypeId;
-    }
-
-    /**
-     * setWeaponTypeId
-     *
-     * What weapon was used by the attacker for the kill
-     *
-     * @param int $weaponTypeId
-     */
-    public function setWeaponTypeId($weaponTypeId) {
-        $this->weaponTypeId = $weaponTypeId;
     }
 }

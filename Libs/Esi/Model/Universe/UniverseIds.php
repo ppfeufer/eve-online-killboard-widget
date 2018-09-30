@@ -107,7 +107,7 @@ class UniverseIds {
     public function setAgents(array $agents) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->agents = $mapper->mapArray($agents, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsAgents');
+        $this->agents = $mapper->mapArray($agents, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Agents');
     }
 
     /**
@@ -127,7 +127,7 @@ class UniverseIds {
     public function setAlliances(array $alliances) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 //
-        $this->alliances = $mapper->mapArray($alliances, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsAlliances');
+        $this->alliances = $mapper->mapArray($alliances, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Alliances');
     }
 
     /**
@@ -147,7 +147,7 @@ class UniverseIds {
     public function setCharacters(array $characters) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->characters = $mapper->mapArray($characters, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsCharacters');
+        $this->characters = $mapper->mapArray($characters, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Characters');
     }
 
     /**
@@ -167,7 +167,7 @@ class UniverseIds {
     public function setConstellations(array $constellations) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->constellations = $mapper->mapArray($constellations, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsConstellations');
+        $this->constellations = $mapper->mapArray($constellations, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Constellations');
     }
 
     /**
@@ -187,7 +187,7 @@ class UniverseIds {
     public function setCorporations(array $corporations) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->corporations = $mapper->mapArray($corporations, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsCorporations');
+        $this->corporations = $mapper->mapArray($corporations, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Corporations');
     }
 
     /**
@@ -207,7 +207,7 @@ class UniverseIds {
     public function setFactions(array $factions) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->factions = $mapper->mapArray($factions, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsFactions');
+        $this->factions = $mapper->mapArray($factions, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Factions');
     }
 
     /**
@@ -227,7 +227,7 @@ class UniverseIds {
     public function setInventoryTypes(array $inventoryTypes) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->inventoryTypes = $mapper->mapArray($inventoryTypes, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsInventoryTypes');
+        $this->inventoryTypes = $mapper->mapArray($inventoryTypes, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\InventoryTypes');
     }
 
     /**
@@ -247,7 +247,7 @@ class UniverseIds {
     public function setRegions(array $regions) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->regions = $mapper->mapArray($regions, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsRegions');
+        $this->regions = $mapper->mapArray($regions, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Regions');
     }
 
     /**
@@ -267,7 +267,7 @@ class UniverseIds {
     public function setStations(array $stations) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->stations = $mapper->mapArray($stations, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsStations');
+        $this->stations = $mapper->mapArray($stations, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Stations');
     }
 
     /**
@@ -287,6 +287,6 @@ class UniverseIds {
     public function setSystems(array $systems) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->systems = $mapper->mapArray($systems, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsSystems');
+        $this->systems = $mapper->mapArray($systems, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Systems');
     }
 }

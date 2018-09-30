@@ -17,56 +17,56 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe;
+namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeId;
 
-class UniverseIdsRegions {
+class DogmaEffect {
     /**
-     * id
+     * effectId
      *
      * @var int
      */
-    protected $id = null;
+    protected $effectId = null;
 
     /**
-     * name
+     * isDefault
      *
-     * @var string
+     * @var boolean
      */
-    protected $name = null;
+    protected $isDefault = null;
 
     /**
-     * getId
+     * getEffectId
      *
      * @return int
      */
-    public function getId() {
-        return $this->id;
+    public function getEffectId() {
+        return $this->effectId;
     }
 
     /**
-     * setId
+     * setEffectId
      *
-     * @param int $id
+     * @param int $effectId
      */
-    public function setId($id) {
-        $this->id = $id;
+    public function setEffectId($effectId) {
+        $this->effectId = $effectId;
     }
 
     /**
-     * getName
+     * getIsDefault
      *
-     * @return string
+     * @return boolean
      */
-    public function getName() {
-        return $this->name;
+    public function getIsDefault() {
+        return $this->isDefault;
     }
 
     /**
-     * setName
+     * setIsDefault
      *
-     * @param string $name
+     * @param boolean $isDefault
      */
-    public function setName($name) {
-        $this->name = $name;
+    public function setIsDefault($isDefault) {
+        $this->isDefault = $isDefault;
     }
 }

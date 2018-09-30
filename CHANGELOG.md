@@ -4,8 +4,9 @@
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.24.1...development)
 ### Changed
-- Namespaces to match WordPress's fodler structure (Plugin » Plugins)
-- implemented a reset to defaults method in Swagger class to make ESI call handling a bit easier to code
+- Namespaces to match WordPress's folder structure (Plugin » Plugins)
+- Implemented a reset to defaults method in Swagger class to make ESI calls a bit easier to handle
+- Esi client for better data handling
 
 ## [0.24.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.24.1) - 2018-09-26
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.24.0...v0.24.1)

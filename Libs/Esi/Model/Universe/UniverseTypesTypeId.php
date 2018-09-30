@@ -185,7 +185,7 @@ class UniverseTypesTypeId {
     public function setDogmaAttributes(array $dogmaAttributes) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->dogmaAttributes = $mapper->mapArray($dogmaAttributes, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeIdDogmaAttribute');
+        $this->dogmaAttributes = $mapper->mapArray($dogmaAttributes, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeId\DogmaAttribute');
     }
 
     /**
@@ -205,7 +205,7 @@ class UniverseTypesTypeId {
     public function setDogmaEffects(array $dogmaEffects) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->dogmaEffects = $mapper->mapArray($dogmaEffects, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeIdDogmaEffect');
+        $this->dogmaEffects = $mapper->mapArray($dogmaEffects, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeId\DogmaEffect');
     }
 
     /**

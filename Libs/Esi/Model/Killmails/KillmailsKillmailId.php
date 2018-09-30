@@ -58,7 +58,7 @@ class KillmailsKillmailId {
     /**
      * victim
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Victim
      */
     protected $victim = null;
 
@@ -86,7 +86,7 @@ class KillmailsKillmailId {
     public function setAttackers(array $attackers) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->attackers = $mapper->mapArray($attackers, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdAttacker');
+        $this->attackers = $mapper->mapArray($attackers, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Attacker');
     }
 
     /**
@@ -164,7 +164,7 @@ class KillmailsKillmailId {
     /**
      * getVictim
      *
-     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim
+     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Victim
      */
     public function getVictim() {
         return $this->victim;
@@ -173,9 +173,9 @@ class KillmailsKillmailId {
     /**
      * setVictim
      *
-     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim $victim
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Victim $victim
      */
-    public function setVictim(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim $victim) {
+    public function setVictim(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Victim $victim) {
         $this->victim = $victim;
     }
 
