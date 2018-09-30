@@ -19,7 +19,7 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails;
 
-class KillmailVictim {
+class KillmailsKillmailIdVictim {
     /**
      * allianceId
      *
@@ -65,7 +65,7 @@ class KillmailVictim {
     /**
      * position
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailPosition
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdPosition
      */
     protected $position = null;
 
@@ -183,13 +183,13 @@ class KillmailVictim {
     public function setItems(array $items) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->items = $mapper->mapArray($items, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailItem');
+        $this->items = $mapper->mapArray($items, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdItem');
     }
 
     /**
      * getPosition
      *
-     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailPosition
+     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdPosition
      */
     public function getPosition() {
         return $this->position;
@@ -198,9 +198,9 @@ class KillmailVictim {
     /**
      * setPosition
      *
-     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailPosition $position
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdPosition $position
      */
-    public function setPosition(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailPosition $position) {
+    public function setPosition(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdPosition $position) {
         $this->position = $position;
     }
 

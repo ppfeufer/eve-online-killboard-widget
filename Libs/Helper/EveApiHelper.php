@@ -180,17 +180,16 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * @return array
      */
     public function getShipDataByShipId($shipID) {
-        $shipData = $this->cacheHelper->getTransientCache('eve_killboard_widget_ship_data_' . $shipID);
+        $transientName = \sanitize_title('ESI :: universe/types/{type_id}/' . $shipID);
+        $shipData = $this->cacheHelper->getTransientCache($transientName);
 
         if($shipData === false || empty($shipData)) {
             $shipData = $this->esiUniverse->universeTypesTypeId($shipID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_ship_data_' . $shipID, $shipData, \strtotime('+12 years'));
+            $this->cacheHelper->setTransientCache($transientName, $shipData, \strtotime('+12 years'));
         }
 
-        return [
-            'data' => (\gettype($shipData) === 'string') ? \json_decode($shipData) : $shipData
-        ];
+        return $shipData;
     }
 
     /**
@@ -223,6 +222,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * @return string
      */
     public function getShipImageByShipId($shipTypeID, $imageOnly = true, $size = 128) {
+        /* @var $ship \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeId */
         $ship = $this->getShipDataByShipId($shipTypeID);
 
         $imagePath = $this->imageserverUrl . $this->imageserverEndpoints['ship'] . $shipTypeID . '_' . $size. '.png';
@@ -231,7 +231,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
             return $imagePath;
         }
 
-        $html = '<img src="' . $imagePath . '" class="eve-character-image eve-ship-id-' . $shipTypeID . '" alt="' . \esc_html($ship['data']->name) . '" data-title="' . \esc_html($ship['data']->name) . '" data-toggle="eve-killboard-tooltip">';
+        $html = '<img src="' . $imagePath . '" class="eve-character-image eve-ship-id-' . $shipTypeID . '" alt="' . \esc_html($ship->getName()) . '" data-title="' . \esc_html($ship->getName()) . '" data-toggle="eve-killboard-tooltip">';
 
         return $html;
     }
@@ -246,36 +246,33 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
     public function getEveIdByName($name, $type) {
         $returnData = null;
 
+        /* @var $esiData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds */
         $esiData = $this->esiUniverse->universeIds([(string) \esc_html($name)]);
-
-        /**
-         * make sure we have an object
-         */
-        if(\gettype($esiData) === 'string') {
-            $esiData = \json_decode($esiData);
-        }
 
         switch($type) {
             case 'alliance':
-                foreach($esiData->alliances as $alliance) {
-                    if($alliance->name === (string) \esc_html($name)) {
-                        $returnData = $alliance->id;
+                foreach($esiData->getAlliances() as $alliance) {
+                    /* @var $alliance \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsAlliances */
+                    if($alliance->getName() === (string) \esc_html($name)) {
+                        $returnData = $alliance->getId();
                     }
                 }
                 break;
 
             case 'corporation':
-                foreach($esiData->corporations as $corporation) {
-                    if($corporation->name === (string) \esc_html($name)) {
-                        $returnData = $corporation->id;
+                foreach($esiData->getCorporations() as $corporation) {
+                    /* @var $corporation \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsCorporations */
+                    if($corporation->getName() === (string) \esc_html($name)) {
+                        $returnData = $corporation->getId();
                     }
                 }
                 break;
 
             case 'character':
-                foreach($esiData->characters as $character) {
-                    if($character->name === (string) \esc_html($name)) {
-                        $returnData = $character->id;
+                foreach($esiData->getCharacters() as $character) {
+                    /* @var $character \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIdsCharacters */
+                    if($character->getName() === (string) \esc_html($name)) {
+                        $returnData = $character->getId();
                     }
                 }
                 break;

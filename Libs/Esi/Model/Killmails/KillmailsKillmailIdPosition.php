@@ -19,7 +19,7 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails;
 
-class KillmailPosition {
+class KillmailsKillmailIdPosition {
     /**
      * x coordinate
      *

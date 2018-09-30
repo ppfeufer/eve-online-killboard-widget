@@ -19,7 +19,7 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails;
 
-class KillmailsKillmailIdKillmailHash {
+class KillmailsKillmailId {
     /**
      * attackers
      *
@@ -58,7 +58,7 @@ class KillmailsKillmailIdKillmailHash {
     /**
      * victim
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim
+     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim
      */
     protected $victim = null;
 
@@ -86,7 +86,7 @@ class KillmailsKillmailIdKillmailHash {
     public function setAttackers(array $attackers) {
         $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
 
-        $this->attackers = $mapper->mapArray($attackers, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailAttacker');
+        $this->attackers = $mapper->mapArray($attackers, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdAttacker');
     }
 
     /**
@@ -164,7 +164,7 @@ class KillmailsKillmailIdKillmailHash {
     /**
      * getVictim
      *
-     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim
+     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim
      */
     public function getVictim() {
         return $this->victim;
@@ -173,9 +173,9 @@ class KillmailsKillmailIdKillmailHash {
     /**
      * setVictim
      *
-     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victim
+     * @param \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim $victim
      */
-    public function setVictim(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailVictim $victim) {
+    public function setVictim(\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdVictim $victim) {
         $this->victim = $victim;
     }
 
@@ -194,6 +194,6 @@ class KillmailsKillmailIdKillmailHash {
      * @param int $warId
      */
     public function setWarId($warId) {
-        $this->warId = $$warId;
+        $this->warId = $warId;
     }
 }

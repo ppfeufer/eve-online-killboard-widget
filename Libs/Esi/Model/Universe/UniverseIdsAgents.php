@@ -19,54 +19,54 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe;
 
-class TypesDogmaEffect {
+class UniverseIdsAgents {
     /**
-     * effectId
+     * id
      *
      * @var int
      */
-    protected $effectId = null;
+    protected $id = null;
 
     /**
-     * isDefault
+     * name
      *
-     * @var boolean
+     * @var string
      */
-    protected $isDefault = null;
+    protected $name = null;
 
     /**
-     * getEffectId
+     * getId
      *
      * @return int
      */
-    public function getEffectId() {
-        return $this->effectId;
+    public function getId() {
+        return $this->id;
     }
 
     /**
-     * setEffectId
+     * setId
      *
-     * @param int $effectId
+     * @param int $id
      */
-    public function setEffectId($effectId) {
-        $this->effectId = $effectId;
+    public function setId($id) {
+        $this->id = $id;
     }
 
     /**
-     * getIsDefault
+     * getName
      *
-     * @return boolean
+     * @return string
      */
-    public function getIsDefault() {
-        return $this->isDefault;
+    public function getName() {
+        return $this->name;
     }
 
     /**
-     * setIsDefault
+     * setName
      *
-     * @param boolean $isDefault
+     * @param string $name
      */
-    public function setIsDefault($isDefault) {
-        $this->isDefault = $isDefault;
+    public function setName($name) {
+        $this->name = $name;
     }
 }

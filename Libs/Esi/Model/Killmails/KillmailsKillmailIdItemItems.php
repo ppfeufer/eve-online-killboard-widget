@@ -19,7 +19,7 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails;
 
-class KillmailItem {
+class KillmailsKillmailIdItemItems {
     /**
      * flag
      *
@@ -35,13 +35,6 @@ class KillmailItem {
      * @var int
      */
     protected $itemTypeId = null;
-
-    /**
-     * items
-     *
-     * @var array
-     */
-    protected $items = null;
 
     /**
      * quantityDestroyed
@@ -97,26 +90,6 @@ class KillmailItem {
      */
     public function setItemTypeId($itemTypeId) {
         $this->itemTypeId = $itemTypeId;
-    }
-
-    /**
-     * getItems
-     *
-     * @return array
-     */
-    public function getItems() {
-        return $this->items;
-    }
-
-    /**
-     * setItems
-     *
-     * @param array $items
-     */
-    public function setItems(array $items) {
-        $mapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
-
-        $this->items = $mapper->mapArray($items, [], '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailItemItems');
     }
 
     /**

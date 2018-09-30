@@ -46,7 +46,7 @@ class KillmailsRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Li
 
         if(!\is_null($killmailData)) {
             $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
-            $returnData = $jsonMapper->map(\json_decode($killmailData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailIdKillmailHash);
+            $returnData = $jsonMapper->map(\json_decode($killmailData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId);
         }
 
         return $returnData;

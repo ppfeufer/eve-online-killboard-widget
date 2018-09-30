@@ -52,7 +52,12 @@ class UniverseRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Lib
 
         $typeData = $this->callEsi();
 
-        return $typeData;
+        if(!\is_null($typeData)) {
+            $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
+            $returnValue = $jsonMapper->map(\json_decode($typeData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeId);
+        }
+
+        return $returnValue;
     }
 
     /**
@@ -145,6 +150,11 @@ class UniverseRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Lib
 
         $nameData = $this->callEsi();
 
-        return $nameData;
+        if(!\is_null($nameData)) {
+            $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
+            $returnData = $jsonMapper->map(\json_decode($nameData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds);
+        }
+
+        return $returnData;
     }
 }
