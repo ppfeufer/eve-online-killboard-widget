@@ -335,9 +335,10 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
         $victimCorporationImage = null;
 
         if($victimData->getCorporationId()) {
+            /* @var $corpData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Corporation\CorporationsCorporationId */
             $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
             $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->getCorporationId() . '_' . $size. '.png';
-            $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->getCorporationId() . '" alt="' . \esc_html($corpData['data']->name) . '" data-title="' . \esc_html($corpData['data']->name) . '" data-toggle="eve-killboard-tooltip">';
+            $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->getCorporationId() . '" alt="' . \esc_html($corpData->getName()) . '" data-title="' . \esc_html($corpData->getName()) . '" data-toggle="eve-killboard-tooltip">';
         }
 
 
@@ -378,6 +379,7 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
         $victimAllianceImage = null;
 
         if(!\is_null($victimData->getAllianceId())) {
+            /* @var $allianceData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Alliance\AlliancesAllianceId */
             $allianceData = $this->eveApi->getAllianceDataByAllianceId($victimData->getAllianceId());
             $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->getAllianceId() . '_' . $size. '.png';
             $victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->getAllianceId() . '" alt="' . \esc_html($allianceData->getName()) . '" data-title="' . \esc_html($allianceData->getName()) . '" data-toggle="eve-killboard-tooltip">';
@@ -414,8 +416,9 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
 
         switch($victimType) {
             case 'Pilot':
+                /* @var $pilotData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId */
                 $pilotData = $this->eveApi->getCharacterDataByCharacterId($victimData->getCharacterId());
-                $victimName = $pilotData['data']->name;
+                $victimName = $pilotData->getName();
                 break;
 
             case 'Corp':
@@ -443,8 +446,9 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
         /* @var $attacker \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailAttacker */
         foreach($attackerData as $attacker) {
             if($attacker->getFinalBlow() === true) {
+                /* @var $finalBlowPilotData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId */
                 $finalBlowPilotData = $this->eveApi->getCharacterDataByCharacterId($attacker->getCharacterId());
-                $finalBlow = $finalBlowPilotData['data']->name;
+                $finalBlow = $finalBlowPilotData->getName();
             }
         }
 

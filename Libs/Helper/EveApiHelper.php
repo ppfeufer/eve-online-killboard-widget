@@ -135,31 +135,29 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
     }
 
     public function getCharacterDataByCharacterId($characterID) {
-        $characterData = $this->cacheHelper->getTransientCache('eve_killboard_widget_character_data_' . $characterID);
+        $transientName = \sanitize_title('ESI :: characters/{character_id}/' . $characterID);
+        $characterData = $this->cacheHelper->getTransientCache($transientName);
 
         if($characterData === false || empty($characterData)) {
             $characterData = $this->esiCharacter->charactersCharacterId($characterID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_character_data_' . $characterID, $characterData, \strtotime('+12 hours'));
+            $this->cacheHelper->setTransientCache($transientName, $characterData, \strtotime('+12 hours'));
         }
 
-        return [
-            'data' => (\gettype($characterData) === 'string') ? \json_decode($characterData) : $characterData
-        ];
+        return $characterData;
     }
 
     public function getCorporationDataByCorporationId($corporationID) {
-        $corporationData = $this->cacheHelper->getTransientCache('eve_killboard_widget_corporation_data_' . $corporationID);
+        $transientName = \sanitize_title('ESI :: corporations/{corporation_id}/' . $corporationID);
+        $corporationData = $this->cacheHelper->getTransientCache($transientName);
 
         if($corporationData === false || empty($corporationData)) {
             $corporationData = $this->esiCorporation->corporationsCorporationId($corporationID);
 
-            $this->cacheHelper->setTransientCache('eve_killboard_widget_corporation_data_' . $corporationID, $corporationData, \strtotime('+12 hours'));
+            $this->cacheHelper->setTransientCache($transientName, $corporationData, \strtotime('+12 hours'));
         }
 
-        return [
-            'data' => (\gettype($corporationData) === 'string') ? \json_decode($corporationData) : $corporationData
-        ];
+        return $corporationData;
     }
 
     public function getAllianceDataByAllianceId($allianceID) {

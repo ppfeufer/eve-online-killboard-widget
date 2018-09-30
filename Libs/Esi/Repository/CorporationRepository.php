@@ -38,6 +38,8 @@ class CorporationRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\
      * @return object
      */
     public function corporationsCorporationId($corporationID) {
+        $returnValue = null;
+
         $this->setEsiMethod('get');
         $this->setEsiRoute($this->esiEndpoints['corporations_corporationId']);
         $this->setEsiRouteParameter([
@@ -47,6 +49,11 @@ class CorporationRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\
 
         $corporationData = $this->callEsi();
 
-        return $corporationData;
+        if(!\is_null($corporationData)) {
+            $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
+            $returnValue = $jsonMapper->map(\json_decode($corporationData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Corporation\CorporationsCorporationId);
+        }
+
+        return $returnValue;
     }
 }

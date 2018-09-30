@@ -41,7 +41,7 @@ class AllianceRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Lib
      * @return object
      */
     public function alliancesAllianceId($allianceID) {
-        $returnData = null;
+        $returnValue = null;
 
         $this->setEsiMethod('get');
         $this->setEsiRoute($this->esiEndpoints['alliances_allianceId']);
@@ -54,9 +54,9 @@ class AllianceRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Lib
 
         if(!\is_null($allianceData)) {
             $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
-            $returnData = $jsonMapper->map(\json_decode($allianceData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Alliance\AlliancesAllianceId);
+            $returnValue = $jsonMapper->map(\json_decode($allianceData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Alliance\AlliancesAllianceId);
         }
 
-        return $returnData;
+        return $returnValue;
     }
 }

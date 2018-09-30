@@ -170,7 +170,7 @@ class CharactersCharacterId {
      * @param string $description
      */
     public function setDescription($description) {
-        $this->description = $description;
+        $this->description = \strip_tags($description);
     }
 
     /**
@@ -189,6 +189,24 @@ class CharactersCharacterId {
      */
     public function setGender($gender) {
         $this->gender = $gender;
+    }
+
+    /**
+     * getName
+     *
+     * @return string
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * setName
+     *
+     * @param string $name
+     */
+    public function setName($name) {
+        $this->name = $name;
     }
 
     /**

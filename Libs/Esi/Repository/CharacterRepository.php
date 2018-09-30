@@ -28,9 +28,7 @@ class CharacterRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Li
      * @var array ESI enpoints
      */
     protected $esiEndpoints = [
-        'characters_characterId' => 'characters/{character_id}/?datasource=tranquility',
-        'characters_characterId_portrait' => 'characters/{character_id}/portrait/?datasource=tranquility',
-        'characters_affiliation' => 'characters/affiliation/?datasource=tranquility'
+        'characters_characterId' => 'characters/{character_id}/?datasource=tranquility'
     ];
 
     /**
@@ -40,6 +38,8 @@ class CharacterRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Li
      * @return object
      */
     public function charactersCharacterId($characterID) {
+        $returnValue = null;
+
         $this->setEsiMethod('get');
         $this->setEsiRoute($this->esiEndpoints['characters_characterId']);
         $this->setEsiRouteParameter([
@@ -49,6 +49,11 @@ class CharacterRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Li
 
         $characterData = $this->callEsi();
 
-        return $characterData;
+        if(!\is_null($characterData)) {
+            $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
+            $returnValue = $jsonMapper->map(\json_decode($characterData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId);
+        }
+
+        return $returnValue;
     }
 }

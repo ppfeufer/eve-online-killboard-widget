@@ -197,7 +197,7 @@ class CorporationsCorporationId {
      * @param string $description
      */
     public function setDescription($description) {
-        $this->desctiption = $description;
+        $this->desctiption = \strip_tags($description);
     }
 
     /**
