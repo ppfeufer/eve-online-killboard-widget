@@ -28,18 +28,19 @@ class CharacterRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Li
      * @var array ESI enpoints
      */
     protected $esiEndpoints = [
-        'characters_characterId' => 'characters/{character_id}/?datasource=tranquility'
+        'characters_characterId' => 'characters/{character_id}/?datasource=tranquility',
+        'characters_characterId_corporationhistory' => 'characters/{character_id}/corporationhistory/?datasource=tranquility',
+        'characters_characterId_portrait' => 'characters/{character_id}/portrait/?datasource=tranquility',
+        'characters_affiliation' => 'characters/affiliation/?datasource=tranquility'
     ];
 
     /**
-     * Find character data by charater ID
+     * Public information about a character
      *
-     * @param int $characterID
-     * @return object
+     * @param int $characterID An EVE character ID
+     * @return \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId
      */
     public function charactersCharacterId($characterID) {
-        $returnValue = null;
-
         $this->setEsiMethod('get');
         $this->setEsiRoute($this->esiEndpoints['characters_characterId']);
         $this->setEsiRouteParameter([
@@ -47,13 +48,21 @@ class CharacterRepository extends \WordPress\Plugins\EveOnlineKillboardWidget\Li
         ]);
         $this->setEsiVersion('v4');
 
-        $characterData = $this->callEsi();
+        return $this->map($this->callEsi(), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId);
+    }
 
-        if(!\is_null($characterData)) {
-            $jsonMapper = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Mapper\JsonMapper;
-            $returnValue = $jsonMapper->map(\json_decode($characterData), new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId);
-        }
+    /**
+     * Bulk lookup of character IDs to corporation, alliance and faction
+     *
+     * @param array $characterIds The character IDs to fetch affiliations for. All characters must exist, or none will be returned
+     * @return array
+     */
+    public function charactersAffiliation($characterIds = []) {
+        $this->setEsiMethod('post');
+        $this->setEsiPostParameter($characterIds);
+        $this->setEsiRoute($this->esiEndpoints['characters_affiliation']);
+        $this->setEsiVersion('v1');
 
-        return $returnValue;
+        return $this->mapArray($this->callEsi(), '\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersAffiliation');
     }
 }

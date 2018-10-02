@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.0...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.1...development)
 - in development
+
+## [0.25.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.25.1) - 2018-10-02
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.0...v0.25.1)
+### Fixed
+- An error when final blow is a structure like a Citadel or similar, which prevented the widget from loading correctly
 
 ## [0.25.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.25.0) - 2018-09-30
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.24.1...v0.25.0)
