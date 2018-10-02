@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.1...development)
-- in development
+### Fixed
+- register_widget Aufruf made compatible for PHP 7.2 (create_function() is deprecated)
 
 ## [0.25.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.25.1) - 2018-10-02
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.0...v0.25.1)

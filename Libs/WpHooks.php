@@ -74,6 +74,8 @@ class WpHooks {
          * thx wordpress for removing update hooks ...
          */
         \add_action('plugins_loaded', [$this, 'checkDatabaseForUpdates']);
+
+        \add_action('widgets_init', [$this, 'registerWidget']);
     }
 
     /**
@@ -109,5 +111,9 @@ class WpHooks {
      */
     public function checkDatabaseForUpdates() {
         Helper\DatabaseHelper::getInstance()->checkDatabase($this->newDatabaseVersion);
+    }
+
+    public function registerWidget() {
+        \register_widget("\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\KillboardWidget");
     }
 }

@@ -83,9 +83,6 @@ class EveOnlineKillboardWidget {
 
         new Libs\AjaxApi;
 
-        // Initialize the widget
-        \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugins\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
-
         /**
          * start backend only libs
          */
