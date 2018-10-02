@@ -19,7 +19,7 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds;
 
-class InventoryTypes {
+class InventoryType {
     /**
      * id
      *
