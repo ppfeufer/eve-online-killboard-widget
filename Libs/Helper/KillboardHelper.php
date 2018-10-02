@@ -229,7 +229,6 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
                         . '    </div>'
                         . '</div>';
         }
-
         return $widgetHtml;
     }
 
@@ -448,9 +447,19 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
         /* @var $attacker \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Killmails\KillmailsKillmailId\Attacker */
         foreach($attackerData as $attacker) {
             if($attacker->getFinalBlow() === true) {
-                /* @var $finalBlowPilotData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId */
-                $finalBlowPilotData = $this->eveApi->getCharacterDataByCharacterId($attacker->getCharacterId());
-                $finalBlow = $finalBlowPilotData->getName();
+                // is it a pilot
+                if(!\is_null($attacker->getCharacterId())) {
+                    /* @var $finalBlowPilotData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Character\CharactersCharacterId */
+                    $finalBlowPilotData = $this->eveApi->getCharacterDataByCharacterId($attacker->getCharacterId());
+                    $finalBlow = $finalBlowPilotData->getName();
+                }
+
+                // or maybe a structure?
+                if(\is_null($finalBlow) && !\is_null($attacker->getShipTypeId())) {
+                    /* @var $finalBlowItemData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeId */
+                    $finalBlowItemData = $this->eveApi->getShipDataByShipId($attacker->getShipTypeId());
+                    $finalBlow = $finalBlowItemData->getName();
+                }
             }
         }
 
