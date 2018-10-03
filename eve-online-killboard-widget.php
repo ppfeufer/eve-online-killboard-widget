@@ -59,7 +59,7 @@ class EveOnlineKillboardWidget {
         $this->textDomain = 'eve-online-killboard-widget';
         $this->pluginDir = \plugin_dir_path(__FILE__);
         $this->localizationDirectory = $this->pluginDir . '/l10n/';
-        $this->databaseVersion = '20180914';
+        $this->databaseVersion = '20181003';
 
         $this->loadTextDomain();
     }
