@@ -108,13 +108,13 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
             }
         }
 
-        $widgetSettingsTransientName = \sanitize_title('Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/' . \md5(\json_encode($widgetSettings)) . '/lastkills_kills-only/zkb_only');
+        $widgetSettingsCacheKey = \sanitize_title('Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/' . \md5(\json_encode($widgetSettings)) . '/lastkills_kills-only/');
 
         if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-            $widgetSettingsTransientName = \sanitize_title('Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/' . \md5(\json_encode($widgetSettings)) . '/lastkills/zkb_only');
+            $widgetSettingsCacheKey = \sanitize_title('Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/' . \md5(\json_encode($widgetSettings)) . '/lastkills/');
         }
 
-        $data = $this->cacheHelper->getKillboardCache($widgetSettingsTransientName);
+        $data = $this->cacheHelper->getKillboardCache($widgetSettingsCacheKey);
 
         if($data === false || empty($data)) {
             $data = $this->getZkillboardData($widgetSettings);
@@ -122,7 +122,7 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
             /**
              * setting the transient caches
              */
-            $this->cacheHelper->setKillboardCache($widgetSettingsTransientName, $data, \strtotime('+5 Minutes'));
+            $this->cacheHelper->setKillboardCache($widgetSettingsCacheKey, $data, \strtotime('+5 Minutes'));
         }
 
         return $data;
@@ -141,10 +141,10 @@ class KillboardHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\S
 
         $this->remoteHelper->setUserAgent('Killboard Widget for WordPress » https://github.com/ppfeufer/eve-online-killboard-widget // WordPress/' . $wp_version . '; ' . home_url());
 
-        $zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/zkbOnly/';
+        $zkbUrl = $this->zkbApiLink . 'kills/' . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID. '/npc/0/';
 
         if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-            $zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/zkbOnly/';
+            $zkbUrl = $this->zkbApiLink . $widgetSettings['eve-online-killboard-widget-entity-type'] . 'ID/' . $this->entityID . '/npc/0/';
         }
 
         $zkbData = $this->remoteHelper->getRemoteData($zkbUrl);
