@@ -190,8 +190,8 @@ class CacheHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singl
      * @param string $route
      * @return mixed
      */
-    public function getTransientCache($route) {
-        $data = $this->databaseHelper->getDatabaseCache($route);
+    public function getKillboardCache($route) {
+        $data = $this->databaseHelper->getCachedKillboardDataFromDb($route);
 
         return $data;
     }
@@ -205,11 +205,19 @@ class CacheHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singl
      * @param boolean $returnData
      * @return mixed
      */
-    public function setTransientCache($route, $value, $validUntil, $returnData = false) {
-        $returnValue = $this->databaseHelper->setDatabaseCache($route, $value, $validUntil, $returnData);
+    public function setKillboardCache($route, $value, $validUntil, $returnData = false) {
+        $returnValue = $this->databaseHelper->writeKillboardCacheDataToDb($route, $value, $validUntil, $returnData);
 
         if($returnData === true) {
             return $returnValue;
         }
+    }
+
+    public function getEsiCache($esiRoute) {
+        return $this->databaseHelper->getCachedEsiDataFromDb($esiRoute);
+    }
+
+    public function setEsiCache(array $data) {
+        return $this->databaseHelper->writeEsiCacheDataToDb($data);
     }
 }

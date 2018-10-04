@@ -80,6 +80,16 @@ class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Si
                 $this->updateDatabase($newVersion);
             }
         }
+
+        /**
+         * Truncate the cache table after this version.
+         *
+         * We switched to a common ESI client with its own namespaces,
+         * so we cannot use the older cached entries any longer.
+         */
+        if($currentVersion < 20181004) {
+            $this->truncateKillboardCacheTable();
+        }
     }
 
     /**
@@ -89,11 +99,19 @@ class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Si
      */
     public function updateDatabase($newVersion) {
         $this->createKillboardCacheTable();
+        $this->createEsiCacheTable();
 
         /**
          * Update database version
          */
         \update_option($this->getDatabaseFieldName(), $newVersion);
+    }
+
+    private function truncateKillboardCacheTable() {
+        $table = $this->wpdb->base_prefix . 'killboardWidgetCache';
+        $sql = "TRUNCATE TABLE $table;";
+
+        $this->wpdb->query($sql);
     }
 
     /**
@@ -115,7 +133,23 @@ class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Si
         \dbDelta($sql);
     }
 
-    public function getDatabaseCache($route) {
+    private function createEsiCacheTable() {
+        $charsetCollate = $this->wpdb->get_charset_collate();
+        $tableName = $this->wpdb->base_prefix . 'eveOnlineEsiCache';
+
+        $sql = "CREATE TABLE $tableName (
+            esi_route varchar(255),
+            value text,
+            valid_until varchar(255),
+            PRIMARY KEY esi_route (esi_route)
+        ) $charsetCollate;";
+
+        require_once(\ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        \dbDelta($sql);
+    }
+
+    public function getCachedKillboardDataFromDb($route) {
         $returnValue = null;
 
         $cacheResult = $this->wpdb->get_results($this->wpdb->prepare(
@@ -141,7 +175,7 @@ class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Si
      * @param boolean $returnData
      * @return object
      */
-    public function setDatabaseCache($route, $value, $validUntil, $returnData = false) {
+    public function writeKillboardCacheDataToDb($route, $value, $validUntil, $returnData = false) {
         $this->wpdb->query($this->wpdb->prepare(
             'REPLACE INTO ' . $this->wpdb->base_prefix . 'killboardWidgetCache' . ' (api_route, value, valid_until) VALUES (%s, %s, %s)', [
                 $route,
@@ -151,7 +185,41 @@ class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Si
         ));
 
         if($returnData === true) {
-            return $this->getDatabaseCache($route);
+            return $this->getCachedKillboardDataFromDb($route);
         }
+    }
+
+    /**
+     * Getting cached ESI data from DB
+     *
+     * @param string $route
+     * @return Esi Object
+     */
+    public function getCachedEsiDataFromDb($route) {
+        $returnValue = null;
+
+        $cacheResult = $this->wpdb->get_results($this->wpdb->prepare(
+            'SELECT * FROM ' . $this->wpdb->base_prefix . 'eveOnlineEsiCache' . ' WHERE esi_route = %s AND valid_until > %s', [
+                $route,
+                \time()
+            ]
+        ));
+
+        if($cacheResult) {
+            $returnValue = \maybe_unserialize($cacheResult['0']->value);
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Write ESI cache data into the DB
+     *
+     * @param array $data ([esi_route, value, valid_until])
+     */
+    public function writeEsiCacheDataToDb(array $data) {
+        $this->wpdb->query($this->wpdb->prepare(
+            'REPLACE INTO ' . $this->wpdb->base_prefix . 'eveOnlineEsiCache' . ' (esi_route, value, valid_until) VALUES (%s, %s, %s)', $data
+        ));
     }
 }
