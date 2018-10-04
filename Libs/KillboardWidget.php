@@ -23,9 +23,13 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\EveApiHelper;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper;
+use \WP_Widget;
+
 \defined('ABSPATH') or die();
 
-class KillboardWidget extends \WP_Widget {
+class KillboardWidget extends WP_Widget {
     /**
      * Root ID for all widgets of this type.
      *
@@ -55,7 +59,7 @@ class KillboardWidget extends \WP_Widget {
     protected $eveApiHelper = null;
 
     public function __construct() {
-        $this->eveApiHelper = Helper\EveApiHelper::getInstance();
+        $this->eveApiHelper = EveApiHelper::getInstance();
 
         $widgetOptions = [
             'classname' => 'eve-online-killboard-widget',
@@ -207,14 +211,14 @@ class KillboardWidget extends \WP_Widget {
                 $widgetHtml = '<div class="killboard-widget-kill-list">';
 
                 for($countI = 1; $countI <= $instance['eve-online-killboard-widget-number-of-kills']; $countI++) {
-                    $widgetHtml .= \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getDummyHtml();
+                    $widgetHtml .= KillboardHelper::getInstance()->getDummyHtml();
                 }
 
                 $widgetHtml .= '<p style="text-align: center;">' . \__('Loading killboard data, please wait ...', 'eve-online-killboard-widget') . '</p>';
                 $widgetHtml .= '<p><span class="loaderImage"></span></p>';
                 $widgetHtml .= '</div>';
 
-                $jsOptions = json_encode([
+                $jsOptions = \json_encode([
                     'entityType' => $instance['eve-online-killboard-widget-entity-type'],
                     'entityName' => $instance['eve-online-killboard-widget-entity-name'],
                     'entityId' => $instance['eve-online-killboard-widget-entity-id'],
@@ -243,10 +247,10 @@ class KillboardWidget extends \WP_Widget {
      */
     private function getWidgetData(array $instance) {
         $widgetHtml = null;
-        $killList = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getKillList($instance);
+        $killList = KillboardHelper::getInstance()->getKillList($instance);
 
         if(!empty($killList) && \is_array($killList)) {
-            $widgetHtml = \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\KillboardHelper::getInstance()->getWidgetHtml($killList);
+            $widgetHtml = KillboardHelper::getInstance()->getWidgetHtml($killList);
         }
 
         return $widgetHtml;

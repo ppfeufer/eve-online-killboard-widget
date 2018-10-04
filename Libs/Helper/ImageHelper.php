@@ -19,9 +19,11 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
+
 \defined('ABSPATH') or die();
 
-class ImageHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class ImageHelper extends AbstractSingleton {
     /**
      * Getting the cached URL for a remote image
      *

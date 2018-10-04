@@ -19,9 +19,11 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
+
 \defined('ABSPATH') or die();
 
-class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class DatabaseHelper extends AbstractSingleton {
     /**
      * Option field name for database version
      *

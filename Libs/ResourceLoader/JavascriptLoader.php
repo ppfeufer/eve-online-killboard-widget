@@ -19,12 +19,15 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\ResourceLoader;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Interfaces\AssetsInterface;
+
 \defined('ABSPATH') or die();
 
 /**
  * JavaScript Loader
  */
-class JavascriptLoader implements \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Interfaces\AssetsInterface {
+class JavascriptLoader implements AssetsInterface {
     /**
      * Initialize the loader
      */
@@ -40,9 +43,9 @@ class JavascriptLoader implements \WordPress\Plugins\EveOnlineKillboardWidget\Li
          * Only in Frontend
          */
         if(!\is_admin()) {
-            \wp_enqueue_script('bootstrap-js', \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/js/bootstrap.min.js'), ['jquery'], '', true);
-            \wp_enqueue_script('bootstrap-toolkit-js', \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/bootstrap-toolkit/bootstrap-toolkit.min.js'), ['jquery', 'bootstrap-js'], '', true);
-            \wp_enqueue_script('eve-online-killboard-widget-js', \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('js/eve-online-killboard-widget.min.js'), ['jquery'], '', true);
+            \wp_enqueue_script('bootstrap-js', PluginHelper::getInstance()->getPluginUri('bootstrap/js/bootstrap.min.js'), ['jquery'], '', true);
+            \wp_enqueue_script('bootstrap-toolkit-js', PluginHelper::getInstance()->getPluginUri('bootstrap/bootstrap-toolkit/bootstrap-toolkit.min.js'), ['jquery', 'bootstrap-js'], '', true);
+            \wp_enqueue_script('eve-online-killboard-widget-js', PluginHelper::getInstance()->getPluginUri('js/eve-online-killboard-widget.min.js'), ['jquery'], '', true);
             \wp_localize_script('eve-online-killboard-widget-js', 'killboardWidgetL10n', $this->getJavaScriptTranslations());
         }
     }
@@ -56,7 +59,7 @@ class JavascriptLoader implements \WordPress\Plugins\EveOnlineKillboardWidget\Li
         return [
             'ajax' => [
                 'url' => \admin_url('admin-ajax.php'),
-                'loaderImage' => \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('images/loader-sprite.gif')
+                'loaderImage' => PluginHelper::getInstance()->getPluginUri('images/loader-sprite.gif')
             ]
         ];
     }

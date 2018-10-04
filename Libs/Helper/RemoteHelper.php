@@ -19,9 +19,11 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
+
 \defined('ABSPATH') or die();
 
-class RemoteHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class RemoteHelper extends AbstractSingleton {
     protected $userAgent = null;
 
     /**

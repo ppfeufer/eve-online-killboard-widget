@@ -19,9 +19,11 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
+
 \defined('ABSPATH') or die();
 
-class PluginHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class PluginHelper extends AbstractSingleton {
     /**
      * Getting the Plugin Path
      *

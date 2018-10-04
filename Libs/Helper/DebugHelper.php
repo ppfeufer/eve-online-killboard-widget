@@ -28,6 +28,5 @@ namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 class DebugHelper {
     public static function debug($debug) {
         echo '<pre>' . \print_r($debug, true) . '</pre>';
-//        echo '<pre>' . \var_dump($debug) . '</pre>';
     }
 }
