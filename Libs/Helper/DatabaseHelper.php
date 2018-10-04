@@ -87,7 +87,7 @@ class DatabaseHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Si
          * We switched to a common ESI client with its own namespaces,
          * so we cannot use the older cached entries any longer.
          */
-        if($currentVersion < 20181003) {
+        if($currentVersion < 20181004) {
             $this->truncateKillboardCacheTable();
         }
     }
