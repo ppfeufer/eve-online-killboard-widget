@@ -19,21 +19,28 @@
 
 namespace WordPress\EsiClient\Model\Universe;
 
-if(!\class_exists('\WordPress\EsiClient\Model\Universe\UniverseAsteroidBeltsAsteroidBeltId')) {
-    class UniverseAsteroidBeltsAsteroidBeltId {
+if(!\class_exists('\WordPress\EsiClient\Model\Universe\UniverseSystemKills')) {
+    class UniverseSystemKills {
         /**
-         * name
+         * npcKills
          *
-         * @var string
+         * @var int
          */
-        protected $name = null;
+        protected $npcKills = null;
 
         /**
-         * position
+         * podKills
          *
-         * @var \WordPress\EsiClient\Model\Universe\UniverseAsteroidBeltsAsteroidBeltId\Position
+         * @var int
          */
-        protected $position = null;
+        protected $podKills = null;
+
+        /**
+         * shipKills
+         *
+         * @var int
+         */
+        protected $shipKills = null;
 
         /**
          * systemId
@@ -43,39 +50,57 @@ if(!\class_exists('\WordPress\EsiClient\Model\Universe\UniverseAsteroidBeltsAste
         protected $systemId = null;
 
         /**
-         * getName
+         * getNpcKills
          *
-         * @return string
+         * @return int
          */
-        public function getName() {
-            return $this->name;
+        public function getNpcKills() {
+            return $this->npcKills;
         }
 
         /**
-         * setName
+         * setNpcKills
          *
-         * @param string $name
+         * @param int $npcKills
          */
-        public function setName(string $name) {
-            $this->name = $name;
+        public function setNpcKills(int $npcKills) {
+            $this->npcKills = $npcKills;
         }
 
         /**
-         * getPosition
+         * getPodKills
          *
-         * @return \WordPress\EsiClient\Model\Universe\UniverseAsteroidBeltsAsteroidBeltId\Position
+         * @return int
          */
-        public function getPosition() {
-            return $this->position;
+        public function getPodKills() {
+            return $this->podKills;
         }
 
         /**
-         * setPosition
+         * setPodKills
          *
-         * @param \WordPress\EsiClient\Model\Universe\UniverseAsteroidBeltsAsteroidBeltId\Position $position
+         * @param int $podKills
          */
-        public function setPosition(\WordPress\EsiClient\Model\Universe\UniverseAsteroidBeltsAsteroidBeltId\Position $position) {
-            $this->position = $position;
+        public function setPodKills(int $podKills) {
+            $this->podKills = $podKills;
+        }
+
+        /**
+         * getShipKills
+         *
+         * @return int
+         */
+        public function getShipKills() {
+            return $this->shipKills;
+        }
+
+        /**
+         * setShipKills
+         *
+         * @param int $shipKills
+         */
+        public function setShipKills(int $shipKills) {
+            $this->shipKills = $shipKills;
         }
 
         /**

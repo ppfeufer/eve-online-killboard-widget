@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2018 ppfeufer
+ * Copyright (C) 2018 p.pfeufer
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,58 +17,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace WordPress\EsiClient\Model\Universe\UniverseIds;
+namespace WordPress\EsiClient\Model\Universe;
 
-if(!\class_exists('\WordPress\EsiClient\Model\Universe\UniverseIds\Regions')) {
-    class Regions {
+if(!\class_exists('\WordPress\EsiClient\Model\Universe\UniverseSystemJumps')) {
+    class UniverseSystemJumps {
         /**
-         * id
+         * shipJumps
          *
          * @var int
          */
-        protected $id = null;
+        protected $shipJumps = null;
 
         /**
-         * name
+         * systemId
          *
-         * @var string
+         * @var int
          */
-        protected $name = null;
+        protected $systemId = null;
 
         /**
-         * getId
+         * getShipJumps
          *
          * @return int
          */
-        public function getId() {
-            return $this->id;
+        public function getShipJumps() {
+            return $this->shipJumps;
         }
 
         /**
-         * setId
+         * setShipJumps
          *
-         * @param int $id
+         * @param int $shipJumps
          */
-        public function setId(int $id) {
-            $this->id = $id;
+        public function setShipJumps(int $shipJumps) {
+            $this->shipJumps = $shipJumps;
         }
 
         /**
-         * getName
+         * getSystemId
          *
-         * @return string
+         * @return int
          */
-        public function getName() {
-            return $this->name;
+        public function getSystemId() {
+            return $this->systemId;
         }
 
         /**
-         * setName
+         * setSystemId
          *
-         * @param string $name
+         * @param int $systemId
          */
-        public function setName(string $name) {
-            $this->name = $name;
+        public function setSystemId(int $systemId) {
+            $this->systemId = $systemId;
         }
     }
 }
