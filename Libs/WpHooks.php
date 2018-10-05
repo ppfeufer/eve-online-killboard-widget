@@ -19,7 +19,7 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs;
 
-use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\DatabaseHelper;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\UpdateHelper;
 use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper;
 
 \defined('ABSPATH') or die();
@@ -33,20 +33,12 @@ class WpHooks {
     private $pluginFile = null;
 
     /**
-     * New database version
-     *
-     * @var string
-     */
-    private $newDatabaseVersion = null;
-
-    /**
      * Constructor
      *
      * @param array $parameter array with parameters
      */
-    public function __construct(array $parameter) {
+    public function __construct() {
         $this->pluginFile = PluginHelper::getInstance()->getPluginPath('eve-online-killboard-widget.php');
-        $this->newDatabaseVersion = (isset($parameter['newDatabaseVersion'])) ? $parameter['newDatabaseVersion'] : null;
 
         $this->init();
     }
@@ -64,7 +56,8 @@ class WpHooks {
      * Initialize our hooks
      */
     public function initHooks() {
-        \register_activation_hook($this->pluginFile, [$this, 'checkDatabaseForUpdates']);
+        \register_activation_hook($this->pluginFile, [UpdateHelper::getInstance(), 'checkDatabaseForUpdates']);
+        \register_activation_hook($this->pluginFile, [UpdateHelper::getInstance(), 'checkEsiClientForUpdates']);
     }
 
     /**
@@ -76,7 +69,8 @@ class WpHooks {
          * since the activation doesn't fire on update
          * thx wordpress for removing update hooks ...
          */
-        \add_action('plugins_loaded', [$this, 'checkDatabaseForUpdates']);
+        \add_action('plugins_loaded', [UpdateHelper::getInstance(), 'checkDatabaseForUpdates']);
+        \add_action('plugins_loaded', [UpdateHelper::getInstance(), 'checkEsiClientForUpdates']);
 
         \add_action('widgets_init', [$this, 'registerWidget']);
     }
@@ -106,14 +100,6 @@ class WpHooks {
         }
 
         return $links;
-    }
-
-    /**
-     * Hook: checkDatabaseForUpdates
-     * Fired on: register_activation_hook
-     */
-    public function checkDatabaseForUpdates() {
-        DatabaseHelper::getInstance()->checkDatabase($this->newDatabaseVersion);
     }
 
     public function registerWidget() {

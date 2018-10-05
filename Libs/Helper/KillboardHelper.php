@@ -113,7 +113,11 @@ class KillboardHelper extends AbstractSingleton {
             if($this->entityID === false || empty($this->entityID)) {
                 $this->entityID = $this->eveApi->getEveIdByName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
 
-                $this->cacheHelper->setKillboardCache($entityIdTransientName, $this->entityID, \strtotime('+12 years'));
+                $this->cacheHelper->setKillboardCache([
+                    $entityIdTransientName,
+                    \maybe_serialize($this->entityID),
+                    \strtotime('+10 years')
+                ]);
             }
         }
 
@@ -131,7 +135,11 @@ class KillboardHelper extends AbstractSingleton {
             /**
              * setting the transient caches
              */
-            $this->cacheHelper->setKillboardCache($widgetSettingsCacheKey, $data, \strtotime('+5 Minutes'));
+            $this->cacheHelper->setKillboardCache([
+                $widgetSettingsCacheKey,
+                \maybe_serialize($data),
+                \strtotime('+5 Minutes')
+            ]);
         }
 
         return $data;
@@ -143,7 +151,7 @@ class KillboardHelper extends AbstractSingleton {
      * @param array $widgetSettings
      * @return array
      */
-    public function getZkillboardData($widgetSettings) {
+    public function getZkillboardData(array $widgetSettings) {
         global $wp_version;
 
         $returnValue = null;
@@ -287,10 +295,10 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * Getting the dummy image
      *
-     * @param boolean $linkOnly
+     * @param bool $linkOnly
      * @return string
      */
-    public function getDummyImage($linkOnly = false) {
+    public function getDummyImage(bool $linkOnly = false) {
         $dummyImage = PluginHelper::getInstance()->getPluginUri('images/dummy.jpg');
         $returnValue = $dummyImage;
 
@@ -307,7 +315,7 @@ class KillboardHelper extends AbstractSingleton {
      * @param int $killID
      * @return string
      */
-    public function getKillboardLink($killID) {
+    public function getKillboardLink(int $killID) {
         return $this->zkbLink . 'kill/' . $killID . '/';
     }
 
@@ -498,7 +506,7 @@ class KillboardHelper extends AbstractSingleton {
      * @param type $systemID
      * @return string
      */
-    public function getSystemInformation($systemID) {
+    public function getSystemInformation(int $systemID) {
         /* @var $system UniverseSystemsSystemId */
         $system = $this->eveApi->getSystemDataBySystemId($systemID);
 

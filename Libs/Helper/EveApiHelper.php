@@ -201,7 +201,7 @@ class EveApiHelper extends AbstractSingleton {
      * Getting all the needed ship information from the ESI
      *
      * @param int $shipID
-     * @return array
+     * @return UniverseTypesTypeId
      */
     public function getShipDataByShipId($shipID) {
         $cacheKey = 'universe/types/' . $shipID;
@@ -224,7 +224,7 @@ class EveApiHelper extends AbstractSingleton {
      * Getting all the needed system information from the ESI
      *
      * @param int $systemID
-     * @return array
+     * @return \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId
      */
     public function getSystemDataBySystemId($systemID) {
         $cacheKey = 'universe/systems/' . $systemID;
@@ -268,13 +268,13 @@ class EveApiHelper extends AbstractSingleton {
     }
 
     /**
-     * Get the EVE ID by it's name
+     * Get the EVE ID by its name
      *
-     * @param type $name
-     * @param type $type
-     * @return type
+     * @param string $name
+     * @param string $type
+     * @return object
      */
-    public function getEveIdByName($name, $type) {
+    public function getEveIdByName(string $name, string $type) {
         $returnData = null;
 
         /* @var $esiData UniverseIds */
@@ -318,9 +318,9 @@ class EveApiHelper extends AbstractSingleton {
      * @param int $killmailID
      * @param string $killmailHash
      * @param boolean $cache
-     * @return json
+     * @return \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId
      */
-    public function getPublicKillmail($killmailID, $killmailHash) {
+    public function getPublicKillmail(int $killmailID, string $killmailHash) {
         $killmailData = $this->esiKillmails->killmailsKillmailIdKillmailHash($killmailID, $killmailHash);
 
         return $killmailData;

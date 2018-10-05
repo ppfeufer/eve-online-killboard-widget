@@ -49,13 +49,6 @@ class EveOnlineKillboardWidget {
     private $pluginDir = null;
 
     /**
-     * Database version
-     *
-     * @var string
-     */
-    private $databaseVersion = null;
-
-    /**
      * Plugin constructor
      *
      * @param boolean $init
@@ -67,7 +60,6 @@ class EveOnlineKillboardWidget {
         $this->textDomain = 'eve-online-killboard-widget';
         $this->pluginDir = \plugin_dir_path(__FILE__);
         $this->localizationDirectory = $this->pluginDir . '/l10n/';
-        $this->databaseVersion = 20181005;
 
         $this->loadTextDomain();
     }
@@ -77,9 +69,7 @@ class EveOnlineKillboardWidget {
      */
     public function init() {
         // Firing hooks
-        new WpHooks([
-            'newDatabaseVersion' => $this->databaseVersion
-        ]);
+        new WpHooks;
 
         // Loading CSS
         $cssLoader = new CssLoader;

@@ -25,23 +25,16 @@ use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleto
 
 class DatabaseHelper extends AbstractSingleton {
     /**
-     * Option field name for database version
-     *
-     * @var string
-     */
-    public $optionDatabaseFieldName = 'eve-online-killboard-widget-database-version';
-
-    /**
      * WordPress Database Instance
      *
-     * @var \WPDB
+     * @var \wpdb
      */
     private $wpdb = null;
 
     /**
      * Constructor
      *
-     * @global \WPDB $wpdb
+     * @global \wpdb $wpdb
      */
     protected function __construct() {
         parent::__construct();
@@ -51,107 +44,7 @@ class DatabaseHelper extends AbstractSingleton {
         $this->wpdb = $wpdb;
     }
 
-    /**
-     * Returning the database version field name
-     *
-     * @return string
-     */
-    public function getDatabaseFieldName() {
-        return $this->optionDatabaseFieldName;
-    }
-
-    /**
-     * Getting the current database version
-     *
-     * @return string
-     */
-    public function getCurrentDatabaseVersion() {
-        return \get_option($this->getDatabaseFieldName());
-    }
-
-    /**
-     * Check if the database needs to be updated
-     *
-     * @param string $newVersion New database version to check against
-     */
-    public function checkDatabase($newVersion) {
-        $currentVersion = $this->getCurrentDatabaseVersion();
-
-        if(!\is_null($newVersion)) {
-            if(\version_compare($currentVersion, $newVersion) < 0) {
-                $this->updateDatabase($newVersion);
-            }
-        }
-
-        /**
-         * Truncate the cache table after this version.
-         *
-         * We switched to a common ESI client with its own namespaces,
-         * so we cannot use the older cached entries any longer.
-         */
-        if($currentVersion < 20181004) {
-            $this->truncateKillboardCacheTable();
-        }
-    }
-
-    /**
-     * Update the plugin database
-     *
-     * @param string $newVersion New database version
-     */
-    public function updateDatabase($newVersion) {
-        $this->createKillboardCacheTable();
-        $this->createEsiCacheTable();
-
-        /**
-         * Update database version
-         */
-        \update_option($this->getDatabaseFieldName(), $newVersion);
-    }
-
-    private function truncateKillboardCacheTable() {
-        $table = $this->wpdb->base_prefix . 'killboardWidgetCache';
-        $sql = "TRUNCATE TABLE $table;";
-
-        $this->wpdb->query($sql);
-    }
-
-    /**
-     * Creating the pilot table
-     */
-    private function createKillboardCacheTable() {
-        $charsetCollate = $this->wpdb->get_charset_collate();
-        $tableName = $this->wpdb->base_prefix . 'killboardWidgetCache';
-
-        $sql = "CREATE TABLE $tableName (
-            api_route varchar(255),
-            value longtext,
-            valid_until varchar(255),
-            PRIMARY KEY api_route (api_route)
-        ) $charsetCollate;";
-
-        require_once(\ABSPATH . 'wp-admin/includes/upgrade.php');
-
-        \dbDelta($sql);
-    }
-
-    private function createEsiCacheTable() {
-        $charsetCollate = $this->wpdb->get_charset_collate();
-        $tableName = $this->wpdb->base_prefix . 'eveOnlineEsiCache';
-
-        $sql = "CREATE TABLE $tableName (
-            esi_route varchar(255),
-            value longtext,
-            valid_until varchar(255),
-            PRIMARY KEY esi_route (esi_route)
-        ) $charsetCollate;";
-
-        require_once(\ABSPATH . 'wp-admin/includes/upgrade.php');
-
-        \dbDelta($sql);
-    }
-
-    public function getCachedKillboardDataFromDb($route) {
+    public function getCachedKillboardDataFromDb(string $route) {
         $returnValue = null;
 
         $cacheResult = $this->wpdb->get_results($this->wpdb->prepare(
@@ -171,24 +64,13 @@ class DatabaseHelper extends AbstractSingleton {
     /**
      * Setting database based cache
      *
-     * @param string $route
-     * @param string $value
-     * @param int $validUntil
-     * @param boolean $returnData
+     * @param array $data
      * @return object
      */
-    public function writeKillboardCacheDataToDb($route, $value, $validUntil, $returnData = false) {
+    public function writeKillboardCacheDataToDb(array $data) {
         $this->wpdb->query($this->wpdb->prepare(
-            'REPLACE INTO ' . $this->wpdb->base_prefix . 'killboardWidgetCache' . ' (api_route, value, valid_until) VALUES (%s, %s, %s)', [
-                $route,
-                \maybe_serialize($value),
-                $validUntil
-            ]
+            'REPLACE INTO ' . $this->wpdb->base_prefix . 'killboardWidgetCache' . ' (api_route, value, valid_until) VALUES (%s, %s, %s)', $data
         ));
-
-        if($returnData === true) {
-            return $this->getCachedKillboardDataFromDb($route);
-        }
     }
 
     /**
