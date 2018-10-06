@@ -2,8 +2,20 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.1...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.0...development)
 - in development
+
+## [0.26.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.0) - 2018-10-06
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.1...v0.26.0)
+### Changed
+- Esi client again, so I can use one for all my plugins and don't have to tweak it for every plugin individually
+- Database names to fit in with WordPress' naming convention
+
+### Fixed
+- register_widget call made compatible for PHP 7.2 (create_function() is deprecated)
+
+### Additional Info
+This update has some major code changes including changes on the database cache tables and the ESI client. If you run into troubles after this update, please try to deactivate and activate this plugin again. If this doesn't help feel free to get in touch with me on my [Discord](https://discord.gg/YymuCZa) or open an [Issue on Github](https://github.com/ppfeufer/eve-online-killboard-widget/issues)
 
 ## [0.25.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.25.1) - 2018-10-02
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.0...v0.25.1)

@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/ppfeufer/eve-online-killboard-widget
  * Git URI: https://github.com/ppfeufer/eve-online-killboard-widget
  * Description: A widget to display your latest kills and/or losses on your WordPress website.
- * Version: 0.25.1
+ * Version: 0.26.0
  * Author: Rounon Dax
  * Author URI: http://yulaifederation.net
  * Text Domain: eve-online-killboard-widget
@@ -30,6 +30,14 @@
  */
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget;
+
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\AjaxApi;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\GithubUpdater;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\ResourceLoader\CssLoader;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\ResourceLoader\JavascriptLoader;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\WpHooks;
+
 const WP_GITHUB_FORCE_UPDATE = true;
 
 // Include the autoloader so we can dynamically include the rest of the classes.
@@ -39,13 +47,6 @@ class EveOnlineKillboardWidget {
     private $textDomain = null;
     private $localizationDirectory = null;
     private $pluginDir = null;
-
-    /**
-     * Database version
-     *
-     * @var string
-     */
-    private $databaseVersion = null;
 
     /**
      * Plugin constructor
@@ -59,7 +60,6 @@ class EveOnlineKillboardWidget {
         $this->textDomain = 'eve-online-killboard-widget';
         $this->pluginDir = \plugin_dir_path(__FILE__);
         $this->localizationDirectory = $this->pluginDir . '/l10n/';
-        $this->databaseVersion = '20180914';
 
         $this->loadTextDomain();
     }
@@ -69,22 +69,17 @@ class EveOnlineKillboardWidget {
      */
     public function init() {
         // Firing hooks
-        new Libs\WpHooks([
-            'newDatabaseVersion' => $this->databaseVersion
-        ]);
+        new WpHooks;
 
         // Loading CSS
-        $cssLoader = new Libs\ResourceLoader\CssLoader;
+        $cssLoader = new CssLoader;
         $cssLoader->init();
 
         // Loading JavaScript
-        $javascriptLoader = new Libs\ResourceLoader\JavascriptLoader;
+        $javascriptLoader = new JavascriptLoader;
         $javascriptLoader->init();
 
-        new Libs\AjaxApi;
-
-        // Initialize the widget
-        \add_action('widgets_init', \create_function('', 'return register_widget("WordPress\Plugins\EveOnlineKillboardWidget\Libs\KillboardWidget");'));
+        new AjaxApi;
 
         /**
          * start backend only libs
@@ -95,7 +90,7 @@ class EveOnlineKillboardWidget {
              */
             $githubConfig = [
                 'slug' => \plugin_basename(__FILE__),
-                'proper_folder_name' => Libs\Helper\PluginHelper::getInstance()->getPluginDirName(),
+                'proper_folder_name' => PluginHelper::getInstance()->getPluginDirName(),
                 'api_url' => 'https://api.github.com/repos/ppfeufer/eve-online-killboard-widget',
                 'raw_url' => 'https://raw.github.com/ppfeufer/eve-online-killboard-widget/master',
                 'github_url' => 'https://github.com/ppfeufer/eve-online-killboard-widget',
@@ -107,7 +102,7 @@ class EveOnlineKillboardWidget {
                 'access_token' => '',
             ];
 
-            new Libs\GithubUpdater($githubConfig);
+            new GithubUpdater($githubConfig);
         }
     }
 
@@ -143,7 +138,7 @@ class EveOnlineKillboardWidget {
  * Start the show ....
  */
 function initializePlugin() {
-    $killboardWidget = new EveOnlineKillboardWidget;
+    $killboardWidget = new \WordPress\Plugins\EveOnlineKillboardWidget\EveOnlineKillboardWidget;
 
     /**
      * Initialize the plugin

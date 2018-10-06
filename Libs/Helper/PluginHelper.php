@@ -19,16 +19,18 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
+
 \defined('ABSPATH') or die();
 
-class PluginHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class PluginHelper extends AbstractSingleton {
     /**
      * Getting the Plugin Path
      *
      * @param string $file
      * @return string
      */
-    public function getPluginPath($file = '') {
+    public function getPluginPath(string $file = '') {
         return \WP_PLUGIN_DIR . '/' . $this->getPluginDirName() . '/' . $file;
     }
 
@@ -38,7 +40,7 @@ class PluginHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * @param string $file
      * @return string
      */
-    public function getPluginUri($file = '') {
+    public function getPluginUri(string $file = '') {
         return \WP_PLUGIN_URL . '/' . $this->getPluginDirName() . '/' . $file;
     }
 

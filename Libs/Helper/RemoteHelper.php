@@ -19,9 +19,11 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
+
 \defined('ABSPATH') or die();
 
-class RemoteHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class RemoteHelper extends AbstractSingleton {
     protected $userAgent = null;
 
     /**
@@ -31,7 +33,7 @@ class RemoteHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * @param array $parameter
      * @return mixed
      */
-    public function getRemoteData($url, $method = 'get', $parameter = []) {
+    public function getRemoteData(string $url, string $method = 'get', array $parameter = []) {
         $returnValue = null;
         $params = '';
 
@@ -84,7 +86,7 @@ class RemoteHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      *
      * @param string $userAgent
      */
-    public function setUserAgent($userAgent) {
+    public function setUserAgent(string $userAgent) {
         $this->userAgent = $userAgent;
     }
 }

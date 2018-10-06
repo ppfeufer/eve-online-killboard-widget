@@ -19,12 +19,15 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\ResourceLoader;
 
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Interfaces\AssetsInterface;
+
 \defined('ABSPATH') or die();
 
 /**
  * CSS Loader
  */
-class CssLoader implements \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Interfaces\AssetsInterface {
+class CssLoader implements AssetsInterface {
     /**
      * Initialize the loader
      */
@@ -40,8 +43,8 @@ class CssLoader implements \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Inte
          * Only in Frontend
          */
         if(!\is_admin()) {
-            \wp_enqueue_style('bootstrap', \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('bootstrap/css/bootstrap.min.css'));
-            \wp_enqueue_style('eve-online-killboard-widget', \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper\PluginHelper::getInstance()->getPluginUri('css/eve-online-killboard-widget.min.css'));
+            \wp_enqueue_style('bootstrap', PluginHelper::getInstance()->getPluginUri('bootstrap/css/bootstrap.min.css'));
+            \wp_enqueue_style('eve-online-killboard-widget', PluginHelper::getInstance()->getPluginUri('css/eve-online-killboard-widget.min.css'));
         }
     }
 }

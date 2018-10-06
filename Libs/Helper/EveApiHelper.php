@@ -25,9 +25,21 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\EsiClient\Model\Universe\UniverseIds;
+use \WordPress\EsiClient\Model\Universe\UniverseIds\Alliances;
+use \WordPress\EsiClient\Model\Universe\UniverseIds\Characters;
+use \WordPress\EsiClient\Model\Universe\UniverseIds\Corporations;
+use \WordPress\EsiClient\Model\Universe\UniverseTypesTypeId;
+use \WordPress\EsiClient\Repository\AllianceRepository;
+use \WordPress\EsiClient\Repository\CharacterRepository;
+use \WordPress\EsiClient\Repository\CorporationRepository;
+use \WordPress\EsiClient\Repository\KillmailsRepository;
+use \WordPress\EsiClient\Repository\UniverseRepository;
+use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
+
 \defined('ABSPATH') or die();
 
-class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton {
+class EveApiHelper extends AbstractSingleton {
     /**
      * ESI URL
      *
@@ -59,35 +71,35 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
     /**
      * esiKillmails
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\KillmailsRepository
+     * @var KillmailsRepository
      */
     protected $esiKillmails = null;
 
     /**
      * esiCharacter
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\CharacterRepository
+     * @var CharacterRepository
      */
     protected $esiCharacter = null;
 
     /**
      * esiCorporation
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\CorporationRepository
+     * @var CorporationRepository
      */
     protected $esiCorporation = null;
 
     /**
      * esiAlliance
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\AllianceRepository
+     * @var AllianceRepository
      */
     protected $esiAlliance = null;
 
     /**
      * esiUniverse
      *
-     * @var \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\UniverseRepository
+     * @var UniverseRepository
      */
     protected $esiUniverse = null;
 
@@ -101,11 +113,11 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
         $this->imageserverUrl = 'https://imageserver.eveonline.com/';
         $this->cacheHelper = CacheHelper::getInstance();
 
-        $this->esiKillmails = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\KillmailsRepository;
-        $this->esiCharacter = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\CharacterRepository;
-        $this->esiCorporation = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\CorporationRepository;
-        $this->esiAlliance = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\AllianceRepository;
-        $this->esiUniverse = new \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Repository\UniverseRepository;
+        $this->esiKillmails = new KillmailsRepository;
+        $this->esiCharacter = new CharacterRepository;
+        $this->esiCorporation = new CorporationRepository;
+        $this->esiAlliance = new AllianceRepository;
+        $this->esiUniverse = new UniverseRepository;
 
         /**
          * Assigning Imagesever Endpoints
@@ -135,39 +147,51 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
     }
 
     public function getCharacterDataByCharacterId($characterID) {
-        $transientName = \sanitize_title('ESI :: characters/{character_id}/' . $characterID);
-        $characterData = $this->cacheHelper->getTransientCache($transientName);
+        $cacheKey = 'characters/' . $characterID;
+        $characterData = $this->cacheHelper->getEsiCache($cacheKey);
 
         if($characterData === false || empty($characterData)) {
             $characterData = $this->esiCharacter->charactersCharacterId($characterID);
 
-            $this->cacheHelper->setTransientCache($transientName, $characterData, \strtotime('+12 hours'));
+            $this->cacheHelper->setEsiCache([
+                $cacheKey,
+                \maybe_serialize($characterData),
+                \strtotime('+1 day')]
+            );
         }
 
         return $characterData;
     }
 
     public function getCorporationDataByCorporationId($corporationID) {
-        $transientName = \sanitize_title('ESI :: corporations/{corporation_id}/' . $corporationID);
-        $corporationData = $this->cacheHelper->getTransientCache($transientName);
+        $cacheKey = 'corporations/' . $corporationID;
+        $corporationData = $this->cacheHelper->getEsiCache($cacheKey);
 
         if($corporationData === false || empty($corporationData)) {
             $corporationData = $this->esiCorporation->corporationsCorporationId($corporationID);
 
-            $this->cacheHelper->setTransientCache($transientName, $corporationData, \strtotime('+12 hours'));
+            $this->cacheHelper->setEsiCache([
+                $cacheKey,
+                \maybe_serialize($corporationData),
+                \strtotime('+1 week')
+            ]);
         }
 
         return $corporationData;
     }
 
     public function getAllianceDataByAllianceId($allianceID) {
-        $transientName = \sanitize_title('ESI :: alliances/{alliance_id}/' . $allianceID);
-        $allianceData = $this->cacheHelper->getTransientCache($transientName);
+        $cacheKey = 'alliances/' . $allianceID;
+        $allianceData = $this->cacheHelper->getEsiCache($cacheKey);
 
         if($allianceData === false || empty($allianceData)) {
             $allianceData = $this->esiAlliance->alliancesAllianceId($allianceID);
 
-            $this->cacheHelper->setTransientCache($transientName, $allianceData, \strtotime('+1 hour'));
+            $this->cacheHelper->setEsiCache([
+                $cacheKey,
+                \maybe_serialize($allianceData),
+                \strtotime('+1 week')
+            ]);
         }
 
         return $allianceData;
@@ -177,16 +201,20 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * Getting all the needed ship information from the ESI
      *
      * @param int $shipID
-     * @return array
+     * @return UniverseTypesTypeId
      */
     public function getShipDataByShipId($shipID) {
-        $transientName = \sanitize_title('ESI :: universe/types/{type_id}/' . $shipID);
-        $shipData = $this->cacheHelper->getTransientCache($transientName);
+        $cacheKey = 'universe/types/' . $shipID;
+        $shipData = $this->cacheHelper->getEsiCache($cacheKey);
 
         if($shipData === false || empty($shipData)) {
             $shipData = $this->esiUniverse->universeTypesTypeId($shipID);
 
-            $this->cacheHelper->setTransientCache($transientName, $shipData, \strtotime('+12 years'));
+            $this->cacheHelper->setEsiCache([
+                $cacheKey,
+                \maybe_serialize($shipData),
+                \strtotime('+1 week')
+            ]);
         }
 
         return $shipData;
@@ -196,16 +224,20 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * Getting all the needed system information from the ESI
      *
      * @param int $systemID
-     * @return array
+     * @return \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId
      */
     public function getSystemDataBySystemId($systemID) {
-        $transientName = \sanitize_title('ESI :: universe/systems/{system_id}/' . $systemID);
-        $systemData = $this->cacheHelper->getTransientCache($transientName);
+        $cacheKey = 'universe/systems/' . $systemID;
+        $systemData = $this->cacheHelper->getEsiCache($cacheKey);
 
         if($systemData === false || empty($systemData)) {
             $systemData = $this->esiUniverse->universeSystemsSystemId($systemID);
 
-            $this->cacheHelper->setTransientCache($transientName, $systemData, \strtotime('+12 years'));
+            $this->cacheHelper->setEsiCache([
+                $cacheKey,
+                \maybe_serialize($systemData),
+                \strtotime('+10 years')
+            ]);
         }
 
         return $systemData;
@@ -221,7 +253,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * @return string
      */
     public function getShipImageByShipId($shipTypeID, $imageOnly = true, $size = 128) {
-        /* @var $ship \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseTypesTypeId */
+        /* @var $ship UniverseTypesTypeId */
         $ship = $this->getShipDataByShipId($shipTypeID);
 
         $imagePath = $this->imageserverUrl . $this->imageserverEndpoints['ship'] . $shipTypeID . '_' . $size. '.png';
@@ -236,22 +268,22 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
     }
 
     /**
-     * Get the EVE ID by it's name
+     * Get the EVE ID by its name
      *
-     * @param type $name
-     * @param type $type
-     * @return type
+     * @param string $name
+     * @param string $type
+     * @return object
      */
-    public function getEveIdByName($name, $type) {
+    public function getEveIdByName(string $name, string $type) {
         $returnData = null;
 
-        /* @var $esiData \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds */
+        /* @var $esiData UniverseIds */
         $esiData = $this->esiUniverse->universeIds([(string) \esc_html($name)]);
 
         switch($type) {
             case 'alliance':
                 foreach($esiData->getAlliances() as $alliance) {
-                    /* @var $alliance \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Alliances */
+                    /* @var $alliance Alliances */
                     if($alliance->getName() === (string) \esc_html($name)) {
                         $returnData = $alliance->getId();
                     }
@@ -260,7 +292,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
 
             case 'corporation':
                 foreach($esiData->getCorporations() as $corporation) {
-                    /* @var $corporation \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Corporations */
+                    /* @var $corporation Corporations */
                     if($corporation->getName() === (string) \esc_html($name)) {
                         $returnData = $corporation->getId();
                     }
@@ -269,7 +301,7 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
 
             case 'character':
                 foreach($esiData->getCharacters() as $character) {
-                    /* @var $character \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Esi\Model\Universe\UniverseIds\Characters */
+                    /* @var $character Characters */
                     if($character->getName() === (string) \esc_html($name)) {
                         $returnData = $character->getId();
                     }
@@ -286,9 +318,9 @@ class EveApiHelper extends \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Sing
      * @param int $killmailID
      * @param string $killmailHash
      * @param boolean $cache
-     * @return json
+     * @return \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId
      */
-    public function getPublicKillmail($killmailID, $killmailHash) {
+    public function getPublicKillmail(int $killmailID, string $killmailHash) {
         $killmailData = $this->esiKillmails->killmailsKillmailIdKillmailHash($killmailID, $killmailHash);
 
         return $killmailData;
