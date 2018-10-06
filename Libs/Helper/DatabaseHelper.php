@@ -48,7 +48,7 @@ class DatabaseHelper extends AbstractSingleton {
         $returnValue = null;
 
         $cacheResult = $this->wpdb->get_results($this->wpdb->prepare(
-            'SELECT * FROM ' . $this->wpdb->base_prefix . 'killboardWidgetCache' . ' WHERE api_route = %s AND valid_until > %s', [
+            'SELECT * FROM ' . $this->wpdb->base_prefix . 'eve_online_killboard_widget_cache' . ' WHERE cache_key = %s AND valid_until > %s', [
                 $route,
                 time()
             ]
@@ -69,7 +69,7 @@ class DatabaseHelper extends AbstractSingleton {
      */
     public function writeKillboardCacheDataToDb(array $data) {
         $this->wpdb->query($this->wpdb->prepare(
-            'REPLACE INTO ' . $this->wpdb->base_prefix . 'killboardWidgetCache' . ' (api_route, value, valid_until) VALUES (%s, %s, %s)', $data
+            'REPLACE INTO ' . $this->wpdb->base_prefix . 'eve_online_killboard_widget_cache' . ' (cache_key, value, valid_until) VALUES (%s, %s, %s)', $data
         ));
     }
 
@@ -83,7 +83,7 @@ class DatabaseHelper extends AbstractSingleton {
         $returnValue = null;
 
         $cacheResult = $this->wpdb->get_results($this->wpdb->prepare(
-            'SELECT * FROM ' . $this->wpdb->base_prefix . 'eveOnlineEsiCache' . ' WHERE esi_route = %s AND valid_until > %s', [
+            'SELECT * FROM ' . $this->wpdb->base_prefix . 'eve_online_esi_cache' . ' WHERE esi_route = %s AND valid_until > %s', [
                 $route,
                 \time()
             ]
@@ -103,7 +103,7 @@ class DatabaseHelper extends AbstractSingleton {
      */
     public function writeEsiCacheDataToDb(array $data) {
         $this->wpdb->query($this->wpdb->prepare(
-            'REPLACE INTO ' . $this->wpdb->base_prefix . 'eveOnlineEsiCache' . ' (esi_route, value, valid_until) VALUES (%s, %s, %s)', $data
+            'REPLACE INTO ' . $this->wpdb->base_prefix . 'eve_online_esi_cache' . ' (esi_route, value, valid_until) VALUES (%s, %s, %s)', $data
         ));
     }
 }

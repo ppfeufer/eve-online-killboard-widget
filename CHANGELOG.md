@@ -3,8 +3,12 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.1...development)
+### Changed
+- Esi client again, so I can use one for all my plugins and don't have to tweak it for every plugin individually
+- Database names to fit in with WordPress' naming convention
+
 ### Fixed
-- register_widget Aufruf made compatible for PHP 7.2 (create_function() is deprecated)
+- register_widget call made compatible for PHP 7.2 (create_function() is deprecated)
 
 ## [0.25.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.25.1) - 2018-10-02
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.25.0...v0.25.1)

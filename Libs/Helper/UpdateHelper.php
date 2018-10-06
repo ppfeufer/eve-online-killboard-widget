@@ -37,7 +37,7 @@ class UpdateHelper extends AbstractSingleton {
      *
      * @var string
      */
-    protected $databaseVersion = 20181005;
+    protected $databaseVersion = 20181006;
 
     /**
      * Database version
@@ -108,8 +108,8 @@ class UpdateHelper extends AbstractSingleton {
          * We switched to a common ESI client with its own namespaces,
          * so we cannot use the older cached entries any longer.
          */
-        if($currentVersion < 20181004) {
-            $this->truncateKillboardCacheTable();
+        if($currentVersion < 20181006) {
+            $this->removeOldTables();
         }
 
         /**
@@ -129,11 +129,17 @@ class UpdateHelper extends AbstractSingleton {
         $this->createEsiCacheTable();
     }
 
-    private function truncateKillboardCacheTable() {
-        $table = $this->wpdb->base_prefix . 'killboardWidgetCache';
-        $sql = "TRUNCATE TABLE $table;";
+    private function removeOldTables() {
+        $oldTableNames = [
+            'killboardWidgetCache',
+            'eveOnlineEsiCache'
+        ];
 
-        $this->wpdb->query($sql);
+        foreach($oldTableNames as $tableName) {
+            $tableToDrop = $this->wpdb->base_prefix . $tableName;
+            $sql = "DROP TABLE IF EXISTS $tableToDrop;";
+            $this->wpdb->query($sql);
+        }
     }
 
     /**
@@ -141,13 +147,13 @@ class UpdateHelper extends AbstractSingleton {
      */
     private function createKillboardCacheTable() {
         $charsetCollate = $this->wpdb->get_charset_collate();
-        $tableName = $this->wpdb->base_prefix . 'killboardWidgetCache';
+        $tableName = $this->wpdb->base_prefix . 'eve_online_killboard_widget_cache';
 
         $sql = "CREATE TABLE $tableName (
-            api_route varchar(255),
+            cache_key varchar(255),
             value longtext,
             valid_until varchar(255),
-            PRIMARY KEY api_route (api_route)
+            PRIMARY KEY cache_key (cache_key)
         ) $charsetCollate;";
 
         require_once(\ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -157,7 +163,7 @@ class UpdateHelper extends AbstractSingleton {
 
     private function createEsiCacheTable() {
         $charsetCollate = $this->wpdb->get_charset_collate();
-        $tableName = $this->wpdb->base_prefix . 'eveOnlineEsiCache';
+        $tableName = $this->wpdb->base_prefix . 'eve_online_esi_cache';
 
         $sql = "CREATE TABLE $tableName (
             esi_route varchar(255),

@@ -106,7 +106,7 @@ class KillboardHelper extends AbstractSingleton {
          * In case we don't have the entity ID set by the widget's settings ...
          */
         if(\is_null($this->entityID)) {
-            $entityIdTransientName = \sanitize_title('EVE Online :: ID ' . $widgetSettings['eve-online-killboard-widget-entity-type'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-name']);
+            $entityIdTransientName = 'EVE Online :: ID ' . $widgetSettings['eve-online-killboard-widget-entity-type'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-name'];
 
             $this->entityID = $this->cacheHelper->getKillboardCache($entityIdTransientName);
 
@@ -121,10 +121,10 @@ class KillboardHelper extends AbstractSingleton {
             }
         }
 
-        $widgetSettingsCacheKey = \sanitize_title('Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/' . \md5(\json_encode($widgetSettings)) . '/lastkills_kills-only/');
+        $widgetSettingsCacheKey = 'Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-number-of-kills']  . '/'. $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/Kills Only/';
 
         if((int) $widgetSettings['eve-online-killboard-widget-show-losses'] === 1) {
-            $widgetSettingsCacheKey = \sanitize_title('Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/' . \md5(\json_encode($widgetSettings)) . '/lastkills/');
+            $widgetSettingsCacheKey = 'Killboard Data :: ' . $widgetSettings['eve-online-killboard-widget-number-of-kills']  . '/'. $widgetSettings['eve-online-killboard-widget-entity-name'] . '/' . $widgetSettings['eve-online-killboard-widget-entity-id'] . '/';
         }
 
         $data = $this->cacheHelper->getKillboardCache($widgetSettingsCacheKey);
