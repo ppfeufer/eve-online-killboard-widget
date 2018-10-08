@@ -2,7 +2,11 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.0...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.1...development)
+- in development
+
+## [0.26.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.1) - 2018-10-08
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.0...v0.26.1)
 ### Changed
 - Check if ZipArchive is available to extract the ESI client zip or if we have to use PclZip
 

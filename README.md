@@ -14,7 +14,7 @@ Works best with the [EVE Online WordPress Theme](https://github.com/ppfeufer/eve
 ### Requirements
 - WordPress 4.7 or newer
 - PHP 7
-- PHP Library "ZipArchive" needs to be installed
+- PHP extension `zlib` needs to be installed
 
 ### Installation
 - Simply [download the archive](https://github.com/ppfeufer/eve-online-killboard-widget/archive/master.zip) or one of the [releases](https://github.com/ppfeufer/eve-online-killboard-widget/releases)
