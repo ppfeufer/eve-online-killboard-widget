@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.1...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.2...development)
 - in development
+
+## [0.26.2](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.2) - 2018-11-17
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.1...v0.26.2)
+### Added
+- EVE Time to kill, so you now see when it happened.
 
 ## [0.26.1](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.1) - 2018-10-08
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.0...v0.26.1)

@@ -237,25 +237,33 @@ class KillboardHelper extends AbstractSingleton {
                         . '    <div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
                         . '        <ul>'
                         . '            <li>' . $this->getVictimType($killMailData->killmail->getVictim()) . ': ' . $this->getVictimName($killMailData->killmail->getVictim()) . '</li>'
-                        . '            <li>Loss: ' . $this->getVictimShip($killMailData->killmail->getVictim()) . '</li>'
-                        . '            <li>ISK lost: ' . $this->getIskLoss($killMailData->zkbData) . '</li>'
-                        . '            <li>System: ' . $systemInformation->getName() . ' (' . \round($systemInformation->getSecurityStatus(), 2) . ')</li>'
-                        . '            <li>Killed by: ' . $this->getFinalBlow($killMailData->killmail->getAttackers()) . $stringInvolved . '</li>'
+                        . '            <li>' . \__('EVE Time', 'eve-online-killboard-widget') . ': ' . $killMailData->killmail->getKillmailTime()->format('d.m.Y') . ' ' . $killMailData->killmail->getKillmailTime()->format('H:i:s') . '</li>'
+                        . '            <li>' . \__('Loss', 'eve-online-killboard-widget') . ': ' . $this->getVictimShip($killMailData->killmail->getVictim()) . '</li>'
+                        . '            <li>' . \__('ISK lost', 'eve-online-killboard-widget') . ': ' . $this->getIskLoss($killMailData->zkbData) . '</li>'
+                        . '            <li>' . \__('System', 'eve-online-killboard-widget') . ': ' . $systemInformation->getName() . ' (' . \round($systemInformation->getSecurityStatus(), 2) . ')</li>'
+                        . '            <li>' . \__('Killed by', 'eve-online-killboard-widget') . ': ' . $this->getFinalBlow($killMailData->killmail->getAttackers()) . $stringInvolved . '</li>'
                         .              $this->getBadges($killMailData)
                         . '        </ul>'
                         . '    </div>'
                         . '</div>';
         }
+
         return $widgetHtml;
     }
 
+    /**
+     * Get killboard badges
+     *
+     * @param object $killMail
+     * @return string
+     */
     private function getBadges($killMail) {
         $returnValue = null;
         $badgeSoloKill = false;
 
         /* @var $killmail->killmail \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId */
         if($killMail->zkbData->solo || \count($killMail->killmail->getAttackers()) === 1) {
-            $badgeSoloKill = '<span class="eve-online-killboard-widget-solokill"><small>SOLO</small></span>';
+            $badgeSoloKill = '<span class="eve-online-killboard-widget-solokill"><small>' . \__('SOLO', 'eve-online-killboard-widget') . '</small></span>';
         }
 
         if($badgeSoloKill) {
@@ -282,11 +290,12 @@ class KillboardHelper extends AbstractSingleton {
                 . '    </div>'
                 . '    <div class="col-xs-8 col-sm-12 col-md-12 col-lg-7">'
                 . '        <ul>'
-                . '            <li>Pilot:</li>'
-                . '            <li>Loss:</li>'
-                . '            <li>ISK lost:</li>'
-                . '            <li>System:</li>'
-                . '            <li>Killed by:</li>'
+                . '            <li>' . \__('Pilot', 'eve-online-killboard-widget') . ':</li>'
+                . '            <li>' . \__('EVE Time', 'eve-online-killboard-widget') . ':</li>'
+                . '            <li>' . \__('Loss', 'eve-online-killboard-widget') . ':</li>'
+                . '            <li>' . \__('ISK lost', 'eve-online-killboard-widget') . ':</li>'
+                . '            <li>' . \__('System', 'eve-online-killboard-widget') . ':</li>'
+                . '            <li>' . \__('Killed by', 'eve-online-killboard-widget') . ':</li>'
                 . '        </ul>'
                 . '    </div>'
                 . '</div>';
@@ -513,6 +522,12 @@ class KillboardHelper extends AbstractSingleton {
         return $system;
     }
 
+    /**
+     * format the ISK loss value
+     *
+     * @param int $isk
+     * @return string
+     */
     private function sanitizeIskLoss($isk) {
         if($isk < 1000) {
             $isk = \number_format($isk, 0);
