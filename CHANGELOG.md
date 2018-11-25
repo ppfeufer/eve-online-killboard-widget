@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.2...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.3...development)
 - in development
+
+## [0.26.3](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.3) - 2018-11-25
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.2...v0.26.3)
+### Changed
+- Minimum needed ESI client version to the lastest version of the ESI client
 
 ## [0.26.2](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.2) - 2018-11-17
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.1...v0.26.2)

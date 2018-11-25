@@ -46,7 +46,7 @@ class UpdateHelper extends AbstractSingleton {
      *
      * @var string
      */
-    protected $esiClientVersion = 20181005;
+    protected $esiClientVersion = 20181125;
 
     /**
      * WordPress Database Instance
@@ -198,8 +198,9 @@ class UpdateHelper extends AbstractSingleton {
         if(\file_exists(\WP_CONTENT_DIR . '/EsiClient/client_version')) {
             $esiClientCurrentVersion = \trim(\file_get_contents(\WP_CONTENT_DIR . '/EsiClient/client_version'));
         }
+
         if(\version_compare($esiClientCurrentVersion, $this->getNewEsiClientVersion()) < 0) {
-            $this->updateEsiClient();
+            $this->updateEsiClient($this->getNewEsiClientVersion());
         }
     }
 
@@ -208,11 +209,18 @@ class UpdateHelper extends AbstractSingleton {
      *
      * @throws Exception
      */
-    private function updateEsiClient() {
-        $esiClientMasterZip = 'https://github.com/ppfeufer/wp-esi-client/archive/master.zip';
+    private function updateEsiClient(string $version = null) {
+        $remoteZipFile = 'https://github.com/ppfeufer/wp-esi-client/archive/master.zip';
+        $dirInZipFile = '/wp-esi-client-master';
+
+        if(!\is_null($version)) {
+            $remoteZipFile = 'https://github.com/ppfeufer/wp-esi-client/archive/v' . $version . '.zip';
+            $dirInZipFile = '/wp-esi-client-' . $version;
+        }
+
         $esiClientZipFile = \WP_CONTENT_DIR . '/uploads/EsiClient.zip';
 
-        \wp_remote_get($esiClientMasterZip, [
+        \wp_remote_get($remoteZipFile, [
             'timeout' => 300,
             'stream' => true,
             'filename' => $esiClientZipFile
@@ -247,7 +255,7 @@ class UpdateHelper extends AbstractSingleton {
             }
         }
 
-        \rename(\WP_CONTENT_DIR . '/wp-esi-client-master', \WP_CONTENT_DIR . '/EsiClient/');
+        \rename(\WP_CONTENT_DIR . $dirInZipFile, \WP_CONTENT_DIR . '/EsiClient/');
 
         \unlink($esiClientZipFile);
     }
