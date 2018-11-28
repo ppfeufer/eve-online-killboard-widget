@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.3...development)
-- in development
+### Changed
+- Number formatting for ISK lost to have it more accurate
 
 ## [0.26.3](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.3) - 2018-11-25
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.2...v0.26.3)
