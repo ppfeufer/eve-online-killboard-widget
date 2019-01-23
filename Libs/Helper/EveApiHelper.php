@@ -150,7 +150,7 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'characters/' . $characterID;
         $characterData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if($characterData === false || empty($characterData)) {
+        if(\is_a($characterData, '\WordPress\EsiClient\Model\Character\CharactersCharacterId')) {
             $characterData = $this->esiCharacter->charactersCharacterId($characterID);
 
             $this->cacheHelper->setEsiCache([
@@ -159,7 +159,6 @@ class EveApiHelper extends AbstractSingleton {
                 \strtotime('+1 day')]
             );
         }
-
         return $characterData;
     }
 
@@ -167,7 +166,7 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'corporations/' . $corporationID;
         $corporationData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if($corporationData === false || empty($corporationData)) {
+        if(\is_a($corporationData, '\WordPress\EsiClient\Model\Corporation\CorporationsCorporationId')) {
             $corporationData = $this->esiCorporation->corporationsCorporationId($corporationID);
 
             $this->cacheHelper->setEsiCache([
@@ -184,7 +183,7 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'alliances/' . $allianceID;
         $allianceData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if($allianceData === false || empty($allianceData)) {
+        if(\is_a($allianceData, '\WordPress\EsiClient\Model\Alliance\AlliancesAllianceId')) {
             $allianceData = $this->esiAlliance->alliancesAllianceId($allianceID);
 
             $this->cacheHelper->setEsiCache([
@@ -207,7 +206,7 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'universe/types/' . $shipID;
         $shipData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if($shipData === false || empty($shipData)) {
+        if(\is_a($shipData, '\WordPress\EsiClient\Model\Universe\UniverseTypesTypeId')) {
             $shipData = $this->esiUniverse->universeTypesTypeId($shipID);
 
             $this->cacheHelper->setEsiCache([
@@ -230,7 +229,7 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'universe/systems/' . $systemID;
         $systemData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if($systemData === false || empty($systemData)) {
+        if(\is_a($systemData, '\WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId')) {
             $systemData = $this->esiUniverse->universeSystemsSystemId($systemID);
 
             $this->cacheHelper->setEsiCache([
@@ -280,33 +279,35 @@ class EveApiHelper extends AbstractSingleton {
         /* @var $esiData UniverseIds */
         $esiData = $this->esiUniverse->universeIds([(string) \esc_html($name)]);
 
-        switch($type) {
-            case 'alliance':
-                foreach($esiData->getAlliances() as $alliance) {
-                    /* @var $alliance Alliances */
-                    if($alliance->getName() === (string) \esc_html($name)) {
-                        $returnData = $alliance->getId();
+        if(\is_a($esiData, '\WordPress\EsiClient\Model\Universe\UniverseIds')) {
+            switch($type) {
+                case 'alliance':
+                    foreach($esiData->getAlliances() as $alliance) {
+                        /* @var $alliance Alliances */
+                        if($alliance->getName() === (string) \esc_html($name)) {
+                            $returnData = $alliance->getId();
+                        }
                     }
-                }
-                break;
+                    break;
 
-            case 'corporation':
-                foreach($esiData->getCorporations() as $corporation) {
-                    /* @var $corporation Corporations */
-                    if($corporation->getName() === (string) \esc_html($name)) {
-                        $returnData = $corporation->getId();
+                case 'corporation':
+                    foreach($esiData->getCorporations() as $corporation) {
+                        /* @var $corporation Corporations */
+                        if($corporation->getName() === (string) \esc_html($name)) {
+                            $returnData = $corporation->getId();
+                        }
                     }
-                }
-                break;
+                    break;
 
-            case 'character':
-                foreach($esiData->getCharacters() as $character) {
-                    /* @var $character Characters */
-                    if($character->getName() === (string) \esc_html($name)) {
-                        $returnData = $character->getId();
+                case 'character':
+                    foreach($esiData->getCharacters() as $character) {
+                        /* @var $character Characters */
+                        if($character->getName() === (string) \esc_html($name)) {
+                            $returnData = $character->getId();
+                        }
                     }
-                }
-                break;
+                    break;
+            }
         }
 
         return $returnData;
@@ -321,8 +322,13 @@ class EveApiHelper extends AbstractSingleton {
      * @return \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId
      */
     public function getPublicKillmail(int $killmailID, string $killmailHash) {
+        $returnData = null;
         $killmailData = $this->esiKillmails->killmailsKillmailIdKillmailHash($killmailID, $killmailHash);
 
-        return $killmailData;
+        if(\is_a($killmailData, '\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId')) {
+            $returnData = $killmailData;
+        }
+
+        return $returnData;
     }
 }
