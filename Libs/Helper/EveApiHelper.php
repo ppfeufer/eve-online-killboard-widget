@@ -150,15 +150,18 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'characters/' . $characterID;
         $characterData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if(\is_a($characterData, '\WordPress\EsiClient\Model\Character\CharactersCharacterId')) {
+        if(\is_null($characterData)) {
             $characterData = $this->esiCharacter->charactersCharacterId($characterID);
 
-            $this->cacheHelper->setEsiCache([
-                $cacheKey,
-                \maybe_serialize($characterData),
-                \strtotime('+1 day')]
-            );
+            if(\is_a($characterData, '\WordPress\EsiClient\Model\Character\CharactersCharacterId')) {
+                $this->cacheHelper->setEsiCache([
+                    $cacheKey,
+                    \maybe_serialize($characterData),
+                    \strtotime('+1 day')]
+                );
+            }
         }
+
         return $characterData;
     }
 
@@ -166,14 +169,16 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'corporations/' . $corporationID;
         $corporationData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if(\is_a($corporationData, '\WordPress\EsiClient\Model\Corporation\CorporationsCorporationId')) {
+        if(\is_null($corporationData)) {
             $corporationData = $this->esiCorporation->corporationsCorporationId($corporationID);
 
-            $this->cacheHelper->setEsiCache([
-                $cacheKey,
-                \maybe_serialize($corporationData),
-                \strtotime('+1 week')
-            ]);
+            if(\is_a($corporationData, '\WordPress\EsiClient\Model\Corporation\CorporationsCorporationId')) {
+                $this->cacheHelper->setEsiCache([
+                    $cacheKey,
+                    \maybe_serialize($corporationData),
+                    \strtotime('+1 week')
+                ]);
+            }
         }
 
         return $corporationData;
@@ -183,14 +188,16 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'alliances/' . $allianceID;
         $allianceData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if(\is_a($allianceData, '\WordPress\EsiClient\Model\Alliance\AlliancesAllianceId')) {
+        if(\is_null($allianceData)) {
             $allianceData = $this->esiAlliance->alliancesAllianceId($allianceID);
 
-            $this->cacheHelper->setEsiCache([
-                $cacheKey,
-                \maybe_serialize($allianceData),
-                \strtotime('+1 week')
-            ]);
+            if(\is_a($allianceData, '\WordPress\EsiClient\Model\Alliance\AlliancesAllianceId')) {
+                $this->cacheHelper->setEsiCache([
+                    $cacheKey,
+                    \maybe_serialize($allianceData),
+                    \strtotime('+1 week')
+                ]);
+            }
         }
 
         return $allianceData;
@@ -206,14 +213,16 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'universe/types/' . $shipID;
         $shipData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if(\is_a($shipData, '\WordPress\EsiClient\Model\Universe\UniverseTypesTypeId')) {
+        if(\is_null($shipData)) {
             $shipData = $this->esiUniverse->universeTypesTypeId($shipID);
 
-            $this->cacheHelper->setEsiCache([
-                $cacheKey,
-                \maybe_serialize($shipData),
-                \strtotime('+1 week')
-            ]);
+            if(\is_a($shipData, '\WordPress\EsiClient\Model\Universe\UniverseTypesTypeId')) {
+                $this->cacheHelper->setEsiCache([
+                    $cacheKey,
+                    \maybe_serialize($shipData),
+                    \strtotime('+1 week')
+                ]);
+            }
         }
 
         return $shipData;
@@ -229,14 +238,16 @@ class EveApiHelper extends AbstractSingleton {
         $cacheKey = 'universe/systems/' . $systemID;
         $systemData = $this->cacheHelper->getEsiCache($cacheKey);
 
-        if(\is_a($systemData, '\WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId')) {
+        if(\is_null($systemData)) {
             $systemData = $this->esiUniverse->universeSystemsSystemId($systemID);
 
-            $this->cacheHelper->setEsiCache([
-                $cacheKey,
-                \maybe_serialize($systemData),
-                \strtotime('+10 years')
-            ]);
+            if(\is_a($systemData, '\WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId')) {
+                $this->cacheHelper->setEsiCache([
+                    $cacheKey,
+                    \maybe_serialize($systemData),
+                    \strtotime('+10 years')
+                ]);
+            }
         }
 
         return $systemData;
