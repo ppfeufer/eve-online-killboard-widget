@@ -58,6 +58,8 @@ class WpHooks {
     public function initHooks() {
         \register_activation_hook($this->pluginFile, [UpdateHelper::getInstance(), 'checkDatabaseForUpdates']);
         \register_activation_hook($this->pluginFile, [UpdateHelper::getInstance(), 'checkEsiClientForUpdates']);
+
+        \register_deactivation_hook($this->pluginFile, [$this, 'removeDatabaseVersionOnDeactivation']);
     }
 
     /**
@@ -102,7 +104,18 @@ class WpHooks {
         return $links;
     }
 
+    /**
+     * Registering the widget
+     */
     public function registerWidget() {
         \register_widget("\\WordPress\Plugins\EveOnlineKillboardWidget\Libs\KillboardWidget");
+    }
+
+    /**
+     * Removing the DB version on plugin decativation
+     * Issue: https://github.com/ppfeufer/eve-online-killboard-widget/issues/50
+     */
+    public function removeDatabaseVersionOnDeactivation() {
+        \delete_option(UpdateHelper::getInstance()->getDatabaseFieldName());
     }
 }

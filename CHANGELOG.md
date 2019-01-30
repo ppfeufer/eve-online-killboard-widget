@@ -3,6 +3,9 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.3...development)
+### Fixed
+- An issue that on rare occasions the database cache tables are not created properly after moving the WordPress installation and somehow losing the cache tables. Reactivating the plugin should do the trick now. (Issue #50)
+
 ### Changed
 - Number formatting for ISK lost to have it more accurate
 
