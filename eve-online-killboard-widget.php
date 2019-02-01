@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/ppfeufer/eve-online-killboard-widget
  * Git URI: https://github.com/ppfeufer/eve-online-killboard-widget
  * Description: A widget to display your latest kills and/or losses on your WordPress website.
- * Version: 0.26.3
+ * Version: 0.26.4
  * Author: Rounon Dax
  * Author URI: http://yulaifederation.net
  * Text Domain: eve-online-killboard-widget
@@ -38,7 +38,7 @@ use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\ResourceLoader\CssLoader;
 use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\ResourceLoader\JavascriptLoader;
 use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\WpHooks;
 
-const WP_GITHUB_FORCE_UPDATE = true;
+const WP_GITHUB_FORCE_UPDATE = false;
 
 // Include the autoloader so we can dynamically include the rest of the classes.
 require_once(\trailingslashit(\dirname(__FILE__)) . 'inc/autoloader.php');

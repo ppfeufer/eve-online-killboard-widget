@@ -530,13 +530,13 @@ class KillboardHelper extends AbstractSingleton {
      */
     private function sanitizeIskLoss($isk) {
         if($isk < 1000) {
-            $isk = \number_format($isk, 0);
+            $isk = \number_format($isk, 2);
         } elseif(($isk/1000) < 1000) {
-            $isk = \number_format(($isk/1000), 0) . 'K';
+            $isk = \number_format(($isk/1000), 2) . 'K';
         } elseif(($isk/1000/1000) < 1000) {
-            $isk = \number_format(($isk/1000/1000), 0) . 'M';
+            $isk = \number_format(($isk/1000/1000), 2) . 'M';
         } else {
-            $isk = \number_format(($isk/1000/1000/1000), 0, '.', ',') . 'B';
+            $isk = \number_format(($isk/1000/1000/1000), 2, '.', ',') . 'B';
         }
 
         return $isk;
