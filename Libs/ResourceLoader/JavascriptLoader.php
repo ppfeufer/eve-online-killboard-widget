@@ -44,7 +44,6 @@ class JavascriptLoader implements AssetsInterface {
          */
         if(!\is_admin()) {
             \wp_enqueue_script('bootstrap-js', PluginHelper::getInstance()->getPluginUri('bootstrap/js/bootstrap.min.js'), ['jquery'], '', true);
-            \wp_enqueue_script('bootstrap-toolkit-js', PluginHelper::getInstance()->getPluginUri('bootstrap/bootstrap-toolkit/bootstrap-toolkit.min.js'), ['jquery', 'bootstrap-js'], '', true);
             \wp_enqueue_script('eve-online-killboard-widget-js', PluginHelper::getInstance()->getPluginUri('js/eve-online-killboard-widget.min.js'), ['jquery'], '', true);
             \wp_localize_script('eve-online-killboard-widget-js', 'killboardWidgetL10n', $this->getJavaScriptTranslations());
         }
