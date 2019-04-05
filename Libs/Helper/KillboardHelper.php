@@ -490,24 +490,41 @@ class KillboardHelper extends AbstractSingleton {
     }
 
     /**
-     * getting the victims ship type
+     * getting the victims ship
      *
      * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @return string
      */
     public function getVictimShip(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData) {
+        $returnValue = null;
+
         /* @var $ship \WordPress\EsiClient\Model\Universe\UniverseTypesTypeId */
         $ship = $this->eveApi->getShipDataByShipId($victimData->getShipTypeId());
 
-        return $ship->getName();
+        if(!\is_null($ship)) {
+            $returnValue = $ship->getName();
+        }
+
+        return $returnValue;
     }
 
+    /**
+     * getting the victims ship type
+     *
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
+     * @return string
+     */
     public function getVictimShipType(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData) {
+        $returnValue = null;
+
         /* @var $shipTypeData \WordPress\EsiClient\Model\Universe\UniverseGroupsGroupId */
         $shipTypeData = $this->eveApi->getShipTypeFromShipId($victimData->getShipTypeId());
 
+        if(!\is_nan($shipTypeData)) {
+            $returnValue = $shipTypeData->getName();
+        }
 
-        return $shipTypeData->getName();
+        return $returnValue;
     }
 
     /**
@@ -517,10 +534,16 @@ class KillboardHelper extends AbstractSingleton {
      * @return string
      */
     public function getSystemInformation(int $systemID) {
+        $returnValue = null;
+
         /* @var $system \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId */
         $system = $this->eveApi->getSystemDataBySystemId($systemID);
 
-        return $system;
+        if(!\is_null($system)) {
+            $returnValue = $system;
+        }
+
+        return $returnValue;
     }
 
     /**

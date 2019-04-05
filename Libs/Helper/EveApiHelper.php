@@ -228,6 +228,12 @@ class EveApiHelper extends AbstractSingleton {
         return $shipData;
     }
 
+    /**
+     * Getting all the ship type information from a ship ID
+     *
+     * @param int $shipID
+     * @return \WordPress\EsiClient\Model\Universe\UniverseGroupsGroupId
+     */
     public function getShipTypeFromShipId($shipID) {
         $returnValue = null;
 
