@@ -228,6 +228,31 @@ class EveApiHelper extends AbstractSingleton {
         return $shipData;
     }
 
+    public function getShipTypeFromShipId($shipID) {
+        $returnValue = null;
+
+        $shipClassData = $this->getShipDataByShipId($shipID);
+
+        if(!\is_null($shipClassData)) {
+            $cacheKey = 'universe/groupes/' . $shipClassData->getGroupId();
+            $returnValue = $this->cacheHelper->getEsiCache($cacheKey);
+
+            if(\is_null($returnValue)) {
+                $returnValue = $this->esiUniverse->universeGroupsGroupId($shipClassData->getGroupId());
+
+                if(\is_a($returnValue, '\WordPress\EsiClient\Model\Universe\UniverseGroupsGroupId')) {
+                    $this->cacheHelper->setEsiCache([
+                        $cacheKey,
+                        \maybe_serialize($returnValue),
+                        \strtotime('+1 week')
+                    ]);
+                }
+            }
+        }
+
+        return $returnValue;
+    }
+
     /**
      * Getting all the needed system information from the ESI
      *

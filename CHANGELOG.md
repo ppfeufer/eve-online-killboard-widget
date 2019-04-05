@@ -3,7 +3,8 @@
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.4...development)
-- in development
+### Added
+- Ship type to lost ship
 
 ## [0.26.4](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.4) - 2019-02-01
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.3...v0.26.4)

@@ -23,13 +23,6 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
-use \WordPress\EsiClient\Model\Alliance\AlliancesAllianceId;
-use \WordPress\EsiClient\Model\Character\CharactersCharacterId;
-use \WordPress\EsiClient\Model\Corporation\CorporationsCorporationId;
-use \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Attacker;
-use \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim;
-use \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId;
-use \WordPress\EsiClient\Model\Universe\UniverseTypesTypeId;
 use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
 
 \defined('ABSPATH') or die();
@@ -199,7 +192,7 @@ class KillboardHelper extends AbstractSingleton {
         foreach($killList as $killMailData) {
             /* @var $killmail->killmail \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId */
             $countAttackers = \count($killMailData->killmail->getAttackers());
-            $stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
+            $stringInvolved = ($countAttackers - 1 === 0) ? '' : ' <small>(+' . ($countAttackers - 1) . ')</small>';
 
             $victimEntityIdsArray = [
                 'characterID' => (!\is_null($killMailData->killmail->getVictim()->getCharacterId())) ? (int) $killMailData->killmail->getVictim()->getCharacterId() : null,
@@ -213,7 +206,7 @@ class KillboardHelper extends AbstractSingleton {
                 $killType = ' kill-list-loss-mail';
             }
 
-            /* @var $systemInformation UniverseSystemsSystemId */
+            /* @var $systemInformation \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId */
             $systemInformation = $this->getSystemInformation($killMailData->killmail->getSolarSystemId());
             $widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
                         . '    <div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
@@ -238,9 +231,9 @@ class KillboardHelper extends AbstractSingleton {
                         . '        <ul>'
                         . '            <li>' . $this->getVictimType($killMailData->killmail->getVictim()) . ': ' . $this->getVictimName($killMailData->killmail->getVictim()) . '</li>'
                         . '            <li>' . \__('EVE Time', 'eve-online-killboard-widget') . ': ' . $killMailData->killmail->getKillmailTime()->format('d.m.Y') . ' ' . $killMailData->killmail->getKillmailTime()->format('H:i:s') . '</li>'
-                        . '            <li>' . \__('Loss', 'eve-online-killboard-widget') . ': ' . $this->getVictimShip($killMailData->killmail->getVictim()) . '</li>'
+                        . '            <li>' . \__('Loss', 'eve-online-killboard-widget') . ': ' . $this->getVictimShip($killMailData->killmail->getVictim()) . ' <small>(' . $this->getVictimShipType($killMailData->killmail->getVictim()) . ')</small></li>'
                         . '            <li>' . \__('ISK lost', 'eve-online-killboard-widget') . ': ' . $this->getIskLoss($killMailData->zkbData) . '</li>'
-                        . '            <li>' . \__('System', 'eve-online-killboard-widget') . ': ' . $systemInformation->getName() . ' (' . \round($systemInformation->getSecurityStatus(), 2) . ')</li>'
+                        . '            <li>' . \__('System', 'eve-online-killboard-widget') . ': ' . $systemInformation->getName() . ' <small>(' . \round($systemInformation->getSecurityStatus(), 2) . ')</small></li>'
                         . '            <li>' . \__('Killed by', 'eve-online-killboard-widget') . ': ' . $this->getFinalBlow($killMailData->killmail->getAttackers()) . $stringInvolved . '</li>'
                         .              $this->getBadges($killMailData)
                         . '        </ul>'
@@ -331,11 +324,11 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * Getting victims image
      *
-     * @param Victim $victimData
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @param int $size
      * @return string
      */
-    public function getVictimImage(Victim $victimData, $size = 256) {
+    public function getVictimImage(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData, $size = 256) {
         $victimImage = null;
 
         if(!\is_null($victimData->getCharacterId())) {
@@ -353,15 +346,15 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * Getting victms corporation logo
      *
-     * @param Victim $victimData
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @param int $size
      * @return string
      */
-    public function getVictimCorpImage(Victim $victimData, $size = 256) {
+    public function getVictimCorpImage(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData, $size = 256) {
         $victimCorporationImage = null;
 
         if($victimData->getCorporationId()) {
-            /* @var $corpData CorporationsCorporationId */
+            /* @var $corpData \WordPress\EsiClient\Model\Corporation\CorporationsCorporationId */
             $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
             $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->getCorporationId() . '_' . $size. '.png';
             $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->getCorporationId() . '" alt="' . \esc_html($corpData->getName()) . '" data-title="' . \esc_html($corpData->getName()) . '" data-toggle="eve-killboard-tooltip">';
@@ -374,11 +367,11 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * Getting victims ship image
      *
-     * @param Victim $victimData
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @param int $size
      * @return type
      */
-    public function getVictimShipImage(Victim $victimData, $size = 256) {
+    public function getVictimShipImage(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData, $size = 256) {
         $victimShipImage = null;
 
         switch($victimData->getShipTypeId()) {
@@ -397,15 +390,15 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * Getting victims alliance logo
      *
-     * @param Victim $victimData
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @param type $size
      * @return string
      */
-    public function getVictimAllianceImage(Victim $victimData, $size = 128) {
+    public function getVictimAllianceImage(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData, $size = 128) {
         $victimAllianceImage = null;
 
         if(!\is_null($victimData->getAllianceId())) {
-            /* @var $allianceData AlliancesAllianceId */
+            /* @var $allianceData \WordPress\EsiClient\Model\Alliance\AlliancesAllianceId */
             $allianceData = $this->eveApi->getAllianceDataByAllianceId($victimData->getAllianceId());
             $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->getAllianceId() . '_' . $size. '.png';
             $victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->getAllianceId() . '" alt="' . \esc_html($allianceData->getName()) . '" data-title="' . \esc_html($allianceData->getName()) . '" data-toggle="eve-killboard-tooltip">';
@@ -417,10 +410,10 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * Getting the victims type
      *
-     * @param Victim $victimData
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @return string
      */
-    public function getVictimType(Victim $victimData) {
+    public function getVictimType(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData) {
         $victimType = \__('Pilot', 'eve-online-killboard-widget');
 
         if(\is_null($victimData->getCharacterId())) {
@@ -433,22 +426,22 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * Getting the victims name
      *
-     * @param Victim $victimData
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @return string
      */
-    public function getVictimName(Victim $victimData) {
+    public function getVictimName(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData) {
         $victimType = $this->getVictimType($victimData);
         $victimName = null;
 
         switch($victimType) {
             case \__('Pilot', 'eve-online-killboard-widget'):
-                /* @var $pilotData CharactersCharacterId */
+                /* @var $pilotData \WordPress\EsiClient\Model\Character\CharactersCharacterId */
                 $pilotData = $this->eveApi->getCharacterDataByCharacterId($victimData->getCharacterId());
                 $victimName = $pilotData->getName();
                 break;
 
             case \__('Corp', 'eve-online-killboard-widget'):
-                /* @var $corpData CorporationsCorporationId */
+                /* @var $corpData \WordPress\EsiClient\Model\Corporation\CorporationsCorporationId */
                 $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
                 $victimName = $corpData->getName();
                 break;
@@ -470,19 +463,19 @@ class KillboardHelper extends AbstractSingleton {
     public function getFinalBlow(array $attackerData) {
         $finalBlow = null;
 
-        /* @var $attacker Attacker */
+        /* @var $attacker \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Attacker */
         foreach($attackerData as $attacker) {
             if($attacker->getFinalBlow() === true) {
                 // is it a pilot
                 if(!\is_null($attacker->getCharacterId())) {
-                    /* @var $finalBlowPilotData CharactersCharacterId */
+                    /* @var $finalBlowPilotData \WordPress\EsiClient\Model\Character\CharactersCharacterId */
                     $finalBlowPilotData = $this->eveApi->getCharacterDataByCharacterId($attacker->getCharacterId());
                     $finalBlow = $finalBlowPilotData->getName();
                 }
 
                 // or maybe a structure?
                 if(\is_null($finalBlow) && !\is_null($attacker->getShipTypeId())) {
-                    /* @var $finalBlowItemData UniverseTypesTypeId */
+                    /* @var $finalBlowItemData \WordPress\EsiClient\Model\Universe\UniverseTypesTypeId */
                     $finalBlowItemData = $this->eveApi->getShipDataByShipId($attacker->getShipTypeId());
                     $finalBlow = $finalBlowItemData->getName();
                 }
@@ -499,14 +492,22 @@ class KillboardHelper extends AbstractSingleton {
     /**
      * getting the victims ship type
      *
-     * @param Victim $victimData
+     * @param \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData
      * @return string
      */
-    public function getVictimShip(Victim $victimData) {
-        /* @var $ship UniverseTypesTypeId */
+    public function getVictimShip(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData) {
+        /* @var $ship \WordPress\EsiClient\Model\Universe\UniverseTypesTypeId */
         $ship = $this->eveApi->getShipDataByShipId($victimData->getShipTypeId());
 
         return $ship->getName();
+    }
+
+    public function getVictimShipType(\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim $victimData) {
+        /* @var $shipTypeData \WordPress\EsiClient\Model\Universe\UniverseGroupsGroupId */
+        $shipTypeData = $this->eveApi->getShipTypeFromShipId($victimData->getShipTypeId());
+
+
+        return $shipTypeData->getName();
     }
 
     /**
@@ -516,7 +517,7 @@ class KillboardHelper extends AbstractSingleton {
      * @return string
      */
     public function getSystemInformation(int $systemID) {
-        /* @var $system UniverseSystemsSystemId */
+        /* @var $system \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId */
         $system = $this->eveApi->getSystemDataBySystemId($systemID);
 
         return $system;
