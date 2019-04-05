@@ -520,7 +520,7 @@ class KillboardHelper extends AbstractSingleton {
         /* @var $shipTypeData \WordPress\EsiClient\Model\Universe\UniverseGroupsGroupId */
         $shipTypeData = $this->eveApi->getShipTypeFromShipId($victimData->getShipTypeId());
 
-        if(!\is_nan($shipTypeData)) {
+        if(!\is_null($shipTypeData)) {
             $returnValue = $shipTypeData->getName();
         }
 
