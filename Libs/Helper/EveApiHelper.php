@@ -25,11 +25,14 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
+use \WordPress\EsiClient\Model\Killmails\KillmailId\KillmailHash;
+use \WordPress\EsiClient\Model\Universe\Groups\GroupId;
+use \WordPress\EsiClient\Model\Universe\Ids\Alliances;
+use \WordPress\EsiClient\Model\Universe\Ids\Characters;
+use \WordPress\EsiClient\Model\Universe\Ids\Corporations;
+use \WordPress\EsiClient\Model\Universe\Systems\SystemId;
+use \WordPress\EsiClient\Model\Universe\Types\TypeId;
 use \WordPress\EsiClient\Model\Universe\UniverseIds;
-use \WordPress\EsiClient\Model\Universe\UniverseIds\Alliances;
-use \WordPress\EsiClient\Model\Universe\UniverseIds\Characters;
-use \WordPress\EsiClient\Model\Universe\UniverseIds\Corporations;
-use \WordPress\EsiClient\Model\Universe\UniverseTypesTypeId;
 use \WordPress\EsiClient\Repository\AllianceRepository;
 use \WordPress\EsiClient\Repository\CharacterRepository;
 use \WordPress\EsiClient\Repository\CorporationRepository;
@@ -153,7 +156,7 @@ class EveApiHelper extends AbstractSingleton {
         if(\is_null($characterData)) {
             $characterData = $this->esiCharacter->charactersCharacterId($characterID);
 
-            if(\is_a($characterData, '\WordPress\EsiClient\Model\Character\CharactersCharacterId')) {
+            if(\is_a($characterData, '\WordPress\EsiClient\Model\Character\CharacterId')) {
                 $this->cacheHelper->setEsiCache([
                     $cacheKey,
                     \maybe_serialize($characterData),
@@ -172,7 +175,7 @@ class EveApiHelper extends AbstractSingleton {
         if(\is_null($corporationData)) {
             $corporationData = $this->esiCorporation->corporationsCorporationId($corporationID);
 
-            if(\is_a($corporationData, '\WordPress\EsiClient\Model\Corporation\CorporationsCorporationId')) {
+            if(\is_a($corporationData, '\WordPress\EsiClient\Model\Corporations\CorporationId')) {
                 $this->cacheHelper->setEsiCache([
                     $cacheKey,
                     \maybe_serialize($corporationData),
@@ -191,7 +194,7 @@ class EveApiHelper extends AbstractSingleton {
         if(\is_null($allianceData)) {
             $allianceData = $this->esiAlliance->alliancesAllianceId($allianceID);
 
-            if(\is_a($allianceData, '\WordPress\EsiClient\Model\Alliance\AlliancesAllianceId')) {
+            if(\is_a($allianceData, '\WordPress\EsiClient\Model\Alliances\Alliance\AllianceId')) {
                 $this->cacheHelper->setEsiCache([
                     $cacheKey,
                     \maybe_serialize($allianceData),
@@ -207,7 +210,7 @@ class EveApiHelper extends AbstractSingleton {
      * Getting all the needed ship information from the ESI
      *
      * @param int $shipID
-     * @return UniverseTypesTypeId
+     * @return TypeId
      */
     public function getShipDataByShipId($shipID) {
         $cacheKey = 'universe/types/' . $shipID;
@@ -216,7 +219,7 @@ class EveApiHelper extends AbstractSingleton {
         if(\is_null($shipData)) {
             $shipData = $this->esiUniverse->universeTypesTypeId($shipID);
 
-            if(\is_a($shipData, '\WordPress\EsiClient\Model\Universe\UniverseTypesTypeId')) {
+            if(\is_a($shipData, '\WordPress\EsiClient\Model\Universe\Types\TypeId')) {
                 $this->cacheHelper->setEsiCache([
                     $cacheKey,
                     \maybe_serialize($shipData),
@@ -232,7 +235,7 @@ class EveApiHelper extends AbstractSingleton {
      * Getting all the ship type information from a ship ID
      *
      * @param int $shipID
-     * @return \WordPress\EsiClient\Model\Universe\UniverseGroupsGroupId
+     * @return GroupId
      */
     public function getShipTypeFromShipId($shipID) {
         $returnValue = null;
@@ -246,7 +249,7 @@ class EveApiHelper extends AbstractSingleton {
             if(\is_null($returnValue)) {
                 $returnValue = $this->esiUniverse->universeGroupsGroupId($shipClassData->getGroupId());
 
-                if(\is_a($returnValue, '\WordPress\EsiClient\Model\Universe\UniverseGroupsGroupId')) {
+                if(\is_a($returnValue, '\WordPress\EsiClient\Model\Universe\Groups\GroupId')) {
                     $this->cacheHelper->setEsiCache([
                         $cacheKey,
                         \maybe_serialize($returnValue),
@@ -263,7 +266,7 @@ class EveApiHelper extends AbstractSingleton {
      * Getting all the needed system information from the ESI
      *
      * @param int $systemID
-     * @return \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId
+     * @return SystemId
      */
     public function getSystemDataBySystemId($systemID) {
         $cacheKey = 'universe/systems/' . $systemID;
@@ -272,7 +275,7 @@ class EveApiHelper extends AbstractSingleton {
         if(\is_null($systemData)) {
             $systemData = $this->esiUniverse->universeSystemsSystemId($systemID);
 
-            if(\is_a($systemData, '\WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId')) {
+            if(\is_a($systemData, '\WordPress\EsiClient\Model\Universe\Systems\SystemId')) {
                 $this->cacheHelper->setEsiCache([
                     $cacheKey,
                     \maybe_serialize($systemData),
@@ -294,7 +297,7 @@ class EveApiHelper extends AbstractSingleton {
      * @return string
      */
     public function getShipImageByShipId($shipTypeID, $imageOnly = true, $size = 128) {
-        /* @var $ship UniverseTypesTypeId */
+        /* @var $ship TypeId */
         $ship = $this->getShipDataByShipId($shipTypeID);
 
         $imagePath = $this->imageserverUrl . $this->imageserverEndpoints['ship'] . $shipTypeID . '_' . $size. '.png';
@@ -321,7 +324,7 @@ class EveApiHelper extends AbstractSingleton {
         /* @var $esiData UniverseIds */
         $esiData = $this->esiUniverse->universeIds([(string) \esc_html($name)]);
 
-        if(\is_a($esiData, '\WordPress\EsiClient\Model\Universe\UniverseIds')) {
+        if(\is_a($esiData, '\WordPress\EsiClient\Model\Universe\Ids')) {
             switch($type) {
                 case 'alliance':
                     foreach($esiData->getAlliances() as $alliance) {
@@ -361,13 +364,13 @@ class EveApiHelper extends AbstractSingleton {
      * @param int $killmailID
      * @param string $killmailHash
      * @param boolean $cache
-     * @return \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId
+     * @return KillmailHash
      */
     public function getPublicKillmail(int $killmailID, string $killmailHash) {
         $returnData = null;
         $killmailData = $this->esiKillmails->killmailsKillmailIdKillmailHash($killmailID, $killmailHash);
 
-        if(\is_a($killmailData, '\WordPress\EsiClient\Model\Killmails\KillmailsKillmailId')) {
+        if(\is_a($killmailData, '\WordPress\EsiClient\Model\Killmails\KillmailId\KillmailHash')) {
             $returnData = $killmailData;
         }
 
