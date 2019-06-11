@@ -2,8 +2,13 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.5...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.6...development)
 - in development
+
+## [0.26.6](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.6) - 2019-06-11
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.5...v0.26.6)
+### Hotfix
+- Backwards compatibility with older ESI clients on update
 
 ## [0.26.5](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.5) - 2019-06-11
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.4...v0.26.5)
