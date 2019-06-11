@@ -243,7 +243,7 @@ class EveApiHelper extends AbstractSingleton {
         $shipClassData = $this->getShipDataByShipId($shipID);
 
         if(!\is_null($shipClassData)) {
-            $cacheKey = 'universe/groupes/' . $shipClassData->getGroupId();
+            $cacheKey = 'universe/groups/' . $shipClassData->getGroupId();
             $returnValue = $this->cacheHelper->getEsiCache($cacheKey);
 
             if(\is_null($returnValue)) {
