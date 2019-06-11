@@ -23,13 +23,14 @@
 
 namespace WordPress\Plugins\EveOnlineKillboardWidget\Libs\Helper;
 
-use \WordPress\EsiClient\Model\Alliance\AlliancesAllianceId;
-use \WordPress\EsiClient\Model\Character\CharactersCharacterId;
-use \WordPress\EsiClient\Model\Corporation\CorporationsCorporationId;
-use \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Attacker;
-use \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId\Victim;
-use \WordPress\EsiClient\Model\Universe\UniverseSystemsSystemId;
-use \WordPress\EsiClient\Model\Universe\UniverseTypesTypeId;
+use \WordPress\EsiClient\Model\Alliances\AllianceId;
+use \WordPress\EsiClient\Model\Characters\CharacterId;
+use \WordPress\EsiClient\Model\Corporations\CorporationId;
+use \WordPress\EsiClient\Model\Killmails\KillmailId\KillmailHash\Attackers;
+use \WordPress\EsiClient\Model\Killmails\KillmailId\KillmailHash\Victim;
+use \WordPress\EsiClient\Model\Universe\Groups\GroupId;
+use \WordPress\EsiClient\Model\Universe\Systems\SystemId;
+use \WordPress\EsiClient\Model\Universe\Types\TypeId;
 use \WordPress\Plugins\EveOnlineKillboardWidget\Libs\Singletons\AbstractSingleton;
 
 \defined('ABSPATH') or die();
@@ -112,7 +113,6 @@ class KillboardHelper extends AbstractSingleton {
 
             if($this->entityID === false || empty($this->entityID)) {
                 $this->entityID = $this->eveApi->getEveIdByName($widgetSettings['eve-online-killboard-widget-entity-name'], $widgetSettings['eve-online-killboard-widget-entity-type']);
-
                 $this->cacheHelper->setKillboardCache([
                     $entityIdTransientName,
                     \maybe_serialize($this->entityID),
@@ -128,7 +128,6 @@ class KillboardHelper extends AbstractSingleton {
         }
 
         $data = $this->cacheHelper->getKillboardCache($widgetSettingsCacheKey);
-
         if($data === false || empty($data)) {
             $data = $this->getZkillboardData($widgetSettings);
 
@@ -165,7 +164,6 @@ class KillboardHelper extends AbstractSingleton {
         }
 
         $zkbData = $this->remoteHelper->getRemoteData($zkbUrl);
-
         if(!\is_null($zkbData)) {
             $zkbDataKills = \array_slice(\json_decode($zkbData), 0, (int) $widgetSettings['eve-online-killboard-widget-number-of-kills'], true);
 
@@ -197,9 +195,9 @@ class KillboardHelper extends AbstractSingleton {
         $widgetHtml = null;
 
         foreach($killList as $killMailData) {
-            /* @var $killmail->killmail \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId */
+            /* @var $killmail->killmail \WordPress\EsiClient\Model\Killmails\KillmailId\KillmailHash */
             $countAttackers = \count($killMailData->killmail->getAttackers());
-            $stringInvolved = ($countAttackers - 1 === 0) ? '' : ' (+' . ($countAttackers - 1) . ')';
+            $stringInvolved = ($countAttackers - 1 === 0) ? '' : ' <small>(+' . ($countAttackers - 1) . ')</small>';
 
             $victimEntityIdsArray = [
                 'characterID' => (!\is_null($killMailData->killmail->getVictim()->getCharacterId())) ? (int) $killMailData->killmail->getVictim()->getCharacterId() : null,
@@ -213,7 +211,7 @@ class KillboardHelper extends AbstractSingleton {
                 $killType = ' kill-list-loss-mail';
             }
 
-            /* @var $systemInformation UniverseSystemsSystemId */
+            /* @var $systemInformation SystemId */
             $systemInformation = $this->getSystemInformation($killMailData->killmail->getSolarSystemId());
             $widgetHtml .= '<div class="row killboard-entry' . $killType . '">'
                         . '    <div class="col-xs-4 col-sm-12 col-md-12 col-lg-5">'
@@ -238,9 +236,9 @@ class KillboardHelper extends AbstractSingleton {
                         . '        <ul>'
                         . '            <li>' . $this->getVictimType($killMailData->killmail->getVictim()) . ': ' . $this->getVictimName($killMailData->killmail->getVictim()) . '</li>'
                         . '            <li>' . \__('EVE Time', 'eve-online-killboard-widget') . ': ' . $killMailData->killmail->getKillmailTime()->format('d.m.Y') . ' ' . $killMailData->killmail->getKillmailTime()->format('H:i:s') . '</li>'
-                        . '            <li>' . \__('Loss', 'eve-online-killboard-widget') . ': ' . $this->getVictimShip($killMailData->killmail->getVictim()) . '</li>'
+                        . '            <li>' . \__('Loss', 'eve-online-killboard-widget') . ': ' . $this->getVictimShip($killMailData->killmail->getVictim()) . ' <small>(' . $this->getVictimShipType($killMailData->killmail->getVictim()) . ')</small></li>'
                         . '            <li>' . \__('ISK lost', 'eve-online-killboard-widget') . ': ' . $this->getIskLoss($killMailData->zkbData) . '</li>'
-                        . '            <li>' . \__('System', 'eve-online-killboard-widget') . ': ' . $systemInformation->getName() . ' (' . \round($systemInformation->getSecurityStatus(), 2) . ')</li>'
+                        . '            <li>' . \__('System', 'eve-online-killboard-widget') . ': ' . $systemInformation->getName() . ' <small>(' . \round($systemInformation->getSecurityStatus(), 2) . ')</small></li>'
                         . '            <li>' . \__('Killed by', 'eve-online-killboard-widget') . ': ' . $this->getFinalBlow($killMailData->killmail->getAttackers()) . $stringInvolved . '</li>'
                         .              $this->getBadges($killMailData)
                         . '        </ul>'
@@ -261,7 +259,7 @@ class KillboardHelper extends AbstractSingleton {
         $returnValue = null;
         $badgeSoloKill = false;
 
-        /* @var $killmail->killmail \WordPress\EsiClient\Model\Killmails\KillmailsKillmailId */
+        /* @var $killmail->killmail \WordPress\EsiClient\Model\Killmails\KillmailId\KillmailHash */
         if($killMail->zkbData->solo || \count($killMail->killmail->getAttackers()) === 1) {
             $badgeSoloKill = '<span class="eve-online-killboard-widget-solokill"><small>' . \__('SOLO', 'eve-online-killboard-widget') . '</small></span>';
         }
@@ -361,7 +359,7 @@ class KillboardHelper extends AbstractSingleton {
         $victimCorporationImage = null;
 
         if($victimData->getCorporationId()) {
-            /* @var $corpData CorporationsCorporationId */
+            /* @var $corpData CorporationId */
             $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
             $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->getCorporationId() . '_' . $size. '.png';
             $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->getCorporationId() . '" alt="' . \esc_html($corpData->getName()) . '" data-title="' . \esc_html($corpData->getName()) . '" data-toggle="eve-killboard-tooltip">';
@@ -405,7 +403,7 @@ class KillboardHelper extends AbstractSingleton {
         $victimAllianceImage = null;
 
         if(!\is_null($victimData->getAllianceId())) {
-            /* @var $allianceData AlliancesAllianceId */
+            /* @var $allianceData AllianceId */
             $allianceData = $this->eveApi->getAllianceDataByAllianceId($victimData->getAllianceId());
             $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->getAllianceId() . '_' . $size. '.png';
             $victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->getAllianceId() . '" alt="' . \esc_html($allianceData->getName()) . '" data-title="' . \esc_html($allianceData->getName()) . '" data-toggle="eve-killboard-tooltip">';
@@ -442,13 +440,13 @@ class KillboardHelper extends AbstractSingleton {
 
         switch($victimType) {
             case \__('Pilot', 'eve-online-killboard-widget'):
-                /* @var $pilotData CharactersCharacterId */
+                /* @var $pilotData CharacterId */
                 $pilotData = $this->eveApi->getCharacterDataByCharacterId($victimData->getCharacterId());
                 $victimName = $pilotData->getName();
                 break;
 
             case \__('Corp', 'eve-online-killboard-widget'):
-                /* @var $corpData CorporationsCorporationId */
+                /* @var $corpData CorporationId */
                 $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
                 $victimName = $corpData->getName();
                 break;
@@ -470,19 +468,19 @@ class KillboardHelper extends AbstractSingleton {
     public function getFinalBlow(array $attackerData) {
         $finalBlow = null;
 
-        /* @var $attacker Attacker */
+        /* @var $attacker Attackers */
         foreach($attackerData as $attacker) {
             if($attacker->getFinalBlow() === true) {
                 // is it a pilot
                 if(!\is_null($attacker->getCharacterId())) {
-                    /* @var $finalBlowPilotData CharactersCharacterId */
+                    /* @var $finalBlowPilotData CharacterId */
                     $finalBlowPilotData = $this->eveApi->getCharacterDataByCharacterId($attacker->getCharacterId());
                     $finalBlow = $finalBlowPilotData->getName();
                 }
 
                 // or maybe a structure?
                 if(\is_null($finalBlow) && !\is_null($attacker->getShipTypeId())) {
-                    /* @var $finalBlowItemData UniverseTypesTypeId */
+                    /* @var $finalBlowItemData TypeId */
                     $finalBlowItemData = $this->eveApi->getShipDataByShipId($attacker->getShipTypeId());
                     $finalBlow = $finalBlowItemData->getName();
                 }
@@ -497,16 +495,41 @@ class KillboardHelper extends AbstractSingleton {
     }
 
     /**
-     * getting the victims ship type
+     * getting the victims ship
      *
      * @param Victim $victimData
      * @return string
      */
     public function getVictimShip(Victim $victimData) {
-        /* @var $ship UniverseTypesTypeId */
+        $returnValue = null;
+
+        /* @var $ship TypeId */
         $ship = $this->eveApi->getShipDataByShipId($victimData->getShipTypeId());
 
-        return $ship->getName();
+        if(!\is_null($ship)) {
+            $returnValue = $ship->getName();
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * getting the victims ship type
+     *
+     * @param Victim $victimData
+     * @return string
+     */
+    public function getVictimShipType(Victim $victimData) {
+        $returnValue = null;
+
+        /* @var $shipTypeData GroupId */
+        $shipTypeData = $this->eveApi->getShipTypeFromShipId($victimData->getShipTypeId());
+
+        if(!\is_null($shipTypeData)) {
+            $returnValue = $shipTypeData->getName();
+        }
+
+        return $returnValue;
     }
 
     /**
@@ -516,10 +539,16 @@ class KillboardHelper extends AbstractSingleton {
      * @return string
      */
     public function getSystemInformation(int $systemID) {
-        /* @var $system UniverseSystemsSystemId */
+        $returnValue = null;
+
+        /* @var $system SystemId */
         $system = $this->eveApi->getSystemDataBySystemId($systemID);
 
-        return $system;
+        if(!\is_null($system)) {
+            $returnValue = $system;
+        }
+
+        return $returnValue;
     }
 
     /**

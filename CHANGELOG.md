@@ -2,8 +2,16 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.4...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.5...development)
 - in development
+
+## [0.26.5](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.5) - 2019-06-11
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.4...v0.26.5)
+### Added
+- Ship type to lost ship
+
+### Changed
+- Code updated to work with the new release of the ESI Client
 
 ## [0.26.4](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.4) - 2019-02-01
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.3...v0.26.4)
