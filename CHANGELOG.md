@@ -2,8 +2,14 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.6...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.7...development)
 - in development
+
+## [0.26.7](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.7) - 2019-06-11
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.6...v0.26.7)
+### Fixed
+- Typo in cache key
+- Hotfix for new ESI client and cache database table
 
 ## [0.26.6](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.6) - 2019-06-11
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.5...v0.26.6)
