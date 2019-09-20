@@ -329,7 +329,7 @@ class EveApiHelper extends AbstractSingleton {
                 case 'alliance':
                     foreach($esiData->getAlliances() as $alliance) {
                         /* @var $alliance Alliances */
-                        if($alliance->getName() === (string) \esc_html($name)) {
+                        if(\strtolower($alliance->getName()) === \strtolower((string) \esc_html($name))) {
                             $returnData = $alliance->getId();
                         }
                     }
@@ -338,7 +338,7 @@ class EveApiHelper extends AbstractSingleton {
                 case 'corporation':
                     foreach($esiData->getCorporations() as $corporation) {
                         /* @var $corporation Corporations */
-                        if($corporation->getName() === (string) \esc_html($name)) {
+                        if(\strtolower($corporation->getName()) === \strtolower((string) \esc_html($name))) {
                             $returnData = $corporation->getId();
                         }
                     }
@@ -347,7 +347,7 @@ class EveApiHelper extends AbstractSingleton {
                 case 'character':
                     foreach($esiData->getCharacters() as $character) {
                         /* @var $character Characters */
-                        if($character->getName() === (string) \esc_html($name)) {
+                        if(\strtolower($character->getName()) === \strtolower((string) \esc_html($name))) {
                             $returnData = $character->getId();
                         }
                     }
