@@ -2,8 +2,16 @@
 # Change Log
 
 ## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.7...development)
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.27.0...development)
 - in development
+
+## [0.27.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.27.0) - 2019-11-01
+[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.7...v0.27.0)
+### Fixed
+- Name comparison in ESI Class
+
+## Changed
+- CCP Imageserver, we're using their new Image API now
 
 ## [0.26.7](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.26.7) - 2019-06-11
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.6...v0.26.7)
