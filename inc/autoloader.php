@@ -3,7 +3,6 @@
 namespace WordPress\Plugins\EveOnlineKillboardWidget;
 
 \spl_autoload_register('\WordPress\Plugins\EveOnlineKillboardWidget\autoload');
-
 function autoload($className) {
     // If the specified $className does not include our namespace, duck out.
     if(\strpos($className, 'WordPress\Plugins\EveOnlineKillboardWidget') === false) {
@@ -51,7 +50,15 @@ function autoload($className) {
     }
 }
 
-\spl_autoload_register('\WordPress\Plugins\EveOnlineKillboardWidget\autoloadEsiClient');
+/**
+ * In preparation to switch the ESI Client to an WPMU plugin
+ */
+if(!\defined('\WordPress\EsiClient\WP_ESI_CLIENT_LOADED')) {
+    /**
+     * Autoloading ESI classes
+     */
+    \spl_autoload_register('\WordPress\Plugins\EveOnlineKillboardWidget\autoloadEsiClient');
+}
 
 function autoloadEsiClient($className) {
     // If the specified $className does not include our namespace, duck out.

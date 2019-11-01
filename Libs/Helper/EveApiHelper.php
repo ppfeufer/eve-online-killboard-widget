@@ -113,7 +113,7 @@ class EveApiHelper extends AbstractSingleton {
         parent::__construct();
 
         $this->esiUrl = 'https://esi.evetech.net/latest/';
-        $this->imageserverUrl = 'https://imageserver.eveonline.com/';
+        $this->imageserverUrl = 'https://images.evetech.net/';
         $this->cacheHelper = CacheHelper::getInstance();
 
         $this->esiKillmails = new KillmailsRepository;
@@ -126,13 +126,11 @@ class EveApiHelper extends AbstractSingleton {
          * Assigning Imagesever Endpoints
          */
         $this->imageserverEndpoints = [
-            'alliance' => 'Alliance/',
-            'corporation' => 'Corporation/',
-            'character' => 'Character/',
-            'item' => 'Type/',
-            'ship' => 'Type/',
-            'render' => 'Render/',
-            'inventory' => 'InventoryType/' // Ships and all the other stuff
+            'alliance' => 'alliances/%d/logo',
+            'corporation' => 'corporations/%d/logo',
+            'character' => 'characters/%d/portrait',
+            'typeIcon' => 'types/%d/icon',
+            'typeRender' => 'types/%d/render'
         ];
     }
 
@@ -299,8 +297,10 @@ class EveApiHelper extends AbstractSingleton {
     public function getShipImageByShipId($shipTypeID, $imageOnly = true, $size = 128) {
         /* @var $ship TypeId */
         $ship = $this->getShipDataByShipId($shipTypeID);
-
-        $imagePath = $this->imageserverUrl . $this->imageserverEndpoints['ship'] . $shipTypeID . '_' . $size. '.png';
+        $imagePath = \sprintf(
+            $this->imageserverUrl . $this->imageserverEndpoints['typeRender'] . '?size=' . $size,
+            $shipTypeID
+        );
 
         if($imageOnly === true) {
             return $imagePath;

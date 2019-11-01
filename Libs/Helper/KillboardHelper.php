@@ -337,12 +337,19 @@ class KillboardHelper extends AbstractSingleton {
         $victimImage = null;
 
         if(!\is_null($victimData->getCharacterId())) {
-            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('character') . $victimData->getCharacterId() . '_' . $size. '.jpg';
+            $imageUrl = \sprintf(
+                $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('character') . '?size=' . $size,
+                $victimData->getCharacterId()
+            );
             $victimImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-character-id-' . $victimData->getCharacterId() . '" alt="' . \esc_html($this->getVictimName($victimData)) . '">';
         }
 
         if(\is_null($victimData->getCharacterId())) {
-            $victimImage = '<img src="' . $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('render') . $victimData->getShipTypeId() . '_' . $size . '.png' . '" class="eve-structure-image eve-online-id-' . $victimData->getShipTypeId() . '">';
+            $imageUrl = \sprintf(
+                $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('typeRender') . '?size=' . $size,
+                $victimData->getShipTypeId()
+            );
+            $victimImage = '<img src="' . $imageUrl . '" class="eve-structure-image eve-online-id-' . $victimData->getShipTypeId() . '">';
         }
 
         return $victimImage;
@@ -361,7 +368,10 @@ class KillboardHelper extends AbstractSingleton {
         if($victimData->getCorporationId()) {
             /* @var $corpData CorporationId */
             $corpData = $this->eveApi->getCorporationDataByCorporationId($victimData->getCorporationId());
-            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . $victimData->getCorporationId() . '_' . $size. '.png';
+            $imageUrl = sprintf(
+                $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('corporation') . '?size=' . $size,
+                $victimData->getCorporationId()
+            );
             $victimCorporationImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-corporation-id-' . $victimData->getCorporationId() . '" alt="' . \esc_html($corpData->getName()) . '" data-title="' . \esc_html($corpData->getName()) . '" data-toggle="eve-killboard-tooltip">';
         }
 
@@ -405,7 +415,10 @@ class KillboardHelper extends AbstractSingleton {
         if(!\is_null($victimData->getAllianceId())) {
             /* @var $allianceData AllianceId */
             $allianceData = $this->eveApi->getAllianceDataByAllianceId($victimData->getAllianceId());
-            $imageUrl = $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . $victimData->getAllianceId() . '_' . $size. '.png';
+            $imageUrl = \sprintf(
+                $this->eveApi->getImageServerUrl() . $this->eveApi->getImageServerEndpont('alliance') . '?size=' . $size,
+                $victimData->getAllianceId()
+            );
             $victimAllianceImage = '<img src="' . $imageUrl . '" class="eve-character-image eve-alliance-id-' . $victimData->getAllianceId() . '" alt="' . \esc_html($allianceData->getName()) . '" data-title="' . \esc_html($allianceData->getName()) . '" data-toggle="eve-killboard-tooltip">';
         }
 
