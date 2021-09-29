@@ -1,9 +1,12 @@
 
 # Change Log
 
-## [In Development](https://github.com/ppfeufer/eve-online-killboard-widget/tree/development)
-[Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.27.0...development)
-- in development
+## [0.28.0]
+
+## Changed
+
+- ESI client version
+
 
 ## [0.27.0](https://github.com/ppfeufer/eve-online-killboard-widget/releases/tag/v0.27.0) - 2019-11-01
 [Full Changelog](https://github.com/ppfeufer/eve-online-killboard-widget/compare/v0.26.7...v0.27.0)
